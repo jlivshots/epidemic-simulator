@@ -35,12 +35,11 @@ By the end of the first week, I will have the movement mechanics created, along 
     
  By the end of the third week, I will:
  * Create a graph that maps the virus spread over time and updates in real time
- * Create buttons/sliders for the parameters in the simulation
- * Allow user to click a "next day" button day-by-day or to click a "play" button that iterates through days for them
-
 
 If I finish early, I will add:
 * A vaccination feature that a user can add at any point during the simulation:
     * User defines the distribution rate of the vaccine at clicks "distribute" at any moment
 * A "lockdown" feature where at any point in the simulation, particles are constrained to 
 "pods" until the user ends the lockdown.
+* Buttons/sliders for the parameters in the simulation
+ * Allow user to click a "next day" button day-by-day or to click a "play" button that iterates through days for them
