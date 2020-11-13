@@ -30,5 +30,21 @@ TEST_CASE("Verify MoveTowardLocation() correctness") {
     REQUIRE(person.GetLocation() == glm::vec2(4, -3.2));
   }
 
+  SECTION(
+      "MoveTowardLocation() returns false when person hasn't yet reached "
+      "target") {
+    REQUIRE_FALSE(person.MoveTowardLocation(glm::vec2(4, -3.2), 3));
+  }
 
+  SECTION(
+      "MoveTowardLocation() returns true when person moves 1 frame to end "
+      "exactly on target") {
+    REQUIRE(person.MoveTowardLocation(glm::vec2(-20, 21), 29));
+  }
+
+  SECTION(
+      "MoveTowardLocation() returns true when person is less than 1 frame from "
+      "target position") {
+    REQUIRE(person.MoveTowardLocation(glm::vec2(-12.3, 1), 40));
+  }
 }
