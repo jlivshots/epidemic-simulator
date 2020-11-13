@@ -10,7 +10,7 @@ class Person {
 
   bool MoveTowardLocation(const glm::vec2& location, float speed);
 
-  const glm::vec2& GetLocation();
+  const glm::vec2& GetLocation() const;
 
  private:
   glm::vec2 position_;

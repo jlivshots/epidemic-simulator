@@ -15,7 +15,7 @@ bool Person::MoveTowardLocation(const glm::vec2& target_location, float speed) {
     return false;
   }
 }
-const glm::vec2& Person::GetLocation() {
+const glm::vec2& Person::GetLocation() const {
   return position_;
 }
 }  // namespace epidemic_simulator

@@ -11,9 +11,11 @@ class Simulator {
 
   bool ApproachNewLocations();
 
+  const std::vector<Person>& GetPeople() const;
  private:
   std::vector<glm::vec2> slots_;
   std::vector<Person> people_;
+
 };
 }
 
