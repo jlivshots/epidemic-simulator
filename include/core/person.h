@@ -6,13 +6,14 @@
 namespace epidemic_simulator {
 class Person {
  public:
-  Person(const glm::vec2& current_position, const glm::vec2& target_position);
+  explicit Person(const glm::vec2& position);
 
-  bool MoveTowardLocation(glm::vec2& location);
+  bool MoveTowardLocation(const glm::vec2& location, float speed);
+
+  const glm::vec2& GetLocation();
 
  private:
   glm::vec2 position_;
-  glm::vec2 target_position_;
 };
 }  // namespace epidemic_simulator
 
