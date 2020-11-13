@@ -10,8 +10,10 @@ class Simulator {
   Simulator(size_t number_people, double arena_radius);
 
   bool ApproachNewLocations();
-
+  void ShuffleLocations();
   const std::vector<Person>& GetPeople() const;
+  const std::vector<glm::vec2>& GetSlots() const;
+
  private:
   std::vector<glm::vec2> slots_;
   std::vector<Person> people_;

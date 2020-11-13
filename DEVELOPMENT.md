@@ -19,3 +19,4 @@ new slot in the circle for 1 frame's distance. I will have it return a boolean t
  
  11/13/2020
  * Implement MoveTowardLocation() method in Person class and manually tested in app class.
+ * Implement Simulator constructor to evenly space out a specified number of people around the Arena.
