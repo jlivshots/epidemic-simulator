@@ -4,25 +4,29 @@
 
 namespace epidemic_simulator {
 
-Simulator::Simulator(size_t number_people, double arena_radius) {
+Simulator::Simulator(size_t number_people, double arena_radius, float speed)
+    : speed_(speed) {
   for (size_t i = 0; i < number_people; ++i) {
+    // Finds the radian angle of the current person's location relative to the
+    // x-axis as 0 degrees.
     double angle = 2 * i * M_PI / number_people;
     glm::vec2 position(arena_radius * cos(angle), arena_radius * sin(angle));
     slots_.push_back(position);
     people_.emplace_back(position);
+    current_person_index_ = 0;
   }
 }
 
 bool Simulator::ApproachNewLocations() {
   bool all_people_arrived = true;
-  for (size_t i = 0; i< people_.size(); ++i) {
-    if(!people_[i].MoveTowardLocation(slots_[i], 6.0f)) {
+  for (size_t i = 0; i < people_.size(); ++i) {
+    if (!people_[i].MoveTowardLocation(slots_[i], speed_)) {
       all_people_arrived = false;
     }
-    ++i;
   }
   return all_people_arrived;
 }
+
 const std::vector<Person>& Simulator::GetPeople() const {
   return people_;
 }
@@ -34,4 +38,5 @@ void Simulator::ShuffleSlots() {
   std::shuffle(slots_.begin(), slots_.end(),
                std::mt19937(std::random_device()()));
 }
+
 }  // namespace epidemic_simulator

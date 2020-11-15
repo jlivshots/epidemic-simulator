@@ -7,16 +7,19 @@
 namespace epidemic_simulator {
 class Simulator {
  public:
-  Simulator(size_t number_people, double arena_radius);
+  Simulator(size_t number_people, double arena_radius, float speed);
 
   bool ApproachNewLocations();
   void ShuffleSlots();
   const std::vector<Person>& GetPeople() const;
   const std::vector<glm::vec2>& GetSlots() const;
 
+
  private:
   std::vector<glm::vec2> slots_;
   std::vector<Person> people_;
+  float speed_;
+  size_t current_person_index_;
 
 };
 }

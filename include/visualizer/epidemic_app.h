@@ -17,17 +17,17 @@ class EpidemicSimulatorApp : public ci::app::App {
   void draw() override;
 
  private:
-  const size_t kNumberPeople = 400;
-  const float kArenaRadius = 300;
-  const glm::vec2 kArenaCenter = glm::vec2(350,500);
+  const size_t kNumberPeople = 601;
+  const float kArenaRadius = 400;
+  const float kSpeed = 11;
+  const glm::vec2 kArenaCenter = glm::vec2(400,500);
   const float kPersonSize = 5;
 
   const double kWindowWidth = 1400;
   const double kWindowHeight = 1000;
   epidemic_simulator::Simulator simulator_;
-  Person person_;
-  glm::vec2 target_;
-  size_t counter;
+
+
 };
 }
 }

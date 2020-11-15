@@ -31,4 +31,10 @@ new slot in the circle for 1 frame's distance. I will have it return a boolean t
         reached their targets so that simulator will know if it can move on to the next day
         
  **11/15/2020**
- 
+ * Finish implementing ApproachNewLocations() to return a bool as described yesterday
+ * Refactor Simulator constructor to take a parameter for speed rather than hard-coding it
+ * Found bug in ApproachNewLocations() where I double-increment the index in slots
+ * Created a Simulator Method that moves one Person at a time to their new location
+    * After manually testing this method, I decided that it's too time consuming to watch
+    each person move individually for larger datasets, and increasing the speed makes the feature irrelevant
+    * Ultimately deleted this method
