@@ -9,7 +9,6 @@ EpidemicSimulatorApp::EpidemicSimulatorApp()
       target_(glm::vec2(900, 900)) {
   ci::app::setWindowSize((int)kWindowWidth, (int)kWindowHeight);
   simulator_.ShuffleSlots();
-counter = 0;
 }
 
 void EpidemicSimulatorApp::draw() {
@@ -19,11 +18,10 @@ void EpidemicSimulatorApp::draw() {
   ci::gl::color(ci::Color("white"));
   ci::gl::drawStrokedCircle(kArenaCenter, kArenaRadius);
   ci::gl::color(ci::Color("yellow"));
-if(counter % 300 == 0) {
+if(simulator_.ApproachNewLocations()) {
   simulator_.ShuffleSlots();
 }
     ci::gl::drawSolidCircle( person_.GetLocation(), 3);
-  simulator_.ApproachNewLocations();
 
   std::vector<Person> people = simulator_.GetPeople();
 

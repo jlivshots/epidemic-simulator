@@ -1,6 +1,6 @@
-Development.md
+##Development
 
-11/12/2020
+**11/12/2020**
 * Created empty classes for Person and Simulator
 * Created CMAKE file, epidemic_app class
 * Create header constructor and instance variable skeleton code in person.h and simulator.h.
@@ -17,12 +17,12 @@ new slot in the circle for 1 frame's distance. I will have it return a boolean t
     returned true. This will tell the Simulator that each Person has reached their desired locations,
     and the simulation can proceed with the next day.
  
- 11/13/2020
+ **11/13/2020**
  * Implement MoveTowardLocation() method in Person class and manually tested in app class.
     * Verified functionality with unit tests
  * Implement Simulator constructor to evenly space out a specified number of people around the Arena.
  
- 11/14/2020
+ **11/14/2020**
  * Write unit tests for Simulator constructor's spacing of locations
  * Implement ApproachNewLocations() in Simulator
  class to randomly assign each Person to a new location and then move each person toward that location
@@ -30,3 +30,5 @@ new slot in the circle for 1 frame's distance. I will have it return a boolean t
         * Will use bool values returned from MoveTowardLocation() to return a bool indicating if all particles have
         reached their targets so that simulator will know if it can move on to the next day
         
+ **11/15/2020**
+ 
