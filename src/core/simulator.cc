@@ -14,17 +14,14 @@ Simulator::Simulator(size_t number_people, double arena_radius) {
 }
 
 bool Simulator::ApproachNewLocations() {
-  size_t i = 0;
-  for (Person& person : people_) {
-//        double new_index = ((people_.size()-1)/2 + i)% (people_.size()-1);
-//        glm::vec2 target = slots_[(size_t )new_index];
-//        person.MoveTowardLocation(slots_[((people_.size())/3 + i)%
-//        (people_.size())], 9.0f);
-//        ++i;
-    person.MoveTowardLocation(slots_[i], 6.0f);
+  bool all_people_arrived = true;
+  for (size_t i = 0; i< people_.size(); ++i) {
+    if(!people_[i].MoveTowardLocation(slots_[i], 6.0f)) {
+      all_people_arrived = false;
+    }
     ++i;
   }
-  return false;
+  return all_people_arrived;
 }
 const std::vector<Person>& Simulator::GetPeople() const {
   return people_;
