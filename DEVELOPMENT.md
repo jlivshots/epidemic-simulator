@@ -21,3 +21,12 @@ new slot in the circle for 1 frame's distance. I will have it return a boolean t
  * Implement MoveTowardLocation() method in Person class and manually tested in app class.
     * Verified functionality with unit tests
  * Implement Simulator constructor to evenly space out a specified number of people around the Arena.
+ 
+ 11/14/2020
+ * Write unit tests for Simulator constructor's spacing of locations
+ * Implement ApproachNewLocations() in Simulator
+ class to randomly assign each Person to a new location and then move each person toward that location
+    * Have not yet implemented a way to tell once all particles have reached their final location
+        * Will use bool values returned from MoveTowardLocation() to return a bool indicating if all particles have
+        reached their targets so that simulator will know if it can move on to the next day
+        

@@ -17,8 +17,8 @@ class EpidemicSimulatorApp : public ci::app::App {
   void draw() override;
 
  private:
-  const size_t kNumberPeople = 8;
-  const float kArenaRadius = 100;
+  const size_t kNumberPeople = 400;
+  const float kArenaRadius = 300;
   const glm::vec2 kArenaCenter = glm::vec2(350,500);
   const float kPersonSize = 5;
 
