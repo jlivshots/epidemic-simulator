@@ -70,14 +70,26 @@ TEST_CASE("Shuffle People generates a valid permutation of slots") {
     REQUIRE(shuffled_people.size() == 43);
 
     for (const epidemic_simulator::Person& person: shuffled_people) {
-      REQUIRE(std::find(initial_people.begin(), initial_people.end(), person) !=
-              initial_people.end());
+      bool contained_in_initial = false;
+      for(const epidemic_simulator::Person& other_person: initial_people) {
+        if(other_person.GetLocation()==person.GetLocation()) {
+          contained_in_initial = true;
+          break;
+        }
+      }
+      REQUIRE(contained_in_initial);
     }
 
-//    for (const epidemic_simulator::Person& person: shuffled_people) {
-//      REQUIRE(std::find(shuffled_people.begin(), shuffled_people.end(), person) !=
-//              shuffled_people.end());
-//    }
+    for (const epidemic_simulator::Person& person: initial_people) {
+      bool contained_in_shuffled = false;
+      for(const epidemic_simulator::Person& other_person: shuffled_people) {
+        if(other_person.GetLocation()==person.GetLocation()) {
+          contained_in_shuffled = true;
+          break;
+        }
+      }
+      REQUIRE(contained_in_shuffled);
+    }
   }
 }
 
