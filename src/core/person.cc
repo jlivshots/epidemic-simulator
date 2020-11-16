@@ -2,7 +2,7 @@
 
 namespace epidemic_simulator {
 
-Person::Person(const glm::vec2& current_position): position_(current_position) {
+Person::Person(const glm::vec2& current_position): position_(current_position), status_(Status::Vulnerable){
 }
 
 bool Person::MoveTowardLocation(const glm::vec2& target_location, float speed) {

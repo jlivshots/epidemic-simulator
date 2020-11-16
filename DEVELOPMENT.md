@@ -38,3 +38,4 @@ new slot in the circle for 1 frame's distance. I will have it return a boolean t
     * After manually testing this method, I decided that it's too time consuming to watch
     each person move individually for larger datasets, and increasing the speed makes the feature irrelevant
     * Ultimately deleted this method
+ * Wrote tests for ApproachNewLocations()
