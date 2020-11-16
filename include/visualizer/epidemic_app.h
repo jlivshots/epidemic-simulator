@@ -23,7 +23,7 @@ class EpidemicSimulatorApp : public ci::app::App {
 
  private:
   const size_t kNumberPeople = 100;
-  const float kPersonSize = 8;
+  const float kPersonSize = 6;
   const float kArenaRadius = 150;
   const glm::vec2 kArenaCenter = glm::vec2(400, 500);
   const float kSpeed = 5;
@@ -31,7 +31,7 @@ class EpidemicSimulatorApp : public ci::app::App {
 
   const double kWindowWidth = 1400;
   const double kWindowHeight = 1000;
-  const ci::Color kVulnerableColor = ci::Color("white");
+  const ci::Color kVulnerableColor = ci::Color("blue");
   const ci::Color kIncubatingColor = ci::Color("orange");
   const ci::Color kInfectiousColor = ci::Color("red");
   const ci::Color kImmuneColor = ci::Color("green");
