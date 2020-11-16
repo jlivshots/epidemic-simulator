@@ -14,6 +14,7 @@ class Virus {
    * @param incubation_period the number of days that someone is infectious
    * without being contagious.
    * @param infectious_period the number of days that someone is infectious.
+   * @throw std::invalid_argument if infectiousness is not between 0-1.
    */
   Virus(double infectiousness, size_t incubation_period,
         size_t infectious_period);
