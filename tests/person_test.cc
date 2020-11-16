@@ -50,5 +50,19 @@ TEST_CASE("Verify MoveTowardLocation() correctness") {
 }
 
 TEST_CASE("Verify Infect() correctness") {
+  epidemic_simulator::Person person(glm::vec2(2, 2));
 
+  SECTION(
+      "Vulnerable person becomes incubating when incubation period is "
+      "positive") {
+    person.Infect(epidemic_simulator::Virus(1, 2, 2));
+    REQUIRE(person.GetStatus() == epidemic_simulator::Status::Incubating);
+  }
+
+  SECTION(
+      "Vulnerable person becomes infectious when incubation period is "
+      "zero") {
+    person.Infect(epidemic_simulator::Virus(1, 0, 2));
+    REQUIRE(person.GetStatus() == epidemic_simulator::Status::Infectious);
+  }
 }

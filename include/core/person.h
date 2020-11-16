@@ -27,6 +27,7 @@ class Person {
 
   Status GetStatus() const;
 
+
  private:
   glm::vec2 position_;
   size_t days_incubating_remaining_;
