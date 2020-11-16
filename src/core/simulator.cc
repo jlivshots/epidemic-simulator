@@ -53,10 +53,13 @@ void Simulator::InfectNeighbors() {
   }
     for(size_t i = 0; i<people_.size(); ++i) {
       if(people_[i].GetStatus()==Status::Infectious) {
-        people_[(i+1)%people_.size()].Infect(virus_);
-        people_[(i-1+people_.size())%people_.size()].Infect(virus_);
+        if((double)rand()/RAND_MAX < infectiousness_) {
+          people_[(i+1)%people_.size()].Infect(virus_);
+        }
+        if((double)rand()/RAND_MAX < infectiousness_) {
+          people_[(i-1+people_.size())%people_.size()].Infect(virus_);
+        }
       }
     }
   }
-
 }  // namespace epidemic_simulator

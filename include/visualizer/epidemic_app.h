@@ -20,10 +20,10 @@ class EpidemicSimulatorApp : public ci::app::App {
  private:
   const size_t kNumberPeople = 300;
   const float kArenaRadius = 400;
-  const float kSpeed = 5;
+  const float kSpeed = 9;
   const glm::vec2 kArenaCenter = glm::vec2(400,500);
-  const float kPersonSize = 12;
-  const Virus kVirus = Virus(0.9, 1, 2);
+  const float kPersonSize = 4;
+  const Virus kVirus = Virus(0.39, 1, 2);
 
   const double kWindowWidth = 1400;
   const double kWindowHeight = 1000;

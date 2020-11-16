@@ -39,3 +39,8 @@ new slot in the circle for 1 frame's distance. I will have it return a boolean t
     each person move individually for larger datasets, and increasing the speed makes the feature irrelevant
     * Ultimately deleted this method
  * Wrote tests for ApproachNewLocations()
+ * Implemented InfectNeighbors()
+    * Spent a good deal of time to find bug where slots are being shuffled and not people, so the 
+    "neighbors" in people_ are not actual neighbors on the arena.
+        * Fixed bug by refactoring ShuffleSlots() to be ShufflePeople(), so
+        now the people in people_ are in the order they're in on the arena too
