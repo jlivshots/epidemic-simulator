@@ -66,3 +66,72 @@ TEST_CASE("Verify Infect() correctness") {
     REQUIRE(person.GetStatus() == epidemic_simulator::Status::Infectious);
   }
 }
+
+TEST_CASE("Verify PassOneDay() correctness") {
+  epidemic_simulator::Person person(glm::vec2(2, 2));
+
+  SECTION("Status unchanged for vulnerable person") {
+    person.PassOneDay();
+    REQUIRE(person.GetStatus() == epidemic_simulator::Status::Vulnerable);
+  }
+
+  SECTION("Status remains incubating for incubation period of 1") {
+    person.Infect(epidemic_simulator::Virus(1, 1, 2));
+    person.PassOneDay();
+    REQUIRE(person.GetStatus() == epidemic_simulator::Status::Incubating);
+  }
+
+  SECTION(
+      "Status switches to infectious after 1 incubating day passes for "
+      "incubation period of 1") {
+    person.Infect(epidemic_simulator::Virus(1, 1, 2));
+    person.PassOneDay();
+    REQUIRE(person.GetStatus() == epidemic_simulator::Status::Incubating);
+    person.PassOneDay();
+    REQUIRE(person.GetStatus() == epidemic_simulator::Status::Infectious);
+  }
+
+  SECTION(
+      "Status switches to infectious after 3 incubating days pass for "
+      "incubation period of 3") {
+    person.Infect(epidemic_simulator::Virus(1, 3, 2));
+    person.PassOneDay();
+    person.PassOneDay();
+    person.PassOneDay();
+    REQUIRE(person.GetStatus() == epidemic_simulator::Status::Incubating);
+    person.PassOneDay();
+    REQUIRE(person.GetStatus() == epidemic_simulator::Status::Infectious);
+  }
+
+  SECTION(
+      "Status switches from infectious to immune after 0 days for infectious "
+      "period of 0") {
+    person.Infect(epidemic_simulator::Virus(1, 0, 0));
+    person.PassOneDay();
+    REQUIRE(person.GetStatus() == epidemic_simulator::Status::Immune);
+  }
+
+  SECTION(
+      "Status switches to immune after correct number of incubation and "
+      "infectious days") {
+    person.Infect(epidemic_simulator::Virus(1, 3, 2));
+    person.PassOneDay();
+    person.PassOneDay();
+    person.PassOneDay();
+    REQUIRE(person.GetStatus() == epidemic_simulator::Status::Incubating);
+    person.PassOneDay();
+    person.PassOneDay();
+    person.PassOneDay();
+    REQUIRE(person.GetStatus() == epidemic_simulator::Status::Infectious);
+    person.PassOneDay();
+    REQUIRE(person.GetStatus() == epidemic_simulator::Status::Immune);
+  }
+
+  SECTION("Status remains unchanged for immune person") {
+    person.Infect(epidemic_simulator::Virus(1,0,0));
+    person.PassOneDay();
+    REQUIRE(person.GetStatus() == epidemic_simulator::Status::Immune);
+    person.PassOneDay();
+    REQUIRE(person.GetStatus() == epidemic_simulator::Status::Immune);
+  }
+}

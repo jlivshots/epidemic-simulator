@@ -23,32 +23,32 @@ const glm::vec2& Person::GetLocation() const {
 }
 
 void Person::Infect(Virus virus) {
-    if (status_ == Status::Vulnerable) {
-      days_infectious_remaining_ = virus.GetInfectiousPeriod();
-      days_incubating_remaining_ = virus.GetIncubationPeriod();
-      if (days_incubating_remaining_ > 0) {
-        status_ = Status::Incubating;
-      } else {
-        status_ = Status::Infectious;
-      }
+  if (status_ == Status::Vulnerable) {
+    days_infectious_remaining_ = virus.GetInfectiousPeriod();
+    days_incubating_remaining_ = virus.GetIncubationPeriod();
+    if (days_incubating_remaining_ > 0) {
+      status_ = Status::Incubating;
+    } else {
+      status_ = Status::Infectious;
     }
   }
+}
 
 void Person::PassOneDay() {
   if (status_ == Status::Incubating) {
-    --days_incubating_remaining_;
     if (days_incubating_remaining_ == 0) {
       status_ = Status::Infectious;
+    } else {
+      --days_incubating_remaining_;
     }
   } else if (status_ == Status::Infectious) {
-    --days_infectious_remaining_;
     if (days_infectious_remaining_ == 0) {
       status_ = Status::Immune;
+    } else {
+      --days_infectious_remaining_;
     }
   }
-
 }
-
 
 Status Person::GetStatus() const {
   return status_;
