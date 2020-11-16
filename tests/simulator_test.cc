@@ -41,40 +41,43 @@ TEST_CASE("Verify constructor assigns slots evenly around the arena") {
   }
 }
 
-TEST_CASE("Shuffle Locations generates a valid permutation of slots") {
+TEST_CASE("Shuffle People generates a valid permutation of slots") {
   SECTION("Empty arena") {
     epidemic_simulator::Simulator simulator(0, 100, 0,
                                             epidemic_simulator::Virus(1, 2, 2));
-    simulator.ShuffleSlots();
+    simulator.ShufflePeople();
     REQUIRE(simulator.GetSlots().empty());
+    REQUIRE(simulator.GetPeople().empty());
+
   }
 
   SECTION("Arena with 1 person") {
     epidemic_simulator::Simulator simulator(1, 100, 0,
                                             epidemic_simulator::Virus(1, 2, 2));
-    simulator.ShuffleSlots();
-    const std::vector<glm::vec2>& slots = simulator.GetSlots();
-    REQUIRE(slots.size() == 1);
-    REQUIRE(slots[0] == glm::vec2(100, 0));
+    simulator.ShufflePeople();
+    const std::vector<epidemic_simulator::Person>& people = simulator.GetPeople();
+    REQUIRE(people.size() == 1);
+    REQUIRE(people[0].GetLocation() == glm::vec2(100, 0));
   }
 
   SECTION("Arena with many people") {
     epidemic_simulator::Simulator simulator(43, 100, 0,
                                             epidemic_simulator::Virus(1, 2, 2));
-    const std::vector<glm::vec2>& initial_slots = simulator.GetSlots();
-    simulator.ShuffleSlots();
-    const std::vector<glm::vec2>& shuffled_slots = simulator.GetSlots();
-    REQUIRE(initial_slots.size() == 43);
-    REQUIRE(shuffled_slots.size() == 43);
+    const std::vector<epidemic_simulator::Person>& initial_people = simulator.GetPeople();
+    simulator.ShufflePeople();
+    const std::vector<epidemic_simulator::Person>& shuffled_people = simulator.GetPeople();
+    REQUIRE(initial_people.size() == 43);
+    REQUIRE(shuffled_people.size() == 43);
 
-    for (const glm::vec2& slot : shuffled_slots) {
-      REQUIRE(std::find(initial_slots.begin(), initial_slots.end(), slot) !=
-              initial_slots.end());
+    for (const epidemic_simulator::Person& person: shuffled_people) {
+      REQUIRE(std::find(initial_people.begin(), initial_people.end(), person) !=
+              initial_people.end());
     }
-    for (const glm::vec2& slot : initial_slots) {
-      REQUIRE(std::find(shuffled_slots.begin(), shuffled_slots.end(), slot) !=
-              shuffled_slots.end());
-    }
+
+//    for (const epidemic_simulator::Person& person: shuffled_people) {
+//      REQUIRE(std::find(shuffled_people.begin(), shuffled_people.end(), person) !=
+//              shuffled_people.end());
+//    }
   }
 }
 
@@ -82,13 +85,13 @@ TEST_CASE("Verify ApproachNewLocations() functionality") {
   SECTION("Method returns true immediately for 0-person arena") {
     epidemic_simulator::Simulator simulator(0, 100, 3,
                                             epidemic_simulator::Virus(1, 2, 2));
-    simulator.ShuffleSlots();
+    simulator.ShufflePeople();
     REQUIRE(simulator.ApproachNewLocations());
   }
   SECTION("Method returns true for 1-person arena") {
     epidemic_simulator::Simulator simulator(1, 100, 3,
                                             epidemic_simulator::Virus(1, 2, 2));
-    simulator.ShuffleSlots();
+    simulator.ShufflePeople();
     REQUIRE(simulator.ApproachNewLocations());
   }
 
@@ -97,7 +100,7 @@ TEST_CASE("Verify ApproachNewLocations() functionality") {
       "many-person arena") {
     epidemic_simulator::Simulator simulator(12, 100, 3,
                                             epidemic_simulator::Virus(1, 2, 2));
-    simulator.ShuffleSlots();
+    simulator.ShufflePeople();
     while (!simulator.ApproachNewLocations()) {
       bool all_have_arrived = true;
       const std::vector<epidemic_simulator::Person>& people =
@@ -117,7 +120,7 @@ TEST_CASE("Verify ApproachNewLocations() functionality") {
       "many-person arena") {
     epidemic_simulator::Simulator simulator(12, 100, 3,
                                             epidemic_simulator::Virus(1, 2, 2));
-    simulator.ShuffleSlots();
+    simulator.ShufflePeople();
     while (!simulator.ApproachNewLocations()) {
     }
     const std::vector<epidemic_simulator::Person>& people =

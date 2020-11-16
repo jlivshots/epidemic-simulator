@@ -19,6 +19,9 @@ Simulator::Simulator(size_t number_people, double arena_radius, float speed,
     people_.emplace_back(position);
     current_person_index_ = 0;
   }
+  if(!people_.empty()) {
+    people_[0].Infect(virus_);
+  }
 }
 
 bool Simulator::ApproachNewLocations() {
@@ -34,13 +37,26 @@ bool Simulator::ApproachNewLocations() {
 const std::vector<Person>& Simulator::GetPeople() const {
   return people_;
 }
+
 const std::vector<glm::vec2>& Simulator::GetSlots() const {
   return slots_;
 }
 
-void Simulator::ShuffleSlots() {
-  std::shuffle(slots_.begin(), slots_.end(),
+void Simulator::ShufflePeople() {
+  std::shuffle(people_.begin(), people_.end(),
                std::mt19937(std::random_device()()));
 }
+
+void Simulator::InfectNeighbors() {
+  for(Person& person: people_) {
+    person.PassOneDay();
+  }
+    for(size_t i = 0; i<people_.size(); ++i) {
+      if(people_[i].GetStatus()==Status::Infectious) {
+        people_[(i+1)%people_.size()].Infect(virus_);
+        people_[(i-1+people_.size())%people_.size()].Infect(virus_);
+      }
+    }
+  }
 
 }  // namespace epidemic_simulator

@@ -11,10 +11,10 @@ class Simulator {
   Simulator(size_t number_people, double arena_radius, float speed, const epidemic_simulator::Virus& virus);
 
   bool ApproachNewLocations();
-  void ShuffleSlots();
+  void ShufflePeople();
   const std::vector<Person>& GetPeople() const;
   const std::vector<glm::vec2>& GetSlots() const;
-
+  void InfectNeighbors();
 
  private:
   std::vector<glm::vec2> slots_;
@@ -25,6 +25,7 @@ class Simulator {
   size_t incubation_period_;
   size_t infectious_period_;
   Virus virus_;
+  std::map<glm::vec2, Person> people_locations_;
 };
 }
 
