@@ -34,7 +34,20 @@ void Person::Infect(Virus virus) {
     }
   }
 
+void Person::PassOneDay() {
+  if (status_ == Status::Incubating) {
+    --days_incubating_remaining_;
+    if (days_incubating_remaining_ == 0) {
+      status_ = Status::Infectious;
+    }
+  } else if (status_ == Status::Infectious) {
+    --days_infectious_remaining_;
+    if (days_infectious_remaining_ == 0) {
+      status_ = Status::Immune;
+    }
+  }
 
+}
 
 
 Status Person::GetStatus() const {
