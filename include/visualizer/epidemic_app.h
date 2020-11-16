@@ -7,6 +7,7 @@
 #include "cinder/gl/gl.h"
 #include "core/simulator.h"
 #include "core/person.h"
+#include "core/virus.h"
 
 namespace epidemic_simulator {
 namespace visualizer {
@@ -22,6 +23,7 @@ class EpidemicSimulatorApp : public ci::app::App {
   const float kSpeed = 11;
   const glm::vec2 kArenaCenter = glm::vec2(400,500);
   const float kPersonSize = 5;
+  const Virus kVirus = Virus(0.9, 2, 5);
 
   const double kWindowWidth = 1400;
   const double kWindowHeight = 1000;

@@ -4,8 +4,12 @@
 
 namespace epidemic_simulator {
 
-Simulator::Simulator(size_t number_people, double arena_radius, float speed)
-    : speed_(speed) {
+Simulator::Simulator(size_t number_people, double arena_radius, float speed,
+                     const epidemic_simulator::Virus& virus)
+    : speed_(speed), virus_(virus),
+      infectiousness_(virus.GetInfectiousness()),
+      incubation_period_(virus.GetIncubationPeriod()),
+      infectious_period_(virus.GetInfectiousPeriod()) {
   for (size_t i = 0; i < number_people; ++i) {
     // Finds the radian angle of the current person's location relative to the
     // x-axis as 0 degrees.

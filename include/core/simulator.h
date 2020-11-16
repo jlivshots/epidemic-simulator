@@ -4,10 +4,11 @@
 
 #include "cinder/gl/gl.h"
 #include "core/person.h"
+#include "core/virus.h"
 namespace epidemic_simulator {
 class Simulator {
  public:
-  Simulator(size_t number_people, double arena_radius, float speed);
+  Simulator(size_t number_people, double arena_radius, float speed, const epidemic_simulator::Virus& virus);
 
   bool ApproachNewLocations();
   void ShuffleSlots();
@@ -20,7 +21,10 @@ class Simulator {
   std::vector<Person> people_;
   float speed_;
   size_t current_person_index_;
-
+  double infectiousness_;
+  size_t incubation_period_;
+  size_t infectious_period_;
+  Virus virus_;
 };
 }
 

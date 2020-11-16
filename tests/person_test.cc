@@ -48,3 +48,7 @@ TEST_CASE("Verify MoveTowardLocation() correctness") {
     REQUIRE(person.MoveTowardLocation(glm::vec2(-12.3, 1), 40));
   }
 }
+
+TEST_CASE("Verify Infect() correctness") {
+
+}

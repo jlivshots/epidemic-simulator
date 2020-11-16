@@ -4,7 +4,7 @@ namespace epidemic_simulator {
 namespace visualizer {
 
 EpidemicSimulatorApp::EpidemicSimulatorApp()
-    : simulator_(kNumberPeople, kArenaRadius, kSpeed) {
+    : simulator_(kNumberPeople, kArenaRadius, kSpeed, kVirus) {
   ci::app::setWindowSize((int)kWindowWidth, (int)kWindowHeight);
   simulator_.ShuffleSlots();
 }
