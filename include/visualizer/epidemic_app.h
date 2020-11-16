@@ -1,29 +1,33 @@
 #ifndef FINAL_PROJECT_JLIVSHOTS_EPIDEMIC_APP_H
 #define FINAL_PROJECT_JLIVSHOTS_EPIDEMIC_APP_H
 
-
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
-#include "core/simulator.h"
 #include "core/person.h"
+#include "core/simulator.h"
 #include "core/virus.h"
 
+/**
+ * Simulates the spread of a virus over time.
+ */
 namespace epidemic_simulator {
 namespace visualizer {
 class EpidemicSimulatorApp : public ci::app::App {
  public:
+  /** Creates a new simulator app instance. **/
   EpidemicSimulatorApp();
 
+  /** Draws the next frame of the simulation. **/
   void draw() override;
 
  private:
-  const size_t kNumberPeople = 300;
-  const float kArenaRadius = 400;
-  const float kSpeed = 9;
-  const glm::vec2 kArenaCenter = glm::vec2(400,500);
-  const float kPersonSize = 4;
-  const Virus kVirus = Virus(0.39, 1, 2);
+  const size_t kNumberPeople = 100;
+  const float kPersonSize = 8;
+  const float kArenaRadius = 150;
+  const glm::vec2 kArenaCenter = glm::vec2(400, 500);
+  const float kSpeed = 5;
+  const Virus kVirus = Virus(0.15, 2, 5);
 
   const double kWindowWidth = 1400;
   const double kWindowHeight = 1000;
@@ -33,13 +37,8 @@ class EpidemicSimulatorApp : public ci::app::App {
   const ci::Color kImmuneColor = ci::Color("green");
 
   epidemic_simulator::Simulator simulator_;
-
-
 };
-}
-}
+}  // namespace visualizer
+}  // namespace epidemic_simulator
 
-
-
-
-#endif //FINAL_PROJECT_JLIVSHOTS_EPIDEMIC_APP_H
+#endif  // FINAL_PROJECT_JLIVSHOTS_EPIDEMIC_APP_H
