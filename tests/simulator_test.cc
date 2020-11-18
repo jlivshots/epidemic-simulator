@@ -144,3 +144,11 @@ TEST_CASE("Verify ApproachNewLocations() functionality") {
     }
   }
 }
+
+TEST_CASE("Infect Neighbors works as intended") {
+  SECTION("Virus with 0% infectiousness does not infect anybody else") {
+    epidemic_simulator::Simulator simulator(12, 100, 1000,
+                                            epidemic_simulator::Virus(0, 2, 2));
+
+  }
+}

@@ -11,7 +11,6 @@ bool Person::MoveTowardLocation(const glm::vec2& target_location, float speed) {
     position_ = target_location;
     return true;
   }
-
   else {
     position_ += glm::normalize(target_location - position_) * speed;
     return false;

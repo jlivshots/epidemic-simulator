@@ -13,12 +13,15 @@ Virus::Virus(double infectiousness, size_t incubation_period,
     throw std::invalid_argument("Infectiousness must be between 0-1!");
   }
 }
+
 double Virus::GetInfectiousness() const {
   return infectiousness_;
 }
+
 size_t Virus::GetIncubationPeriod() const {
   return incubation_period_;
 }
+
 size_t Virus::GetInfectiousPeriod() const {
   return infectious_period_;
 }

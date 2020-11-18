@@ -22,12 +22,12 @@ class EpidemicSimulatorApp : public ci::app::App {
   void draw() override;
 
  private:
-  const size_t kNumberPeople = 100;
-  const float kPersonSize = 6;
-  const float kArenaRadius = 150;
-  const glm::vec2 kArenaCenter = glm::vec2(400, 500);
-  const float kSpeed = 5;
-  const Virus kVirus = Virus(0.15, 2, 5);
+  const size_t kNumberPeople = 300;
+  const float kPersonRadius = 4;
+  const float kArenaRadius = 450;
+  const glm::vec2 kArenaCenter = glm::vec2(500, 500);
+  const float kSpeed = 10;
+  const Virus kVirus = Virus(0.3, 2, 5);
 
   const double kWindowWidth = 1400;
   const double kWindowHeight = 1000;

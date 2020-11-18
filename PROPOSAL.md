@@ -30,7 +30,6 @@ By the end of the first week, I will have the movement mechanics created, along 
     * Virus incubation period (how many days from infection until contagious)
     * Contagious period
     * Probability of infecting someone when exposed
-    * Duration of immunity
  * The particle colors will update accordingly
     
  By the end of the third week, I will:

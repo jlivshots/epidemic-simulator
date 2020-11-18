@@ -6,10 +6,10 @@ namespace epidemic_simulator {
 
 Simulator::Simulator(size_t number_people, double arena_radius, float speed,
                      const epidemic_simulator::Virus& virus)
-    : speed_(speed), virus_(virus),
+    : speed_(speed),
+      virus_(virus),
       infectiousness_(virus.GetInfectiousness()),
-      incubation_period_(virus.GetIncubationPeriod()),
-      infectious_period_(virus.GetInfectiousPeriod()) {
+      at_slots_(true) {
   for (size_t i = 0; i < number_people; ++i) {
     // Finds the radian angle of the current person's location relative to the
     // x-axis as 0 degrees.
@@ -17,9 +17,8 @@ Simulator::Simulator(size_t number_people, double arena_radius, float speed,
     glm::vec2 position(arena_radius * cos(angle), arena_radius * sin(angle));
     slots_.push_back(position);
     people_.emplace_back(position);
-    current_person_index_ = 0;
   }
-  if(!people_.empty()) {
+  if (!people_.empty()) {
     people_[0].Infect(virus_);
   }
 }
@@ -48,18 +47,28 @@ void Simulator::ShufflePeople() {
 }
 
 void Simulator::InfectNeighbors() {
-  for(Person& person: people_) {
+  for (Person& person : people_) {
     person.PassOneDay();
   }
-    for(size_t i = 0; i<people_.size(); ++i) {
-      if(people_[i].GetStatus()==Status::Infectious) {
-        if((double)rand()/RAND_MAX < infectiousness_) {
-          people_[(i+1)%people_.size()].Infect(virus_);
-        }
-        if((double)rand()/RAND_MAX < infectiousness_) {
-          people_[(i-1+people_.size())%people_.size()].Infect(virus_);
-        }
+  for (size_t i = 0; i < people_.size(); ++i) {
+    if (people_[i].GetStatus() == Status::Infectious) {
+      if ((double)rand() / RAND_MAX < infectiousness_) {
+        people_[(i + 1) % people_.size()].Infect(virus_);
+      }
+      if ((double)rand() / RAND_MAX < infectiousness_) {
+        people_[(i - 1 + people_.size()) % people_.size()].Infect(virus_);
       }
     }
   }
+}
+
+void Simulator::PerformNextFrame() {
+  if (!at_slots_) {
+    at_slots_ = ApproachNewLocations();
+  } else {
+    InfectNeighbors();
+    ShufflePeople();
+    at_slots_ = false;
+  }
+}
 }  // namespace epidemic_simulator

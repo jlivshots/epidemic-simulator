@@ -45,3 +45,8 @@ new slot in the circle for 1 frame's distance. I will have it return a boolean t
         * Fixed bug by refactoring ShuffleSlots() to be ShufflePeople(), so
         now the people in people_ are in the order they're in on the arena too
     * Refactored tests to accommodate refactoring ShufflePeople()
+    
+**11/16/2020**
+* Add documentation throughout existing files
+* Throw errors in virus constructor for invalid infectiousness
+    * Add tests in virus_test.cc to verify this functionality
