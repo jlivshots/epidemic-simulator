@@ -52,6 +52,7 @@ class Simulator {
   const std::vector<Person>& GetPeople() const;
   const std::vector<glm::vec2>& GetSlots() const;
 
+  const std::vector<ColumnStatus>& GetBars() const;
  private:
   void UpdateFrequencies();
   /** All vec2 positions on the circle, in order as traversed from 0-2PI. **/

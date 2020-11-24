@@ -15,29 +15,30 @@ void EpidemicSimulatorApp::draw() {
   ci::gl::color(ci::Color("white"));
   ci::gl::drawStrokedCircle(kArenaCenter, kArenaRadius);
 
-//  if (simulator_.ApproachNewLocations()) {
-//    simulator_.InfectNeighbors();
-//    simulator_.ShufflePeople();
-//  }
+
     simulator_.PerformNextFrame();
   std::vector<Person> people = simulator_.GetPeople();
 
   for (const Person& person : people) {
-    switch (person.GetStatus()) {
-      case Status::Vulnerable:
-        ci::gl::color(kVulnerableColor);
-        break;
-      case Status::Incubating:
-        ci::gl::color(kIncubatingColor);
-        break;
-      case Status::Infectious:
-        ci::gl::color(kInfectiousColor);
-        break;
-      case Status::Immune:
-        ci::gl::color(kImmuneColor);
-        break;
-    }
+    SetStatusColor(person.GetStatus());
     ci::gl::drawSolidCircle(kArenaCenter + person.GetLocation(), kPersonRadius);
+  }
+}
+
+void EpidemicSimulatorApp::SetStatusColor(Status status) {
+  switch (status) {
+    case Status::Vulnerable:
+      ci::gl::color(kVulnerableColor);
+      break;
+    case Status::Incubating:
+      ci::gl::color(kIncubatingColor);
+      break;
+    case Status::Infectious:
+      ci::gl::color(kInfectiousColor);
+      break;
+    case Status::Immune:
+      ci::gl::color(kImmuneColor);
+      break;
   }
 }
 }  // namespace visualizer
