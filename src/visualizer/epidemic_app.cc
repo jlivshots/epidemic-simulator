@@ -15,13 +15,23 @@ void EpidemicSimulatorApp::draw() {
   ci::gl::color(ci::Color("white"));
   ci::gl::drawStrokedCircle(kArenaCenter, kArenaRadius);
 
-
-    simulator_.PerformNextFrame();
-  std::vector<Person> people = simulator_.GetPeople();
+  simulator_.PerformNextFrame();
+  const std::vector<Person> people = simulator_.GetPeople();
 
   for (const Person& person : people) {
     SetStatusColor(person.GetStatus());
     ci::gl::drawSolidCircle(kArenaCenter + person.GetLocation(), kPersonRadius);
+  }
+
+  const std::vector<ColumnStatus> bars = simulator_.GetBars();
+  for (const ColumnStatus& column_status : bars) {
+    SetStatusColor(column_status.first);
+    ci::Rectf rectangle = column_status.second;
+    ci::Rectf moved_rectangle(glm::vec2(rectangle.x1 + kGraphTopLeft.x,
+                                        rectangle.y1 + kGraphTopLeft.y),
+                              glm::vec2(rectangle.x2 + kGraphTopLeft.x,
+                                        rectangle.y2 + kGraphTopLeft.y));
+    ci::gl::drawSolidRect(moved_rectangle);
   }
 }
 
