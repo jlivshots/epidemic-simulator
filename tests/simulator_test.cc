@@ -157,5 +157,4 @@ TEST_CASE("Infect Neighbors works as intended") {
       }
     }
   }
-
 }
