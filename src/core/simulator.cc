@@ -10,7 +10,7 @@ Simulator::Simulator(size_t number_people, double arena_radius, float speed,
       virus_(virus),
       infectiousness_(virus.GetInfectiousness()),
       at_slots_(true),
-      graph_(1000, 500, number_people) {
+      graph_(500, 500, number_people) {
   for (size_t i = 0; i < number_people; ++i) {
     // Finds the radian angle of the current person's location relative to the
     // x-axis as 0 degrees.

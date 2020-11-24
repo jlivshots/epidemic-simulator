@@ -28,7 +28,7 @@ void epidemic_simulator::Graph::AddDay(
 }
 
 void epidemic_simulator::Graph::GenerateBars() {
-  double bar_width = width_ / number_people_;
+  double bar_width = width_ / number_days_;
   for (size_t day = 0; day < number_days_; ++day) {
     size_t lower_bound = 0;
     size_t upper_bound = 0;

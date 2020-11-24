@@ -24,8 +24,8 @@ class EpidemicSimulatorApp : public ci::app::App {
  private:
   void SetStatusColor(Status status);
 
-  const size_t kNumberPeople = 300;
-  const float kPersonRadius = 4;
+  const size_t kNumberPeople = 50;
+  const float kPersonRadius = 7;
   const float kArenaRadius = 450;
   const glm::vec2 kArenaCenter = glm::vec2(400, 500);
   const glm::vec2 kGraphTopLeft = glm::vec2(1000, 500);
