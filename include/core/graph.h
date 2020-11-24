@@ -8,7 +8,7 @@ typedef std::pair<epidemic_simulator::Status,ci::Rectf> ColumnStatus;
 namespace epidemic_simulator {
 class Graph {
  public:
-  Graph(const glm::vec2& top_left_corner, size_t width, size_t height);
+  Graph(double width, double height, size_t number_people);
   void AddDay(const std::map<Status, size_t>& frequencies);
   void GenerateBars();
   const std::vector<ColumnStatus>& GetBars() const;
@@ -17,10 +17,9 @@ class Graph {
   std::map<Status, std::vector<size_t>> status_frequencies_;
   std::vector<ColumnStatus> bars_;
   size_t number_days_;
-  size_t top_wall_;
-  size_t left_wall_;
-  size_t height_;
-  size_t width_;
+  size_t number_people_;
+  double height_;
+  double width_;
   std::vector<Status> kVerticalOrder = {Status::Vulnerable, Status::Immune,
                                         Status::Incubating, Status::Infectious};
 };

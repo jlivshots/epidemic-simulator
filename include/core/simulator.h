@@ -5,6 +5,7 @@
 #include "cinder/gl/gl.h"
 #include "core/person.h"
 #include "core/virus.h"
+#include "core/graph.h"
 
 /**
  * Visually simulates the spread of a virus on a circular arena.
@@ -61,6 +62,7 @@ class Simulator {
   Virus virus_;
   bool at_slots_;
   std::map<Status, size_t> frequencies_;
+  Graph graph_;
 };
 }  // namespace epidemic_simulator
 

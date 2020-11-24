@@ -9,7 +9,8 @@ Simulator::Simulator(size_t number_people, double arena_radius, float speed,
     : speed_(speed),
       virus_(virus),
       infectiousness_(virus.GetInfectiousness()),
-      at_slots_(true) {
+      at_slots_(true),
+      graph_(10, 10, number_people) {
   for (size_t i = 0; i < number_people; ++i) {
     // Finds the radian angle of the current person's location relative to the
     // x-axis as 0 degrees.
@@ -21,6 +22,7 @@ Simulator::Simulator(size_t number_people, double arena_radius, float speed,
   if (!people_.empty()) {
     people_[0].Infect(virus_);
   }
+  UpdateFrequencies();
 }
 
 bool Simulator::ApproachNewLocations() {
@@ -86,8 +88,9 @@ void Simulator::UpdateFrequencies() {
   frequencies_.insert(std::make_pair(Status::Infectious, 0));
   frequencies_.insert(std::make_pair(Status::Incubating, 0));
   frequencies_.insert(std::make_pair(Status::Immune, 0));
-  for(const Person& person:people_) {
+  for (const Person& person : people_) {
     ++frequencies_[person.GetStatus()];
   }
+  graph_.AddDay(frequencies_);
 }
 }  // namespace epidemic_simulator
