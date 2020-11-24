@@ -52,6 +52,7 @@ class Simulator {
   const std::vector<glm::vec2>& GetSlots() const;
 
  private:
+  void UpdateFrequencies();
   /** All vec2 positions on the circle, in order as traversed from 0-2PI. **/
   std::vector<glm::vec2> slots_;
   std::vector<Person> people_;
@@ -59,6 +60,7 @@ class Simulator {
   double infectiousness_;
   Virus virus_;
   bool at_slots_;
+  std::map<Status, size_t> frequencies_;
 };
 }  // namespace epidemic_simulator
 

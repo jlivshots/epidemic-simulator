@@ -149,6 +149,13 @@ TEST_CASE("Infect Neighbors works as intended") {
   SECTION("Virus with 0% infectiousness does not infect anybody else") {
     epidemic_simulator::Simulator simulator(12, 100, 1000,
                                             epidemic_simulator::Virus(0, 2, 2));
+    for(size_t i = 0; i<100; ++i) {
+      const std::vector<epidemic_simulator::Person>& people =
+          simulator.GetPeople();
+      for(const epidemic_simulator::Person& person: people) {
 
+      }
+    }
   }
+
 }
