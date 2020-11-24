@@ -17,6 +17,10 @@ const std::vector<ColumnStatus>& epidemic_simulator::Graph::GetBars() const {
 
 void epidemic_simulator::Graph::AddDay(
     const std::map<Status, size_t>& frequencies) {
+  for(auto iterator: frequencies) {
+      Status current_status = iterator.first;
+      status_frequencies_[current_status].push_back(frequencies.at(current_status));
+  }
 }
 
 void epidemic_simulator::Graph::GenerateBars() {
