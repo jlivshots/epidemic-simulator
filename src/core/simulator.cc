@@ -50,6 +50,7 @@ void Simulator::InfectNeighbors() {
   for (Person& person : people_) {
     person.PassOneDay();
   }
+
   for (size_t i = 0; i < people_.size(); ++i) {
     if (people_[i].GetStatus() == Status::Infectious) {
       if ((double)rand() / RAND_MAX < infectiousness_) {
@@ -81,6 +82,10 @@ void Simulator::PerformNextFrame() {
 
 void Simulator::UpdateFrequencies() {
   frequencies_.clear();
+  frequencies_.insert(std::make_pair(Status::Vulnerable, 0));
+  frequencies_.insert(std::make_pair(Status::Infectious, 0));
+  frequencies_.insert(std::make_pair(Status::Incubating, 0));
+  frequencies_.insert(std::make_pair(Status::Immune, 0));
   for(const Person& person:people_) {
     ++frequencies_[person.GetStatus()];
   }
