@@ -22,15 +22,15 @@ class EpidemicSimulatorApp : public ci::app::App {
   void draw() override;
 
  private:
-  void SetStatusColor(Status status);
-
+  void SetStatusFromColor(Status status);
+  void DrawLegend();
   const size_t kNumberPeople = 5000;
   const float kPersonRadius = 4;
   const float kArenaRadius = 400;
   const glm::vec2 kArenaCenter = glm::vec2(400, 500);
   const glm::vec2 kGraphTopLeft = glm::vec2(850, 300);
-  const double kGraphWidth = 100;
-  const double kGraphHeight = 100;
+  const double kGraphWidth = 500;
+  const double kGraphHeight = 500;
   const float kSpeed = 1000;
   const Virus kVirus = Virus(0.1, 2, 8);
 

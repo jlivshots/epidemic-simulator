@@ -4,7 +4,7 @@ namespace epidemic_simulator {
 namespace visualizer {
 
 EpidemicSimulatorApp::EpidemicSimulatorApp()
-    : simulator_(kNumberPeople, kArenaRadius, kSpeed, kVirus) {
+    : simulator_(kNumberPeople, kArenaRadius, kSpeed, kVirus, kGraphWidth, kGraphHeight) {
   ci::app::setWindowSize((int)kWindowWidth, (int)kWindowHeight);
   simulator_.ShufflePeople();
 }
@@ -19,13 +19,13 @@ void EpidemicSimulatorApp::draw() {
   const std::vector<Person> people = simulator_.GetPeople();
 
   for (const Person& person : people) {
-    SetStatusColor(person.GetStatus());
+    SetStatusFromColor(person.GetStatus());
     ci::gl::drawSolidCircle(kArenaCenter + person.GetLocation(), kPersonRadius);
   }
 
   const std::vector<ColumnStatus> bars = simulator_.GetBars();
   for (const ColumnStatus& column_status : bars) {
-    SetStatusColor(column_status.first);
+    SetStatusFromColor(column_status.first);
     ci::Rectf rectangle = column_status.second;
     ci::Rectf moved_rectangle(glm::vec2(rectangle.x1 + kGraphTopLeft.x,
                                         rectangle.y1 + kGraphTopLeft.y),
@@ -35,7 +35,7 @@ void EpidemicSimulatorApp::draw() {
   }
 }
 
-void EpidemicSimulatorApp::SetStatusColor(Status status) {
+void EpidemicSimulatorApp::SetStatusFromColor(Status status) {
   switch (status) {
     case Status::Vulnerable:
       ci::gl::color(kVulnerableColor);
@@ -50,6 +50,9 @@ void EpidemicSimulatorApp::SetStatusColor(Status status) {
       ci::gl::color(kImmuneColor);
       break;
   }
+}
+void EpidemicSimulatorApp::DrawLegend() {
+
 }
 }  // namespace visualizer
 }  // namespace epidemic_simulator
