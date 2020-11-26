@@ -20,13 +20,13 @@ void EpidemicSimulatorApp::draw() {
   const std::vector<Person> people = simulator_.GetPeople();
 
   for (const Person& person : people) {
-    SetStatusFromColor(person.GetStatus());
+    SetColorFromStatus(person.GetStatus());
     ci::gl::drawSolidCircle(kArenaCenter + person.GetLocation(), kPersonRadius);
   }
 
   const std::vector<ColumnStatus> bars = simulator_.GetBars();
   for (const ColumnStatus& column_status : bars) {
-    SetStatusFromColor(column_status.first);
+    SetColorFromStatus(column_status.first);
     ci::Rectf rectangle = column_status.second;
     ci::Rectf moved_rectangle(glm::vec2(rectangle.x1 + kGraphTopLeft.x,
                                         rectangle.y1 + kGraphTopLeft.y),
@@ -37,21 +37,28 @@ void EpidemicSimulatorApp::draw() {
   DrawLegend();
 }
 
-void EpidemicSimulatorApp::SetStatusFromColor(const Status& status) const {
+std::string EpidemicSimulatorApp::SetColorFromStatus(
+    const Status& status) const {
+  std::string status_string;
   switch (status) {
     case Status::Vulnerable:
       ci::gl::color(kVulnerableColor);
+      status_string = "Vulnerable";
       break;
     case Status::Incubating:
       ci::gl::color(kIncubatingColor);
+      status_string = "Incubating";
       break;
     case Status::Infectious:
       ci::gl::color(kInfectiousColor);
+      status_string = "Infectious";
       break;
     case Status::Immune:
       ci::gl::color(kImmuneColor);
+      status_string = "Immune";
       break;
   }
+  return status_string;
 }
 
 void EpidemicSimulatorApp::DrawLegend() {
@@ -61,11 +68,22 @@ void EpidemicSimulatorApp::DrawLegend() {
 
   std::map<Status, size_t> frequencies = simulator_.GetFrequencies();
   double height = (kLegendBottomRight.y - kLegendTopLeft.y) - 2 * kLegendMargin;
-  for (size_t i = 0; i < frequencies.size(); ++i) {
+  double entry_height = height / frequencies.size();
+  size_t index = 0;
+  for (auto iterator : frequencies) {
+    std::string label = SetColorFromStatus(iterator.first);
     ci::gl::drawSolidCircle(
-        kLegendTopLeft + glm::vec2(kLegendIconSize + kLegendMargin,
-                                   kLegendIconSize + kLegendMargin),
+        kLegendTopLeft +
+            glm::vec2(kLegendIconSize + kLegendMargin,
+                      kLegendMargin + entry_height * index + kLegendIconSize),
         kLegendIconSize);
+    ci::gl::drawString(
+        label,
+        kLegendTopLeft + glm::vec2(2 * kLegendIconSize + 2 * kLegendMargin,
+                                   kLegendMargin + entry_height * index),
+        kLegendColor, ci::Font(kLegendFont, kLegendFontSize));
+
+    ++index;
   }
 }
 }  // namespace visualizer
