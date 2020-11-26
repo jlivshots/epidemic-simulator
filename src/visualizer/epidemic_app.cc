@@ -83,6 +83,10 @@ void EpidemicSimulatorApp::DrawLegend() {
                                    kLegendMargin + entry_height * index),
         kLegendColor, ci::Font(kLegendFont, kLegendFontSize));
 
+    ci::gl::drawStringRight(
+        std::to_string(iterator.second),
+        kFrequencyTopLeft + glm::vec2(0, kLegendMargin + entry_height * index),
+        kLegendColor, ci::Font(kLegendFont, kLegendFontSize));
     ++index;
   }
 }
