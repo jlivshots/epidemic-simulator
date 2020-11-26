@@ -6,12 +6,12 @@ namespace epidemic_simulator {
 
 Simulator::Simulator(size_t number_people, double arena_radius, float speed,
                      const epidemic_simulator::Virus& virus, double graph_width,
-                     double graph_height)
+                     double graph_height, bool show_graph)
     : speed_(speed),
       virus_(virus),
       infectiousness_(virus.GetInfectiousness()),
       at_slots_(true),
-      graph_(graph_width, graph_height, number_people) {
+      graph_(graph_width, graph_height, number_people), show_graph_(show_graph) {
   for (size_t i = 0; i < number_people; ++i) {
     // Finds the radian angle of the current person's location relative to the
     // x-axis as 0 degrees.
@@ -93,7 +93,9 @@ void Simulator::UpdateFrequencies() {
     ++frequencies_[person.GetStatus()];
   }
   graph_.AddDay(frequencies_);
-  graph_.GenerateBars();
+  if(show_graph_) {
+    graph_.GenerateBars();
+  }
 }
 
 const std::vector<ColumnStatus>& Simulator::GetBars() const {

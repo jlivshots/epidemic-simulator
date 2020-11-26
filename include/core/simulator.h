@@ -23,7 +23,7 @@ class Simulator {
    * @param virus the Virus to be modelled in the simulation.
    */
   Simulator(size_t number_people, double arena_radius, float speed,
-            const epidemic_simulator::Virus& virus, double graph_width, double graph_height);
+            const epidemic_simulator::Virus& virus, double graph_width, double graph_height, bool show_graph);
 
   /**
    * Iterates through each Person in people_ and moves then 1 speed_ closer to
@@ -64,6 +64,7 @@ class Simulator {
   bool at_slots_;
   std::map<Status, size_t> frequencies_;
   Graph graph_;
+  bool show_graph_;
 };
 }  // namespace epidemic_simulator
 

@@ -34,9 +34,10 @@ void epidemic_simulator::Graph::GenerateBars() {
     size_t upper_bound = 0;
     for (const Status& status : kVerticalOrder) {
       upper_bound += status_frequencies_[status][day];
-
-      ci::Rectf boundary(glm::vec2(bar_width * day, lower_bound*height_/number_people_),
-                         glm::vec2(bar_width * (day + 1), upper_bound*height_/number_people_));
+      ci::Rectf boundary(
+          glm::vec2(bar_width * day, lower_bound * height_ / number_people_),
+          glm::vec2(bar_width * (day + 1),
+                    upper_bound * height_ / number_people_));
       bars_.emplace_back(status, boundary);
       lower_bound = upper_bound;
     }

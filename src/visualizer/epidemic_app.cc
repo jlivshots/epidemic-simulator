@@ -4,7 +4,8 @@ namespace epidemic_simulator {
 namespace visualizer {
 
 EpidemicSimulatorApp::EpidemicSimulatorApp()
-    : simulator_(kNumberPeople, kArenaRadius, kSpeed, kVirus, kGraphWidth, kGraphHeight) {
+    : simulator_(kNumberPeople, kArenaRadius, kSpeed, kVirus, kGraphWidth,
+                 kGraphHeight, true) {
   ci::app::setWindowSize((int)kWindowWidth, (int)kWindowHeight);
   simulator_.ShufflePeople();
 }
@@ -33,9 +34,10 @@ void EpidemicSimulatorApp::draw() {
                                         rectangle.y2 + kGraphTopLeft.y));
     ci::gl::drawSolidRect(moved_rectangle);
   }
+  DrawLegend();
 }
 
-void EpidemicSimulatorApp::SetStatusFromColor(Status status) {
+void EpidemicSimulatorApp::SetStatusFromColor(const Status& status) const {
   switch (status) {
     case Status::Vulnerable:
       ci::gl::color(kVulnerableColor);
@@ -51,8 +53,20 @@ void EpidemicSimulatorApp::SetStatusFromColor(Status status) {
       break;
   }
 }
-void EpidemicSimulatorApp::DrawLegend() {
 
+void EpidemicSimulatorApp::DrawLegend() {
+  ci::Rectf boundary(kLegendTopLeft, kLegendBottomRight);
+  ci::gl::color(ci::Color("white"));
+  ci::gl::drawStrokedRect(boundary);
+
+  std::map<Status, size_t> frequencies = simulator_.GetFrequencies();
+  double height = (kLegendBottomRight.y - kLegendTopLeft.y) - 2 * kLegendMargin;
+  for (size_t i = 0; i < frequencies.size(); ++i) {
+    ci::gl::drawSolidCircle(
+        kLegendTopLeft + glm::vec2(kLegendIconSize + kLegendMargin,
+                                   kLegendIconSize + kLegendMargin),
+        kLegendIconSize);
+  }
 }
 }  // namespace visualizer
 }  // namespace epidemic_simulator
