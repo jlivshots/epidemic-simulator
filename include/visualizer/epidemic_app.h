@@ -22,7 +22,8 @@ class EpidemicSimulatorApp : public ci::app::App {
   void draw() override;
 
  private:
-  void SetStatusFromColor(const Status& status) const;
+  std::string SetColorFromStatus(const Status& status) const;
+
   void DrawLegend();
   const size_t kNumberPeople = 300;
   const float kPersonRadius = 4;
@@ -38,8 +39,9 @@ class EpidemicSimulatorApp : public ci::app::App {
   const float kLegendIconSize = 15;
   const std::string kLegendFont = "calibri";
   const ci::Color kLegendColor = ci::Color("white");
-  constexpr static const float kLegendFontSize = 18.0f;
+  constexpr static const float kLegendFontSize = 35.0f;
   const double kLegendMargin = 15;
+  const glm::vec2 kFrequencyTopLeft = glm::vec2(1100, 30);
 
   const float kSpeed = 20;
   const Virus kVirus = Virus(0.2, 2, 4);
