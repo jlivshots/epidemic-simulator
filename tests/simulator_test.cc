@@ -2,7 +2,7 @@
 
 #include <catch2/catch.hpp>
 
-TEST_CASE("Verify constructor assigns slots evenly around the arena") {
+TEST_CASE("Verify constructor works as intended") {
   SECTION("No people in the arena") {
     epidemic_simulator::Simulator simulator(
         0, 20, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
@@ -10,7 +10,7 @@ TEST_CASE("Verify constructor assigns slots evenly around the arena") {
     REQUIRE(simulator.GetSlots().empty());
   }
 
-  SECTION("1 person in the arena") {
+  SECTION("People spaced evenly for 1 person in the arena") {
     epidemic_simulator::Simulator simulator(
         1, 2, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
     const std::vector<epidemic_simulator::Person>& people =
@@ -24,7 +24,7 @@ TEST_CASE("Verify constructor assigns slots evenly around the arena") {
     REQUIRE(slots[0] == glm::vec2(2, 0));
   }
 
-  SECTION("Multiple people in the arena") {
+  SECTION("People spaced evenly when multiple people in the arena") {
     epidemic_simulator::Simulator simulator(
         20, 100, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
     const std::vector<epidemic_simulator::Person>& people =
@@ -37,6 +37,31 @@ TEST_CASE("Verify constructor assigns slots evenly around the arena") {
       REQUIRE(people[i].GetLocation() == slots[i]);
       REQUIRE(slots[i].x == Approx(100 * cos(2 * i * M_PI / 20)).epsilon(0.01));
       REQUIRE(slots[i].y == Approx(100 * sin(2 * i * M_PI / 20)).epsilon(0.01));
+    }
+  }
+
+  SECTION("Exactly 1 person is infected for 1 person in arena") {
+    epidemic_simulator::Simulator simulator(
+        1, 2, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+    const std::vector<epidemic_simulator::Person>& people =
+        simulator.GetPeople();
+
+    REQUIRE(people[0].GetStatus() == epidemic_simulator::Status::Incubating);
+  }
+
+  SECTION("Exactly 1 person is infected for multiple people in arena") {
+    epidemic_simulator::Simulator simulator(
+        14, 2, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+    const std::vector<epidemic_simulator::Person>& people =
+        simulator.GetPeople();
+    for (size_t i = 0; i < people.size(); ++i) {
+      if (i == 0) {
+        REQUIRE(people[i].GetStatus() ==
+                epidemic_simulator::Status::Incubating);
+      } else {
+        REQUIRE(people[i].GetStatus() ==
+                epidemic_simulator::Status::Vulnerable);
+      }
     }
   }
 }
