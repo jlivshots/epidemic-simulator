@@ -8,9 +8,6 @@ epidemic_simulator::Graph::Graph(double width, double height,
       height_(height),
       width_(width),
       number_people_(number_people) {
-  if (number_people == 0) {
-    throw std::invalid_argument("Sorry, graph needs at least one person!");
-  }
 }
 
 const std::vector<ColumnStatus>& epidemic_simulator::Graph::GetBars() const {
