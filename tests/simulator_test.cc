@@ -186,8 +186,48 @@ TEST_CASE("Infect Neighbors works as intended") {
   }
 
   SECTION(
-      "Virus with 100% infectiousness infects everybody near an infectious "
+      "Virus with 100% infectiousness infects each right neighbor of an "
+      "infectious "
       "person") {
+    epidemic_simulator::Simulator simulator(
+        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+    for (size_t i = 0; i < 100; ++i) {
+      const std::vector<epidemic_simulator::Person>& initial_people =
+          simulator.GetPeople();
+      simulator.InfectNeighbors();
+      const std::vector<epidemic_simulator::Person>& final_people =
+          simulator.GetPeople();
+      for (size_t j = 0; j < final_people.size(); ++j) {
+        if (initial_people[j].GetStatus() ==
+            epidemic_simulator::Status::Infectious) {
+          REQUIRE(final_people[(j + 1) % final_people.size()].GetStatus() !=
+                  epidemic_simulator::Status::Vulnerable);
+        }
+      }
+      simulator.ShufflePeople();
+    }
+  }
+  SECTION(
+      "Virus with 100% infectiousness infects each left neighbor of an "
+      "infectious person") {
+    epidemic_simulator::Simulator simulator(
+        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+    for (size_t i = 0; i < 100; ++i) {
+      const std::vector<epidemic_simulator::Person>& initial_people =
+          simulator.GetPeople();
+      simulator.InfectNeighbors();
+      const std::vector<epidemic_simulator::Person>& final_people =
+          simulator.GetPeople();
+      for (size_t j = 0; j < final_people.size(); ++j) {
+        if (initial_people[j].GetStatus() ==
+            epidemic_simulator::Status::Infectious) {
+          REQUIRE(
+              final_people[(j - 1 + final_people.size()) % final_people.size()]
+                  .GetStatus() != epidemic_simulator::Status::Vulnerable);
+        }
+      }
+      simulator.ShufflePeople();
+    }
   }
 }
 
