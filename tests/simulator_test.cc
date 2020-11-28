@@ -161,6 +161,8 @@ TEST_CASE("Infect Neighbors works as intended") {
                   frequencies.at(epidemic_simulator::Status::Immune) ==
               1);
       REQUIRE(frequencies.at(epidemic_simulator::Status::Vulnerable) == 11);
+      simulator.ShufflePeople();
+      simulator.InfectNeighbors();
     }
   }
 
@@ -170,6 +172,7 @@ TEST_CASE("Infect Neighbors works as intended") {
     epidemic_simulator::Simulator simulator(
         15, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, false);
     for (size_t i = 0; i < 100; ++i) {
+      simulator.UpdateFrequencies();
       const std::map<epidemic_simulator::Status, size_t>& frequencies =
           simulator.GetFrequencies();
       REQUIRE(frequencies.at(epidemic_simulator::Status::Infectious) +
@@ -177,6 +180,8 @@ TEST_CASE("Infect Neighbors works as intended") {
                   frequencies.at(epidemic_simulator::Status::Immune) ==
               1);
       REQUIRE(frequencies.at(epidemic_simulator::Status::Vulnerable) == 14);
+      simulator.ShufflePeople();
+      simulator.InfectNeighbors();
     }
   }
 
@@ -188,12 +193,140 @@ TEST_CASE("Infect Neighbors works as intended") {
 
 TEST_CASE("Frequencies are calculated correctly") {
   SECTION("Initial frequencies have 1 incubating and all other vulnerable") {
-
+    epidemic_simulator::Simulator simulator(
+        12, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, false);
+    const std::map<epidemic_simulator::Status, size_t>& frequencies =
+        simulator.GetFrequencies();
+    REQUIRE(frequencies.at(epidemic_simulator::Status::Infectious) == 0);
+    REQUIRE(frequencies.at(epidemic_simulator::Status::Incubating) == 1);
+    REQUIRE(frequencies.at(epidemic_simulator::Status::Immune) == 0);
+    REQUIRE(frequencies.at(epidemic_simulator::Status::Vulnerable) == 11);
   }
 
-  SECTION(
-      "Virus with 0 day incubation and 0 day infectious periods updates "
-      "correctly") {
+  SECTION("Virus with a 0% infectiousness updates frequencies correctly") {
+    epidemic_simulator::Simulator simulator(
+        15, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, false);
+    for (size_t i = 0; i < 100; ++i) {
+      size_t number_infectious = 0;
+      size_t number_vulnerable = 0;
+      size_t number_immune = 0;
+      size_t number_incubating = 0;
+      const std::vector<epidemic_simulator::Person>& people =
+          simulator.GetPeople();
+      for (const epidemic_simulator::Person& person : people) {
+        switch (person.GetStatus()) {
+          case epidemic_simulator::Status::Vulnerable:
+            ++number_vulnerable;
+            break;
+          case epidemic_simulator::Status::Incubating:
+            ++number_incubating;
+            break;
+          case epidemic_simulator::Status::Infectious:
+            ++number_infectious;
+            break;
+          case epidemic_simulator::Status::Immune:
+            ++number_immune;
+            break;
+        }
+      }
+      simulator.UpdateFrequencies();
+      const std::map<epidemic_simulator::Status, size_t>& frequencies =
+          simulator.GetFrequencies();
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Immune) ==
+              number_immune);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Vulnerable) ==
+              number_vulnerable);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Infectious) ==
+              number_infectious);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Incubating) ==
+              number_incubating);
+      simulator.ShufflePeople();
+      simulator.InfectNeighbors();
+    }
+  }
 
+  SECTION("Virus with a 50% infectiousness updates frequencies correctly") {
+    epidemic_simulator::Simulator simulator(
+        15, 100, 1000, epidemic_simulator::Virus(0.5, 2, 2), 0, 0, false);
+    for (size_t i = 0; i < 100; ++i) {
+      size_t number_infectious = 0;
+      size_t number_vulnerable = 0;
+      size_t number_immune = 0;
+      size_t number_incubating = 0;
+      const std::vector<epidemic_simulator::Person>& people =
+          simulator.GetPeople();
+      for (const epidemic_simulator::Person& person : people) {
+        switch (person.GetStatus()) {
+          case epidemic_simulator::Status::Vulnerable:
+            ++number_vulnerable;
+            break;
+          case epidemic_simulator::Status::Incubating:
+            ++number_incubating;
+            break;
+          case epidemic_simulator::Status::Infectious:
+            ++number_infectious;
+            break;
+          case epidemic_simulator::Status::Immune:
+            ++number_immune;
+            break;
+        }
+      }
+      simulator.UpdateFrequencies();
+
+      const std::map<epidemic_simulator::Status, size_t>& frequencies =
+          simulator.GetFrequencies();
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Immune) ==
+              number_immune);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Vulnerable) ==
+              number_vulnerable);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Infectious) ==
+              number_infectious);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Incubating) ==
+              number_incubating);
+      simulator.ShufflePeople();
+      simulator.InfectNeighbors();
+    }
+  }
+
+  SECTION("Virus with a 100% infectiousness updates frequencies correctly") {
+    epidemic_simulator::Simulator simulator(
+        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+    for (size_t i = 0; i < 100; ++i) {
+      size_t number_infectious = 0;
+      size_t number_vulnerable = 0;
+      size_t number_immune = 0;
+      size_t number_incubating = 0;
+      const std::vector<epidemic_simulator::Person>& people =
+          simulator.GetPeople();
+      for (const epidemic_simulator::Person& person : people) {
+        switch (person.GetStatus()) {
+          case epidemic_simulator::Status::Vulnerable:
+            ++number_vulnerable;
+            break;
+          case epidemic_simulator::Status::Incubating:
+            ++number_incubating;
+            break;
+          case epidemic_simulator::Status::Infectious:
+            ++number_infectious;
+            break;
+          case epidemic_simulator::Status::Immune:
+            ++number_immune;
+            break;
+        }
+      }
+      simulator.UpdateFrequencies();
+      const std::map<epidemic_simulator::Status, size_t>& frequencies =
+          simulator.GetFrequencies();
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Immune) ==
+              number_immune);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Vulnerable) ==
+              number_vulnerable);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Infectious) ==
+              number_infectious);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Incubating) ==
+              number_incubating);
+      simulator.ShufflePeople();
+      simulator.InfectNeighbors();
+    }
   }
 }
