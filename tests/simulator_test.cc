@@ -172,7 +172,7 @@ TEST_CASE("Verify ApproachNewLocations() functionality") {
   }
 }
 
-TEST_CASE("Infect Neighbors works as intended") {
+TEST_CASE("InfectNeighbors() works as intended") {
   SECTION(
       "Virus with 0% infectiousness does not infect anybody else for a "
       "12-person arena") {
@@ -393,5 +393,108 @@ TEST_CASE("Frequencies are calculated correctly") {
       simulator.ShufflePeople();
       simulator.InfectNeighbors();
     }
+  }
+}
+
+TEST_CASE("Verify PerformNextFrame() functionality") {
+  SECTION("People are shuffled when method is called for the first time") {
+    epidemic_simulator::Simulator simulator(
+        100, 100, 1, epidemic_simulator::Virus(0, 2, 2), 0, 0, false);
+    const std::vector<epidemic_simulator::Person> initial_people =
+        simulator.GetPeople();
+    simulator.PerformNextFrame();
+    const std::vector<epidemic_simulator::Person> final_people =
+        simulator.GetPeople();
+    bool is_shuffled = false;
+    for (size_t i = 0; i < initial_people.size(); ++i) {
+      if (initial_people[i].GetLocation() != final_people[i].GetLocation()) {
+        is_shuffled = true;
+        break;
+      }
+    }
+    REQUIRE(is_shuffled);
+  }
+
+  SECTION("Neighbors are infected when method is called for the first time") {
+    epidemic_simulator::Simulator simulator(
+        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+    for (size_t i = 0; i < 100; ++i) {
+      const std::vector<epidemic_simulator::Person>& initial_people =
+          simulator.GetPeople();
+      simulator.InfectNeighbors();
+      const std::vector<epidemic_simulator::Person>& final_people =
+          simulator.GetPeople();
+      for (size_t j = 0; j < final_people.size(); ++j) {
+        if (initial_people[j].GetStatus() ==
+            epidemic_simulator::Status::Infectious) {
+          REQUIRE(final_people[(j + 1) % final_people.size()].GetStatus() !=
+                  epidemic_simulator::Status::Vulnerable);
+          REQUIRE(
+              final_people[(j - 1 + final_people.size()) % final_people.size()]
+                  .GetStatus() != epidemic_simulator::Status::Vulnerable);
+        }
+      }
+    }
+  }
+  SECTION(
+      "People approach their new locations when they are on their way to their "
+      "new locations") {
+    epidemic_simulator::Simulator simulator(
+        100, 100, 1, epidemic_simulator::Virus(0, 2, 2), 0, 0, false);
+    const std::vector<epidemic_simulator::Person> initial_people =
+        simulator.GetPeople();
+    simulator.PerformNextFrame();
+    simulator.PerformNextFrame();
+    const std::vector<epidemic_simulator::Person> final_people =
+        simulator.GetPeople();
+    for (size_t i = 0; i < initial_people.size(); ++i) {
+      REQUIRE(initial_people[i].GetLocation() != final_people[i].GetLocation());
+    }
+  }
+
+  SECTION("People are infected when they are at their new locations") {
+    epidemic_simulator::Simulator simulator(
+        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+    simulator.PerformNextFrame();
+    simulator.PerformNextFrame();
+    simulator.PerformNextFrame();
+    for (size_t i = 0; i < 100; ++i) {
+      const std::vector<epidemic_simulator::Person>& initial_people =
+          simulator.GetPeople();
+      simulator.InfectNeighbors();
+      const std::vector<epidemic_simulator::Person>& final_people =
+          simulator.GetPeople();
+      for (size_t j = 0; j < final_people.size(); ++j) {
+        if (initial_people[j].GetStatus() ==
+            epidemic_simulator::Status::Infectious) {
+          REQUIRE(final_people[(j + 1) % final_people.size()].GetStatus() !=
+                  epidemic_simulator::Status::Vulnerable);
+          REQUIRE(
+              final_people[(j - 1 + final_people.size()) % final_people.size()]
+                  .GetStatus() != epidemic_simulator::Status::Vulnerable);
+        }
+      }
+    }
+  }
+
+  SECTION("People are shuffled when they are at their new locations") {
+    epidemic_simulator::Simulator simulator(
+        100, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, false);
+    simulator.PerformNextFrame();
+    const std::vector<epidemic_simulator::Person> initial_people =
+        simulator.GetPeople();
+    simulator.PerformNextFrame();
+    simulator.PerformNextFrame();
+
+    const std::vector<epidemic_simulator::Person> final_people =
+        simulator.GetPeople();
+    bool is_shuffled = false;
+    for (size_t i = 0; i < initial_people.size(); ++i) {
+      if (initial_people[i].GetLocation() != final_people[i].GetLocation()) {
+        is_shuffled = true;
+        break;
+      }
+    }
+    REQUIRE(is_shuffled);
   }
 }

@@ -11,7 +11,8 @@ Simulator::Simulator(size_t number_people, double arena_radius, float speed,
       virus_(virus),
       infectiousness_(virus.GetInfectiousness()),
       at_slots_(true),
-      graph_(graph_width, graph_height, number_people), show_graph_(show_graph) {
+      graph_(graph_width, graph_height, number_people),
+      show_graph_(show_graph) {
   for (size_t i = 0; i < number_people; ++i) {
     // Finds the radian angle of the current person's location relative to the
     // x-axis as 0 degrees.
@@ -34,14 +35,6 @@ bool Simulator::ApproachNewLocations() {
     }
   }
   return all_people_arrived;
-}
-
-const std::vector<Person>& Simulator::GetPeople() const {
-  return people_;
-}
-
-const std::vector<glm::vec2>& Simulator::GetSlots() const {
-  return slots_;
 }
 
 void Simulator::ShufflePeople() {
@@ -93,7 +86,7 @@ void Simulator::UpdateFrequencies() {
     ++frequencies_[person.GetStatus()];
   }
   graph_.AddDay(frequencies_);
-  if(show_graph_) {
+  if (show_graph_) {
     graph_.GenerateBars();
   }
 }
@@ -105,4 +98,11 @@ const std::map<Status, size_t>& Simulator::GetFrequencies() const {
   return frequencies_;
 }
 
+const std::vector<Person>& Simulator::GetPeople() const {
+  return people_;
+}
+
+const std::vector<glm::vec2>& Simulator::GetSlots() const {
+  return slots_;
+}
 }  // namespace epidemic_simulator
