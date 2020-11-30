@@ -118,7 +118,8 @@ void EpidemicSimulatorApp::DrawHorizontalAxis() {
         kGraphTopLeft + glm::vec2(0, kGraphHeight) + label.second, kTextColor,
         ci::Font(kFont, kAxisLabelSize));
   }
-
+  ci::gl::drawStringCentered("Day", kHorizontalAxisNameLocation, kTextColor,
+                             ci::Font(kFont, kAxisNameSize));
 }
 
 }  // namespace visualizer
