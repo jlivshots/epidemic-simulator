@@ -6,13 +6,12 @@ namespace epidemic_simulator {
 
 Simulator::Simulator(size_t number_people, double arena_radius, float speed,
                      const epidemic_simulator::Virus& virus, double graph_width,
-                     double graph_height, bool show_graph)
+                     double graph_height, size_t vertical_label_interval, size_t horizontal_label_interval)
     : speed_(speed),
       virus_(virus),
       infectiousness_(virus.GetInfectiousness()),
       at_slots_(true),
-      graph_(graph_width, graph_height, number_people),
-      show_graph_(show_graph) {
+      graph_(graph_width, graph_height, number_people) {
   for (size_t i = 0; i < number_people; ++i) {
     // Finds the radian angle of the current person's location relative to the
     // x-axis as 0 degrees.
@@ -25,7 +24,7 @@ Simulator::Simulator(size_t number_people, double arena_radius, float speed,
     people_[0].Infect(virus_);
   }
   UpdateFrequencies();
-  graph_.GenerateVerticalLabels();
+  graph_.GenerateVerticalLabels(vertical_label_interval);
 }
 
 bool Simulator::ApproachNewLocations() {
@@ -87,9 +86,7 @@ void Simulator::UpdateFrequencies() {
     ++frequencies_[person.GetStatus()];
   }
   graph_.AddDay(frequencies_);
-  if (show_graph_) {
     graph_.GenerateBars();
-  }
 }
 
 const std::vector<ColumnStatus>& Simulator::GetBars() const {
@@ -105,5 +102,13 @@ const std::vector<Person>& Simulator::GetPeople() const {
 
 const std::vector<glm::vec2>& Simulator::GetSlots() const {
   return slots_;
+}
+
+const std::vector<LocatedLabel>& Simulator::GetHorizontalLabels() const {
+  return graph_.GetHorizontalLabels();
+}
+
+const std::vector<LocatedLabel>& Simulator::GetVerticalLabels() const {
+  return graph_.GetVerticalLabels();
 }
 }  // namespace epidemic_simulator

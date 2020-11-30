@@ -5,8 +5,10 @@ namespace visualizer {
 
 EpidemicSimulatorApp::EpidemicSimulatorApp()
     : simulator_(kNumberPeople, kArenaRadius, kSpeed, kVirus, kGraphWidth,
-                 kGraphHeight, kShowGraph) {
+                 kGraphHeight, kVerticalLabelInterval,
+                 kHorizontalLabelInterval) {
   ci::app::setWindowSize((int)kWindowWidth, (int)kWindowHeight);
+  vertical_labels_ = simulator_.GetVerticalLabels();
   simulator_.ShufflePeople();
 }
 
@@ -35,6 +37,7 @@ void EpidemicSimulatorApp::draw() {
     ci::gl::drawSolidRect(moved_rectangle);
   }
   DrawLegend();
+  DrawVerticalAxis();
 }
 
 std::string EpidemicSimulatorApp::SetAndGetColorFromStatus(
@@ -81,14 +84,24 @@ void EpidemicSimulatorApp::DrawLegend() {
         label,
         kLegendTopLeft + glm::vec2(2 * kLegendIconSize + 2 * kLegendMargin,
                                    kLegendMargin + entry_height * index),
-        kLegendColor, ci::Font(kLegendFont, kLegendFontSize));
+        kTextColor, ci::Font(kFont, kLegendTextSize));
 
     ci::gl::drawStringRight(
         std::to_string(iterator.second),
         kFrequencyTopLeft + glm::vec2(0, kLegendMargin + entry_height * index),
-        kLegendColor, ci::Font(kLegendFont, kLegendFontSize));
+        kTextColor, ci::Font(kFont, kLegendTextSize));
     ++index;
   }
 }
+
+void EpidemicSimulatorApp::DrawVerticalAxis() {
+  for (const LocatedLabel& label : vertical_labels_) {
+    ci::gl::drawStringRight(std::to_string(label.first),
+                            kGraphTopLeft + label.second, kTextColor,
+                            ci::Font(kFont, kAxisLabelSize));
+  }
+
+}
+
 }  // namespace visualizer
 }  // namespace epidemic_simulator

@@ -23,7 +23,7 @@ class Simulator {
    * @param virus the Virus to be modelled in the simulation.
    */
   Simulator(size_t number_people, double arena_radius, float speed,
-            const epidemic_simulator::Virus& virus, double graph_width, double graph_height, bool show_graph);
+            const epidemic_simulator::Virus& virus, double graph_width, double graph_height, size_t vertical_label_interval, size_t horizontal_label_interval);
 
   /**
    * Iterates through each Person in people_ and moves then 1 speed_ closer to
@@ -55,6 +55,9 @@ class Simulator {
   const std::vector<glm::vec2>& GetSlots() const;
   const std::vector<ColumnStatus>& GetBars() const;
   const std::map<Status, size_t>& GetFrequencies() const;
+  const std::vector<LocatedLabel>& GetHorizontalLabels() const;
+  const std::vector<LocatedLabel>& GetVerticalLabels() const;
+
  private:
   /** All vec2 positions on the circle, in order as traversed from 0-2PI. **/
   std::vector<glm::vec2> slots_;
@@ -65,7 +68,6 @@ class Simulator {
   bool at_slots_;
   std::map<Status, size_t> frequencies_;
   Graph graph_;
-  bool show_graph_;
 };
 }  // namespace epidemic_simulator
 

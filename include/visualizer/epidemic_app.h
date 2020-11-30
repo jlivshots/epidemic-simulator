@@ -24,25 +24,33 @@ class EpidemicSimulatorApp : public ci::app::App {
  private:
   std::string SetAndGetColorFromStatus(const Status& status) const;
 
+
   void DrawLegend();
+
+  void DrawVerticalAxis();
+
   const size_t kNumberPeople = 500;
   const float kSpeed = 30;
   const Virus kVirus = Virus(0.2, 2, 5);
   const float kPersonRadius = 2;
-  const float kArenaRadius = 400;
+  const float kArenaRadius = 330;
   const glm::vec2 kArenaCenter = glm::vec2(400, 500);
 
-  const glm::vec2 kGraphTopLeft = glm::vec2(850, 300);
+  const glm::vec2 kGraphTopLeft = glm::vec2(880, 300);
   const double kGraphWidth = 500;
   const double kGraphHeight = 500;
-  const bool kShowGraph = true;
+  const size_t kVerticalLabelInterval = 100;
+  const size_t kHorizontalLabelInterval = 10;
+  constexpr static const float kAxisLabelSize = 20.0f;
+
+  const std::string kFont = "calibri";
+  const ci::Color kTextColor = ci::Color("white");
 
   const glm::vec2 kLegendTopLeft = glm::vec2(850, 30);
   const glm::vec2 kLegendBottomRight = glm::vec2(1200, 200);
   const float kLegendIconSize = 15;
-  const std::string kLegendFont = "calibri";
-  const ci::Color kLegendColor = ci::Color("white");
-  constexpr static const float kLegendFontSize = 35.0f;
+
+  constexpr static const float kLegendTextSize = 35.0f;
   const double kLegendMargin = 15;
   const glm::vec2 kFrequencyTopLeft = glm::vec2(1100, 30);
 
@@ -54,6 +62,8 @@ class EpidemicSimulatorApp : public ci::app::App {
   const ci::Color kImmuneColor = ci::Color("green");
 
   epidemic_simulator::Simulator simulator_;
+
+  std::vector<LocatedLabel> vertical_labels_;
 };
 }  // namespace visualizer
 }  // namespace epidemic_simulator
