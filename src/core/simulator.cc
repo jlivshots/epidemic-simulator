@@ -25,6 +25,7 @@ Simulator::Simulator(size_t number_people, double arena_radius, float speed,
     people_[0].Infect(virus_);
   }
   UpdateFrequencies();
+  graph_.GenerateVerticalLabels();
 }
 
 bool Simulator::ApproachNewLocations() {

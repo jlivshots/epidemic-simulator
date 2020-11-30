@@ -25,8 +25,10 @@ class EpidemicSimulatorApp : public ci::app::App {
   std::string SetAndGetColorFromStatus(const Status& status) const;
 
   void DrawLegend();
-  const size_t kNumberPeople = 50;
-  const float kPersonRadius = 10;
+  const size_t kNumberPeople = 500;
+  const float kSpeed = 30;
+  const Virus kVirus = Virus(0.2, 2, 5);
+  const float kPersonRadius = 2;
   const float kArenaRadius = 400;
   const glm::vec2 kArenaCenter = glm::vec2(400, 500);
 
@@ -43,9 +45,6 @@ class EpidemicSimulatorApp : public ci::app::App {
   constexpr static const float kLegendFontSize = 35.0f;
   const double kLegendMargin = 15;
   const glm::vec2 kFrequencyTopLeft = glm::vec2(1100, 30);
-
-  const float kSpeed = 30;
-  const Virus kVirus = Virus(0.33, 2, 4);
 
   const double kWindowWidth = 1400;
   const double kWindowHeight = 1000;

@@ -41,3 +41,18 @@ void epidemic_simulator::Graph::GenerateBars() {
     }
   }
 }
+
+void epidemic_simulator::Graph::GenerateVerticalLabels() {
+  vertical_labels_.clear();
+  double interval = (double)number_people_ / (kNumberVerticalLabels - 1);
+  for (size_t i = 0; i < kNumberVerticalLabels; ++i) {
+    vertical_labels_.emplace_back(
+        i * interval,
+        glm::vec2(0, height_ - height_ * i / (kNumberVerticalLabels - 1)));
+  }
+}
+
+const std::vector<LocatedLabel>& epidemic_simulator::Graph::GetVerticalLabels()
+    const {
+  return vertical_labels_;
+}
