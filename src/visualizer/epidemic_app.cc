@@ -5,7 +5,7 @@ namespace visualizer {
 
 EpidemicSimulatorApp::EpidemicSimulatorApp()
     : simulator_(kNumberPeople, kArenaRadius, kSpeed, kVirus, kGraphWidth,
-                 kGraphHeight, true) {
+                 kGraphHeight, kShowGraph) {
   ci::app::setWindowSize((int)kWindowWidth, (int)kWindowHeight);
   simulator_.ShufflePeople();
 }
@@ -20,13 +20,13 @@ void EpidemicSimulatorApp::draw() {
   const std::vector<Person> people = simulator_.GetPeople();
 
   for (const Person& person : people) {
-    SetColorFromStatus(person.GetStatus());
+    SetAndGetColorFromStatus(person.GetStatus());
     ci::gl::drawSolidCircle(kArenaCenter + person.GetLocation(), kPersonRadius);
   }
 
   const std::vector<ColumnStatus> bars = simulator_.GetBars();
   for (const ColumnStatus& column_status : bars) {
-    SetColorFromStatus(column_status.first);
+    SetAndGetColorFromStatus(column_status.first);
     ci::Rectf rectangle = column_status.second;
     ci::Rectf moved_rectangle(glm::vec2(rectangle.x1 + kGraphTopLeft.x,
                                         rectangle.y1 + kGraphTopLeft.y),
@@ -37,7 +37,7 @@ void EpidemicSimulatorApp::draw() {
   DrawLegend();
 }
 
-std::string EpidemicSimulatorApp::SetColorFromStatus(
+std::string EpidemicSimulatorApp::SetAndGetColorFromStatus(
     const Status& status) const {
   std::string status_string;
   switch (status) {
@@ -71,7 +71,7 @@ void EpidemicSimulatorApp::DrawLegend() {
   double entry_height = height / frequencies.size();
   size_t index = 0;
   for (auto iterator : frequencies) {
-    std::string label = SetColorFromStatus(iterator.first);
+    std::string label = SetAndGetColorFromStatus(iterator.first);
     ci::gl::drawSolidCircle(
         kLegendTopLeft +
             glm::vec2(kLegendIconSize + kLegendMargin,

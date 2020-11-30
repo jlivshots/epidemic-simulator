@@ -22,17 +22,18 @@ class EpidemicSimulatorApp : public ci::app::App {
   void draw() override;
 
  private:
-  std::string SetColorFromStatus(const Status& status) const;
+  std::string SetAndGetColorFromStatus(const Status& status) const;
 
   void DrawLegend();
-  const size_t kNumberPeople = 200;
-  const float kPersonRadius = 6;
+  const size_t kNumberPeople = 50;
+  const float kPersonRadius = 10;
   const float kArenaRadius = 400;
   const glm::vec2 kArenaCenter = glm::vec2(400, 500);
 
   const glm::vec2 kGraphTopLeft = glm::vec2(850, 300);
   const double kGraphWidth = 500;
   const double kGraphHeight = 500;
+  const bool kShowGraph = true;
 
   const glm::vec2 kLegendTopLeft = glm::vec2(850, 30);
   const glm::vec2 kLegendBottomRight = glm::vec2(1200, 200);
