@@ -9,7 +9,7 @@ typedef std::pair<size_t , glm::vec2> LocatedLabel;
 namespace epidemic_simulator {
 class Graph {
  public:
-  Graph(double width, double height, size_t number_people);
+  Graph(double width, double height, size_t number_people, size_t horizontal_label_interval);
   void AddDay(const std::map<Status, size_t>& frequencies);
   void GenerateBars();
   void GenerateVerticalLabels(size_t number_labels);
@@ -30,6 +30,7 @@ class Graph {
   double width_;
   std::vector<Status> kVerticalOrder = {Status::Vulnerable, Status::Immune,
                                         Status::Incubating, Status::Infectious};
+  size_t horizontal_interval_;
 
 };
 }  // namespace epidemic_simulator
