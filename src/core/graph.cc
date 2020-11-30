@@ -1,11 +1,13 @@
 #include "core/graph.h"
 
 epidemic_simulator::Graph::Graph(double width, double height,
-                                 size_t number_people, size_t horizontal_label_interval)
+                                 size_t number_people,
+                                 size_t horizontal_label_interval)
     : number_days_(0),
       height_(height),
       width_(width),
-      number_people_(number_people), horizontal_interval_(horizontal_label_interval) {
+      number_people_(number_people),
+      horizontal_interval_(horizontal_label_interval) {
 }
 
 const std::vector<ColumnStatus>& epidemic_simulator::Graph::GetBars() const {
@@ -57,9 +59,9 @@ const std::vector<LocatedLabel>& epidemic_simulator::Graph::GetVerticalLabels()
 
 void epidemic_simulator::Graph::GenerateHorizontalLabels() {
   horizontal_labels_.clear();
-  for (size_t i = horizontal_interval_; i <= number_days_; i += horizontal_interval_) {
-    horizontal_labels_.emplace_back(
-        i, glm::vec2(i*width_/number_days_, 0));
+  for (size_t i = horizontal_interval_; i <= number_days_;
+       i += horizontal_interval_) {
+    horizontal_labels_.emplace_back(i, glm::vec2(i * width_ / number_days_, 0));
   }
 }
 
