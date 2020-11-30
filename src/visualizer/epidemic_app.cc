@@ -100,7 +100,12 @@ void EpidemicSimulatorApp::DrawVerticalAxis() {
                             kGraphTopLeft + label.second, kTextColor,
                             ci::Font(kFont, kAxisLabelSize));
   }
-
+  ci::gl::pushModelMatrix();
+  ci::gl::translate(kVerticalAxisNameLocation);
+  ci::gl::rotate((float)-M_PI / 2);
+  ci::gl::drawStringCentered("Number of People", glm::vec2(0, 0),
+                             kTextColor, ci::Font(kFont, kAxisNameSize));
+  ci::gl::popModelMatrix();
 }
 
 }  // namespace visualizer

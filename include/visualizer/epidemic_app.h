@@ -42,6 +42,8 @@ class EpidemicSimulatorApp : public ci::app::App {
   const size_t kVerticalLabelInterval = 100;
   const size_t kHorizontalLabelInterval = 10;
   constexpr static const float kAxisLabelSize = 20.0f;
+  const glm::vec2 kVerticalAxisNameLocation = glm::vec2(800, 550);
+  constexpr static const float kAxisNameSize = 35.0f;
 
   const std::string kFont = "calibri";
   const ci::Color kTextColor = ci::Color("white");
