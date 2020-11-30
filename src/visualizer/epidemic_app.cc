@@ -38,6 +38,7 @@ void EpidemicSimulatorApp::draw() {
   }
   DrawLegend();
   DrawVerticalAxis();
+  DrawHorizontalAxis();
 }
 
 std::string EpidemicSimulatorApp::SetAndGetColorFromStatus(
@@ -103,9 +104,21 @@ void EpidemicSimulatorApp::DrawVerticalAxis() {
   ci::gl::pushModelMatrix();
   ci::gl::translate(kVerticalAxisNameLocation);
   ci::gl::rotate((float)-M_PI / 2);
-  ci::gl::drawStringCentered("Number of People", glm::vec2(0, 0),
-                             kTextColor, ci::Font(kFont, kAxisNameSize));
+  ci::gl::drawStringCentered("Number of People", glm::vec2(0, 0), kTextColor,
+                             ci::Font(kFont, kAxisNameSize));
   ci::gl::popModelMatrix();
+}
+
+void EpidemicSimulatorApp::DrawHorizontalAxis() {
+  std::vector<LocatedLabel> horizontal_labels_ =
+      simulator_.GetHorizontalLabels();
+  for (const LocatedLabel& label : horizontal_labels_) {
+    ci::gl::drawStringRight(
+        std::to_string(label.first),
+        kGraphTopLeft + glm::vec2(0, kGraphHeight) + label.second, kTextColor,
+        ci::Font(kFont, kAxisLabelSize));
+  }
+
 }
 
 }  // namespace visualizer
