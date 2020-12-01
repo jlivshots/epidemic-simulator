@@ -46,7 +46,7 @@ class EpidemicSimulatorApp : public ci::app::App {
   void DrawHorizontalAxis();
 
   const size_t kNumberPeople = 500;
-  const float kSpeed = 3000;
+  const float kSpeed = 30;
   const Virus kVirus = Virus(0.2, 2, 5);
   const float kPersonRadius = 2;
   const float kArenaRadius = 330;
@@ -66,7 +66,7 @@ class EpidemicSimulatorApp : public ci::app::App {
   const ci::Color kTextColor = ci::Color("white");
 
   const glm::vec2 kLegendTopLeft = glm::vec2(850, 30);
-  const glm::vec2 kLegendBottomRight = glm::vec2(1200, 200);
+  const glm::vec2 kLegendBottomRight = glm::vec2(1115, 200);
   const float kLegendIconSize = 15;
 
   constexpr static const float kLegendTextSize = 35.0f;
