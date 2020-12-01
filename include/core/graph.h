@@ -18,8 +18,8 @@ class Graph {
    * @param width the width of the graph.
    * @param height the height of the graph.
    * @param number_people the number of people in the simulation.
-   * @param initial_horizontal_label_interval the interval of labels for the horizontal
-   * axis at the start of the simulation.
+   * @param initial_horizontal_label_interval the interval of labels for the
+   * horizontal axis at the start of the simulation.
    */
   Graph(double width, double height, size_t number_people,
         size_t initial_horizontal_label_interval);
@@ -49,6 +49,8 @@ class Graph {
   /**
    * Generates horizontal labels for the graph based on horizontal_interval_ and
    * adds them to horizontal_labels_. Their locations will be relative to (0,0).
+   * Updates horizontal_interval_ if the number of labels exceed
+   * kMaxNumberLabels.
    */
   void GenerateHorizontalLabels();
 
@@ -70,15 +72,18 @@ class Graph {
    * The vertical order of the bars for each day. First Status will be at the
    * top, and the last status will be on the horizontal axis.
    */
-  const std::vector<Status> kVerticalOrder = {Status::Vulnerable, Status::Immune,
-                                        Status::Incubating, Status::Infectious};
+  const std::vector<Status> kVerticalOrder = {
+      Status::Vulnerable, Status::Immune, Status::Incubating,
+      Status::Infectious};
   std::vector<LocatedLabel> vertical_labels_;
   std::vector<LocatedLabel> horizontal_labels_;
   std::vector<ColumnStatus> bars_;
   size_t number_days_;
   size_t number_people_;
   size_t horizontal_interval_;
-  const size_t kMaxIntervalFactor = 10;
+
+  /** Maximum number of horizontal labels for a graph to display at a time. **/
+  const size_t kMaxNumberLabels = 10;
 };
 }  // namespace epidemic_simulator
 

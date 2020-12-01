@@ -59,7 +59,7 @@ const std::vector<LocatedLabel>& epidemic_simulator::Graph::GetVerticalLabels()
 
 void epidemic_simulator::Graph::GenerateHorizontalLabels() {
   horizontal_labels_.clear();
-  if (number_days_ >= kMaxIntervalFactor * horizontal_interval_) {
+  if (number_days_ >= kMaxNumberLabels * horizontal_interval_) {
     horizontal_interval_ *= 2;
   }
   for (size_t i = horizontal_interval_; i <= number_days_;
