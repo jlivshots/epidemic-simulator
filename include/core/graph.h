@@ -18,11 +18,11 @@ class Graph {
    * @param width the width of the graph.
    * @param height the height of the graph.
    * @param number_people the number of people in the simulation.
-   * @param horizontal_label_interval the interval of labels for the horizontal
-   * axis.
+   * @param initial_horizontal_label_interval the interval of labels for the horizontal
+   * axis at the start of the simulation.
    */
   Graph(double width, double height, size_t number_people,
-        size_t horizontal_label_interval);
+        size_t initial_horizontal_label_interval);
 
   /**
    * Adds a new day's worth of data to status_frequencies_.
@@ -78,6 +78,7 @@ class Graph {
   size_t number_days_;
   size_t number_people_;
   size_t horizontal_interval_;
+  const size_t kMaxIntervalFactor = 10;
 };
 }  // namespace epidemic_simulator
 

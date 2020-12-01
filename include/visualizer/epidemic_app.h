@@ -46,7 +46,7 @@ class EpidemicSimulatorApp : public ci::app::App {
   void DrawHorizontalAxis();
 
   const size_t kNumberPeople = 500;
-  const float kSpeed = 30;
+  const float kSpeed = 3000;
   const Virus kVirus = Virus(0.2, 2, 5);
   const float kPersonRadius = 2;
   const float kArenaRadius = 330;
@@ -56,7 +56,7 @@ class EpidemicSimulatorApp : public ci::app::App {
   const double kGraphWidth = 500;
   const double kGraphHeight = 500;
   const size_t kVerticalLabelInterval = 100;
-  const size_t kHorizontalLabelInterval = 10;
+  const size_t kInitialHorizontalLabelInterval = 5;
   constexpr static const float kAxisLabelSize = 20.0f;
   const glm::vec2 kVerticalAxisNameLocation = glm::vec2(800, 550);
   const glm::vec2 kHorizontalAxisNameLocation = glm::vec2(1130, 850);

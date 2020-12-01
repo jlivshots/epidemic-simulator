@@ -6,7 +6,7 @@ namespace visualizer {
 EpidemicSimulatorApp::EpidemicSimulatorApp()
     : simulator_(kNumberPeople, kArenaRadius, kSpeed, kVirus, kGraphWidth,
                  kGraphHeight, kVerticalLabelInterval,
-                 kHorizontalLabelInterval) {
+                 kInitialHorizontalLabelInterval) {
   ci::app::setWindowSize((int)kWindowWidth, (int)kWindowHeight);
   vertical_labels_ = simulator_.GetVerticalLabels();
   simulator_.ShufflePeople();
