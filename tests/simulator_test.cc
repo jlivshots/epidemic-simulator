@@ -5,14 +5,14 @@
 TEST_CASE("Verify constructor works as intended") {
   SECTION("No people in the arena") {
     epidemic_simulator::Simulator simulator(
-        0, 20, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+        0, 20, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, 0, 0);
     REQUIRE(simulator.GetPeople().empty());
     REQUIRE(simulator.GetSlots().empty());
   }
 
   SECTION("People spaced evenly for 1 person in the arena") {
     epidemic_simulator::Simulator simulator(
-        1, 2, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+        1, 2, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, 0, 0);
     const std::vector<epidemic_simulator::Person>& people =
         simulator.GetPeople();
     const std::vector<glm::vec2>& slots = simulator.GetSlots();
@@ -26,7 +26,7 @@ TEST_CASE("Verify constructor works as intended") {
 
   SECTION("People spaced evenly when multiple people in the arena") {
     epidemic_simulator::Simulator simulator(
-        20, 100, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+        20, 100, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, 0, 0);
     const std::vector<epidemic_simulator::Person>& people =
         simulator.GetPeople();
     const std::vector<glm::vec2>& slots = simulator.GetSlots();
@@ -42,7 +42,7 @@ TEST_CASE("Verify constructor works as intended") {
 
   SECTION("Exactly 1 person is infected for 1 person in arena") {
     epidemic_simulator::Simulator simulator(
-        1, 2, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+        1, 2, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, 0, 0);
     const std::vector<epidemic_simulator::Person>& people =
         simulator.GetPeople();
 
@@ -51,7 +51,7 @@ TEST_CASE("Verify constructor works as intended") {
 
   SECTION("Exactly 1 person is infected for multiple people in arena") {
     epidemic_simulator::Simulator simulator(
-        14, 2, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+        14, 2, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, 0, 0);
     const std::vector<epidemic_simulator::Person>& people =
         simulator.GetPeople();
     for (size_t i = 0; i < people.size(); ++i) {
@@ -69,7 +69,7 @@ TEST_CASE("Verify constructor works as intended") {
 TEST_CASE("Shuffle People generates a valid permutation of slots") {
   SECTION("Empty arena") {
     epidemic_simulator::Simulator simulator(
-        0, 100, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+        0, 100, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, 0, 0);
     simulator.ShufflePeople();
     REQUIRE(simulator.GetSlots().empty());
     REQUIRE(simulator.GetPeople().empty());
@@ -77,7 +77,7 @@ TEST_CASE("Shuffle People generates a valid permutation of slots") {
 
   SECTION("Arena with 1 person") {
     epidemic_simulator::Simulator simulator(
-        1, 100, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+        1, 100, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, 0, 0);
     simulator.ShufflePeople();
     const std::vector<epidemic_simulator::Person>& people =
         simulator.GetPeople();
@@ -87,7 +87,7 @@ TEST_CASE("Shuffle People generates a valid permutation of slots") {
 
   SECTION("Arena with many people") {
     epidemic_simulator::Simulator simulator(
-        43, 100, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+        43, 100, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, 0, 0);
     const std::vector<epidemic_simulator::Person>& initial_people =
         simulator.GetPeople();
     simulator.ShufflePeople();
@@ -123,13 +123,13 @@ TEST_CASE("Shuffle People generates a valid permutation of slots") {
 TEST_CASE("Verify ApproachNewLocations() functionality") {
   SECTION("Method returns true immediately for 0-person arena") {
     epidemic_simulator::Simulator simulator(
-        0, 100, 3, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+        0, 100, 3, epidemic_simulator::Virus(1, 2, 2), 0, 0, 0, 0);
     simulator.ShufflePeople();
     REQUIRE(simulator.ApproachNewLocations());
   }
   SECTION("Method returns true for 1-person arena") {
     epidemic_simulator::Simulator simulator(
-        1, 100, 3, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+        1, 100, 3, epidemic_simulator::Virus(1, 2, 2), 0, 0, 0, 0);
     simulator.ShufflePeople();
     REQUIRE(simulator.ApproachNewLocations());
   }
@@ -138,7 +138,7 @@ TEST_CASE("Verify ApproachNewLocations() functionality") {
       "Method returns false until all people are at their new location for"
       "many-person arena") {
     epidemic_simulator::Simulator simulator(
-        12, 100, 3, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+        12, 100, 3, epidemic_simulator::Virus(1, 2, 2), 0, 0, 0, 0);
     simulator.ShufflePeople();
     while (!simulator.ApproachNewLocations()) {
       bool all_have_arrived = true;
@@ -158,7 +158,7 @@ TEST_CASE("Verify ApproachNewLocations() functionality") {
       "Method returns true once all people are at their new location for "
       "many-person arena") {
     epidemic_simulator::Simulator simulator(
-        12, 100, 3, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+        12, 100, 3, epidemic_simulator::Virus(1, 2, 2), 0, 0, 0, 0);
     simulator.ShufflePeople();
     while (!simulator.ApproachNewLocations()) {
     }
@@ -177,7 +177,7 @@ TEST_CASE("InfectNeighbors() works as intended") {
       "Virus with 0% infectiousness does not infect anybody else for a "
       "12-person arena") {
     epidemic_simulator::Simulator simulator(
-        12, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, false);
+        12, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, 0, 0);
     for (size_t i = 0; i < 100; ++i) {
       const std::map<epidemic_simulator::Status, size_t>& frequencies =
           simulator.GetFrequencies();
@@ -195,7 +195,7 @@ TEST_CASE("InfectNeighbors() works as intended") {
       "Virus with 0% infectiousness does not infect anybody else for a "
       "15-person arena") {
     epidemic_simulator::Simulator simulator(
-        15, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, false);
+        15, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, 0, 0);
     for (size_t i = 0; i < 100; ++i) {
       simulator.UpdateFrequencies();
       const std::map<epidemic_simulator::Status, size_t>& frequencies =
@@ -215,7 +215,7 @@ TEST_CASE("InfectNeighbors() works as intended") {
       "infectious "
       "person") {
     epidemic_simulator::Simulator simulator(
-        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, 0, 0);
     for (size_t i = 0; i < 100; ++i) {
       const std::vector<epidemic_simulator::Person>& initial_people =
           simulator.GetPeople();
@@ -236,7 +236,7 @@ TEST_CASE("InfectNeighbors() works as intended") {
       "Virus with 100% infectiousness infects each left neighbor of an "
       "infectious person") {
     epidemic_simulator::Simulator simulator(
-        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, 0, 0);
     for (size_t i = 0; i < 100; ++i) {
       const std::vector<epidemic_simulator::Person>& initial_people =
           simulator.GetPeople();
@@ -259,7 +259,7 @@ TEST_CASE("InfectNeighbors() works as intended") {
 TEST_CASE("Frequencies are calculated correctly") {
   SECTION("Initial frequencies have 1 incubating and all other vulnerable") {
     epidemic_simulator::Simulator simulator(
-        12, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, false);
+        12, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, 0, 0);
     const std::map<epidemic_simulator::Status, size_t>& frequencies =
         simulator.GetFrequencies();
     REQUIRE(frequencies.at(epidemic_simulator::Status::Infectious) == 0);
@@ -270,7 +270,7 @@ TEST_CASE("Frequencies are calculated correctly") {
 
   SECTION("Virus with a 0% infectiousness updates frequencies correctly") {
     epidemic_simulator::Simulator simulator(
-        15, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, false);
+        15, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, 0, 0);
     for (size_t i = 0; i < 100; ++i) {
       size_t number_infectious = 0;
       size_t number_vulnerable = 0;
@@ -312,7 +312,7 @@ TEST_CASE("Frequencies are calculated correctly") {
 
   SECTION("Virus with a 50% infectiousness updates frequencies correctly") {
     epidemic_simulator::Simulator simulator(
-        15, 100, 1000, epidemic_simulator::Virus(0.5, 2, 2), 0, 0, false);
+        15, 100, 1000, epidemic_simulator::Virus(0.5, 2, 2), 0, 0, 0, 0);
     for (size_t i = 0; i < 100; ++i) {
       size_t number_infectious = 0;
       size_t number_vulnerable = 0;
@@ -355,7 +355,7 @@ TEST_CASE("Frequencies are calculated correctly") {
 
   SECTION("Virus with a 100% infectiousness updates frequencies correctly") {
     epidemic_simulator::Simulator simulator(
-        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, 0, 0);
     for (size_t i = 0; i < 100; ++i) {
       size_t number_infectious = 0;
       size_t number_vulnerable = 0;
@@ -399,7 +399,7 @@ TEST_CASE("Frequencies are calculated correctly") {
 TEST_CASE("Verify PerformNextFrame() functionality") {
   SECTION("People are shuffled when method is called for the first time") {
     epidemic_simulator::Simulator simulator(
-        100, 100, 1, epidemic_simulator::Virus(0, 2, 2), 0, 0, false);
+        100, 100, 1, epidemic_simulator::Virus(0, 2, 2), 0, 0, 0, 0);
     const std::vector<epidemic_simulator::Person> initial_people =
         simulator.GetPeople();
     simulator.PerformNextFrame();
@@ -417,7 +417,7 @@ TEST_CASE("Verify PerformNextFrame() functionality") {
 
   SECTION("Neighbors are infected when method is called for the first time") {
     epidemic_simulator::Simulator simulator(
-        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, 0, 0);
     for (size_t i = 0; i < 100; ++i) {
       const std::vector<epidemic_simulator::Person>& initial_people =
           simulator.GetPeople();
@@ -440,7 +440,7 @@ TEST_CASE("Verify PerformNextFrame() functionality") {
       "People approach their new locations when they are on their way to their "
       "new locations") {
     epidemic_simulator::Simulator simulator(
-        100, 100, 1, epidemic_simulator::Virus(0, 2, 2), 0, 0, false);
+        100, 100, 1, epidemic_simulator::Virus(0, 2, 2), 0, 0, 0, 0);
     const std::vector<epidemic_simulator::Person> initial_people =
         simulator.GetPeople();
     simulator.PerformNextFrame();
@@ -454,7 +454,7 @@ TEST_CASE("Verify PerformNextFrame() functionality") {
 
   SECTION("People are infected when they are at their new locations") {
     epidemic_simulator::Simulator simulator(
-        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, false);
+        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, 0, 0);
     simulator.PerformNextFrame();
     simulator.PerformNextFrame();
     simulator.PerformNextFrame();
@@ -479,7 +479,7 @@ TEST_CASE("Verify PerformNextFrame() functionality") {
 
   SECTION("People are shuffled when they are at their new locations") {
     epidemic_simulator::Simulator simulator(
-        100, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, false);
+        100, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, 0, 0);
     simulator.PerformNextFrame();
     const std::vector<epidemic_simulator::Person> initial_people =
         simulator.GetPeople();

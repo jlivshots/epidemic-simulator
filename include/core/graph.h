@@ -49,7 +49,7 @@ class Graph {
   /**
    * Generates horizontal labels for the graph based on horizontal_interval_ and
    * adds them to horizontal_labels_. Their locations will be relative to (0,0).
-   * Updates horizontal_interval_ if the number of labels exceed
+   * Updates horizontal_interval_ if the number of labels reach
    * kMaxNumberLabels.
    */
   void GenerateHorizontalLabels();

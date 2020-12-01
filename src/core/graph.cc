@@ -46,9 +46,11 @@ void epidemic_simulator::Graph::GenerateBars() {
 
 void epidemic_simulator::Graph::GenerateVerticalLabels(size_t interval) {
   vertical_labels_.clear();
-  for (size_t i = 0; i <= number_people_; i += interval) {
-    vertical_labels_.emplace_back(
-        i, glm::vec2(0, height_ - height_ * i / number_people_));
+  if (number_days_ != 0) {
+    for (size_t i = 0; i <= number_people_; i += interval) {
+      vertical_labels_.emplace_back(
+          i, glm::vec2(0, height_ - height_ * i / number_people_));
+    }
   }
 }
 
