@@ -352,4 +352,73 @@ TEST_CASE("Multiple people in simulation") {
       REQUIRE(final_labels[i].second.x == 20 * (i + 1));
     }
   }
+
+  SECTION("Bars are generated correctly for 1 day") {
+    std::map<epidemic_simulator::Status, size_t> first_day;
+    first_day.insert(std::make_pair(epidemic_simulator::Status::Vulnerable, 1));
+    first_day.insert(std::make_pair(epidemic_simulator::Status::Infectious, 0));
+    first_day.insert(std::make_pair(epidemic_simulator::Status::Incubating, 1));
+    first_day.insert(std::make_pair(epidemic_simulator::Status::Immune, 0));
+    first_graph.AddDay(first_day);
+    first_graph.GenerateBars();
+    const std::vector<ColumnStatus> bars = first_graph.GetBars();
+    REQUIRE(bars.size() == 4);
+    REQUIRE(bars[0].first == epidemic_simulator::Status::Vulnerable);
+    REQUIRE(bars[1].first == epidemic_simulator::Status::Immune);
+    REQUIRE(bars[2].first == epidemic_simulator::Status::Incubating);
+    REQUIRE(bars[3].first == epidemic_simulator::Status::Infectious);
+    REQUIRE(bars[0].second.getUpperLeft() == glm::vec2(0, 0));
+    REQUIRE(bars[0].second.getLowerRight() == glm::vec2(100, 50));
+    REQUIRE(bars[1].second.getUpperLeft() == glm::vec2(0, 50));
+    REQUIRE(bars[1].second.getLowerRight() == glm::vec2(100, 50));
+    REQUIRE(bars[2].second.getUpperLeft() == glm::vec2(0, 50));
+    REQUIRE(bars[2].second.getLowerRight() == glm::vec2(100, 100));
+    REQUIRE(bars[3].second.getUpperLeft() == glm::vec2(0, 100));
+    REQUIRE(bars[3].second.getLowerRight() == glm::vec2(100, 100));
+  }
+
+  SECTION("Bars are generated correctly for 2 days") {
+    std::map<epidemic_simulator::Status, size_t> first_day;
+    first_day.insert(std::make_pair(epidemic_simulator::Status::Vulnerable, 1));
+    first_day.insert(std::make_pair(epidemic_simulator::Status::Infectious, 0));
+    first_day.insert(std::make_pair(epidemic_simulator::Status::Incubating, 1));
+    first_day.insert(std::make_pair(epidemic_simulator::Status::Immune, 0));
+    first_graph.AddDay(first_day);
+    std::map<epidemic_simulator::Status, size_t> second_day;
+    second_day.insert(
+        std::make_pair(epidemic_simulator::Status::Vulnerable, 0));
+    second_day.insert(
+        std::make_pair(epidemic_simulator::Status::Infectious, 1));
+    second_day.insert(
+        std::make_pair(epidemic_simulator::Status::Incubating, 0));
+    second_day.insert(std::make_pair(epidemic_simulator::Status::Immune, 1));
+    first_graph.AddDay(second_day);
+    first_graph.GenerateBars();
+    const std::vector<ColumnStatus> bars = first_graph.GetBars();
+    REQUIRE(bars.size() == 8);
+    REQUIRE(bars[0].first == epidemic_simulator::Status::Vulnerable);
+    REQUIRE(bars[1].first == epidemic_simulator::Status::Immune);
+    REQUIRE(bars[2].first == epidemic_simulator::Status::Incubating);
+    REQUIRE(bars[3].first == epidemic_simulator::Status::Infectious);
+    REQUIRE(bars[4].first == epidemic_simulator::Status::Vulnerable);
+    REQUIRE(bars[5].first == epidemic_simulator::Status::Immune);
+    REQUIRE(bars[6].first == epidemic_simulator::Status::Incubating);
+    REQUIRE(bars[7].first == epidemic_simulator::Status::Infectious);
+    REQUIRE(bars[0].second.getUpperLeft() == glm::vec2(0, 0));
+    REQUIRE(bars[0].second.getLowerRight() == glm::vec2(50, 50));
+    REQUIRE(bars[1].second.getUpperLeft() == glm::vec2(0, 50));
+    REQUIRE(bars[1].second.getLowerRight() == glm::vec2(50, 50));
+    REQUIRE(bars[2].second.getUpperLeft() == glm::vec2(0, 50));
+    REQUIRE(bars[2].second.getLowerRight() == glm::vec2(50, 100));
+    REQUIRE(bars[3].second.getUpperLeft() == glm::vec2(0, 100));
+    REQUIRE(bars[3].second.getLowerRight() == glm::vec2(50, 100));
+    REQUIRE(bars[4].second.getUpperLeft() == glm::vec2(50, 0));
+    REQUIRE(bars[4].second.getLowerRight() == glm::vec2(100, 0));
+    REQUIRE(bars[5].second.getUpperLeft() == glm::vec2(50, 0));
+    REQUIRE(bars[5].second.getLowerRight() == glm::vec2(100, 50));
+    REQUIRE(bars[6].second.getUpperLeft() == glm::vec2(50, 50));
+    REQUIRE(bars[6].second.getLowerRight() == glm::vec2(100, 50));
+    REQUIRE(bars[7].second.getUpperLeft() == glm::vec2(50, 50));
+    REQUIRE(bars[7].second.getLowerRight() == glm::vec2(100, 100));
+  }
 }
