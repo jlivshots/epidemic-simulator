@@ -22,15 +22,28 @@ class EpidemicSimulatorApp : public ci::app::App {
   void draw() override;
 
  private:
+  /**
+   * Sets the current Color to the one associated with status, and returns the
+   * string name of the status.
+   * @param status a Status enum.
+   * @return an std::string corresponding to the name of the status.
+   */
   std::string SetAndGetColorFromStatus(const Status& status) const;
 
-
+  /**
+   * Draws the legend box and frequency counts.
+   */
   void DrawLegend();
 
+  /**
+   * Draws the vertical axis labels and title.
+   */
   void DrawVerticalAxis();
 
+  /**
+   * Draws the horizontal axis labels and title.
+   */
   void DrawHorizontalAxis();
-
 
   const size_t kNumberPeople = 500;
   const float kSpeed = 30;
@@ -48,7 +61,6 @@ class EpidemicSimulatorApp : public ci::app::App {
   const glm::vec2 kVerticalAxisNameLocation = glm::vec2(800, 550);
   const glm::vec2 kHorizontalAxisNameLocation = glm::vec2(1130, 850);
   constexpr static const float kAxisNameSize = 35.0f;
-  const double kDistanceGraphToHorizontalLabels = 20;
 
   const std::string kFont = "calibri";
   const ci::Color kTextColor = ci::Color("white");
