@@ -447,8 +447,9 @@ TEST_CASE("Verify PerformNextFrame() functionality") {
     simulator.PerformNextFrame();
     const std::vector<epidemic_simulator::Person> final_people =
         simulator.GetPeople();
+    const std::vector<glm::vec2>& slots = simulator.GetSlots();
     for (size_t i = 0; i < initial_people.size(); ++i) {
-      REQUIRE(initial_people[i].GetLocation() != final_people[i].GetLocation());
+      REQUIRE((final_people[i].GetLocation()==slots[i] || initial_people[i].GetLocation() != final_people[i].GetLocation()));
     }
   }
 
