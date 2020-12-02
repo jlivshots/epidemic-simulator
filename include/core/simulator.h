@@ -56,6 +56,9 @@ class Simulator {
    */
   void PerformNextFrame();
 
+  /**
+   * Updates frequencies_ with the current frequencies of each Status.
+   */
   void UpdateFrequencies();
 
   const std::vector<Person>& GetPeople() const;

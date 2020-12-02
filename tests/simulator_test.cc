@@ -499,7 +499,7 @@ TEST_CASE("Verify PerformNextFrame() functionality") {
   }
 }
 
-TEST_CASE("Verify Graph drawing functionality") {
+TEST_CASE("Verify Graph bar generation functionality") {
   SECTION("Graph bars are initially generated correctly") {
     epidemic_simulator::Simulator simulator(
         1, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 100, 100, 1, 1);
@@ -519,8 +519,7 @@ TEST_CASE("Verify Graph drawing functionality") {
     REQUIRE(bars[3].second.getLowerRight() == glm::vec2(100, 100));
   }
 
-  SECTION(
-      "Graph bars are generated correctly after 2 days") {
+  SECTION("Graph bars are generated correctly after 2 days") {
     epidemic_simulator::Simulator simulator(
         1, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 100, 100, 1, 1);
     simulator.PerformNextFrame();
@@ -552,8 +551,7 @@ TEST_CASE("Verify Graph drawing functionality") {
     REQUIRE(bars[7].second.getLowerRight() == glm::vec2(100, 100));
   }
 
-  SECTION(
-      "Graph bars are generated correctly after 4 days") {
+  SECTION("Graph bars are generated correctly after 4 days") {
     epidemic_simulator::Simulator simulator(
         1, 100, 1000, epidemic_simulator::Virus(0, 0, 0), 100, 100, 1, 1);
     simulator.PerformNextFrame();
@@ -613,3 +611,44 @@ TEST_CASE("Verify Graph drawing functionality") {
     REQUIRE(bars[15].second.getLowerRight() == glm::vec2(100, 100));
   }
 }
+
+TEST_CASE("Verify graph labels are generated correctly for 1 person in simulation") {
+  epidemic_simulator::Simulator simulator(
+      1, 100, 1000, epidemic_simulator::Virus(0, 0, 0), 100, 100, 1, 1);
+
+  SECTION("Graph generates correct vertical labels") {
+    const std::vector<LocatedLabel>& labels = simulator.GetVerticalLabels();
+    REQUIRE(labels.size() == 2);
+    REQUIRE(labels[0].first == 0);
+    REQUIRE(labels[0].second.x == 0);
+    REQUIRE(labels[0].second.y == 100);
+    REQUIRE(labels[1].first == 1);
+    REQUIRE(labels[1].second.x == 0);
+    REQUIRE(labels[1].second.y == 0);
+  }
+
+  SECTION("Graph generates correct horizontal labels after 1 day with initial interval of 1") {
+    const std::vector<LocatedLabel>& labels = simulator.GetHorizontalLabels();
+    REQUIRE(labels.size() == 1);
+    REQUIRE(labels[0].first==1);
+    REQUIRE(labels[0].second==glm::vec2(100,0));
+  }
+
+  SECTION("Horizontal labels are correctly rescaled and located on 10th day with initial interval 1") {
+    for (size_t i = 0; i < 16; ++i) {
+      simulator.PerformNextFrame();
+    }
+    const std::vector<LocatedLabel>& initial_labels =
+        simulator.GetHorizontalLabels();
+    REQUIRE(initial_labels.size() == 9);
+    simulator.PerformNextFrame();
+    const std::vector<LocatedLabel>& final_labels = simulator.GetHorizontalLabels();
+    REQUIRE(final_labels.size() == 5);
+    for (size_t i = 0; i < final_labels.size(); ++i) {
+      REQUIRE(final_labels[i].first == (i + 1) * 2);
+      REQUIRE(final_labels[i].second.y == 0);
+      REQUIRE(final_labels[i].second.x == 20 * (i + 1));
+    }
+  }
+}
+
