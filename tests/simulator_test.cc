@@ -652,3 +652,66 @@ TEST_CASE("Verify graph labels are generated correctly for 1 person in simulatio
   }
 }
 
+TEST_CASE("Verify graph labels are generated correctly for 2 people in simulation") {
+  epidemic_simulator::Simulator simulator(
+      2, 100, 1000, epidemic_simulator::Virus(0, 0, 0), 100, 100, 1, 2);
+
+  SECTION("Graph generates correct vertical labels with interval 1") {
+    const std::vector<LocatedLabel>& labels = simulator.GetVerticalLabels();
+    REQUIRE(labels.size() == 3);
+    REQUIRE(labels[0].first == 0);
+    REQUIRE(labels[0].second.x == 0);
+    REQUIRE(labels[0].second.y == 100);
+    REQUIRE(labels[1].first == 1);
+    REQUIRE(labels[1].second.x == 0);
+    REQUIRE(labels[1].second.y == 50);
+    REQUIRE(labels[2].first == 2);
+    REQUIRE(labels[2].second.x == 0);
+    REQUIRE(labels[2].second.y == 0);
+  }
+
+  SECTION("Graph generates correct vertical labels with interval 2") {
+    epidemic_simulator::Simulator other_simulator(
+        2, 100, 1000, epidemic_simulator::Virus(0, 0, 0), 100, 100, 2, 2);
+    const std::vector<LocatedLabel>& labels = other_simulator.GetVerticalLabels();
+    REQUIRE(labels.size() == 2);
+    REQUIRE(labels[0].first == 0);
+    REQUIRE(labels[0].second.x == 0);
+    REQUIRE(labels[0].second.y == 100);
+    REQUIRE(labels[1].first == 2);
+    REQUIRE(labels[1].second.x == 0);
+    REQUIRE(labels[1].second.y == 0);
+  }
+
+
+  SECTION("Graph generates no horizontal labels after 1 day with initial interval 2") {
+    const std::vector<LocatedLabel>& labels = simulator.GetHorizontalLabels();
+    REQUIRE(labels.empty());
+  }
+
+  SECTION("Graph generates correct horizontal labels after 2 days with initial interval 2") {
+    simulator.PerformNextFrame();
+    const std::vector<LocatedLabel>& labels = simulator.GetHorizontalLabels();
+    REQUIRE(labels.size() == 1);
+    REQUIRE(labels[0].first==2);
+    REQUIRE(labels[0].second==glm::vec2(100,0));
+  }
+
+  SECTION("Horizontal labels are correctly rescaled and located on 20th day with initial interval 2") {
+    for (size_t i = 0; i < 36; ++i) {
+      simulator.PerformNextFrame();
+    }
+    const std::vector<LocatedLabel>& initial_labels =
+        simulator.GetHorizontalLabels();
+    REQUIRE(initial_labels.size() == 9);
+    simulator.PerformNextFrame();
+    simulator.PerformNextFrame();
+    const std::vector<LocatedLabel>& final_labels = simulator.GetHorizontalLabels();
+    REQUIRE(final_labels.size() == 5);
+    for (size_t i = 0; i < final_labels.size(); ++i) {
+      REQUIRE(final_labels[i].first == (i + 1) * 4);
+      REQUIRE(final_labels[i].second.y == 0);
+      REQUIRE(final_labels[i].second.x == 20 * (i + 1));
+    }
+  }
+}
