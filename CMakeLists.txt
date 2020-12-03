@@ -49,13 +49,13 @@ get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 
 include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
-list(APPEND CORE_SOURCE_FILES src/core/person.cc src/core/simulator.cc src/core/virus.cc)
+list(APPEND CORE_SOURCE_FILES src/core/person.cc src/core/graph.cc src/core/simulator.cc src/core/virus.cc)
 
 
 list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
         src/visualizer/epidemic_app.cc)
 
-list(APPEND TEST_FILES tests/person_test.cc tests/simulator_test.cc tests/virus_test.cc)
+list(APPEND TEST_FILES tests/person_test.cc tests/graph_test.cc tests/simulator_test.cc tests/virus_test.cc)
 
 #add_executable(train-model apps/train_model_main.cc ${CORE_SOURCE_FILES} src/core/naive_bayes_trainer.cc src/core/labeled_image.cc src/core/naive_bayes_predictor.cc)
 #target_include_directories(train-model PRIVATE include)

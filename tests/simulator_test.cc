@@ -2,17 +2,17 @@
 
 #include <catch2/catch.hpp>
 
-TEST_CASE("Verify constructor assigns slots evenly around the arena") {
+TEST_CASE("Verify constructor works as intended") {
   SECTION("No people in the arena") {
-    epidemic_simulator::Simulator simulator(0, 20, 0,
-                                            epidemic_simulator::Virus(1, 2, 2));
+    epidemic_simulator::Simulator simulator(
+        0, 20, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, 1, 1);
     REQUIRE(simulator.GetPeople().empty());
     REQUIRE(simulator.GetSlots().empty());
   }
 
-  SECTION("1 person in the arena") {
-    epidemic_simulator::Simulator simulator(1, 2, 0,
-                                            epidemic_simulator::Virus(1, 2, 2));
+  SECTION("People spaced evenly for 1 person in the arena") {
+    epidemic_simulator::Simulator simulator(
+        1, 2, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, 1, 1);
     const std::vector<epidemic_simulator::Person>& people =
         simulator.GetPeople();
     const std::vector<glm::vec2>& slots = simulator.GetSlots();
@@ -24,9 +24,9 @@ TEST_CASE("Verify constructor assigns slots evenly around the arena") {
     REQUIRE(slots[0] == glm::vec2(2, 0));
   }
 
-  SECTION("Multiple people in the arena") {
-    epidemic_simulator::Simulator simulator(20, 100, 0,
-                                            epidemic_simulator::Virus(1, 2, 2));
+  SECTION("People spaced evenly when multiple people in the arena") {
+    epidemic_simulator::Simulator simulator(
+        20, 100, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, 1, 1);
     const std::vector<epidemic_simulator::Person>& people =
         simulator.GetPeople();
     const std::vector<glm::vec2>& slots = simulator.GetSlots();
@@ -39,40 +39,67 @@ TEST_CASE("Verify constructor assigns slots evenly around the arena") {
       REQUIRE(slots[i].y == Approx(100 * sin(2 * i * M_PI / 20)).epsilon(0.01));
     }
   }
+
+  SECTION("Exactly 1 person is infected for 1 person in arena") {
+    epidemic_simulator::Simulator simulator(
+        1, 2, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, 1, 1);
+    const std::vector<epidemic_simulator::Person>& people =
+        simulator.GetPeople();
+
+    REQUIRE(people[0].GetStatus() == epidemic_simulator::Status::Incubating);
+  }
+
+  SECTION("Exactly 1 person is infected for multiple people in arena") {
+    epidemic_simulator::Simulator simulator(
+        14, 2, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, 1, 1);
+    const std::vector<epidemic_simulator::Person>& people =
+        simulator.GetPeople();
+    for (size_t i = 0; i < people.size(); ++i) {
+      if (i == 0) {
+        REQUIRE(people[i].GetStatus() ==
+                epidemic_simulator::Status::Incubating);
+      } else {
+        REQUIRE(people[i].GetStatus() ==
+                epidemic_simulator::Status::Vulnerable);
+      }
+    }
+  }
 }
 
 TEST_CASE("Shuffle People generates a valid permutation of slots") {
   SECTION("Empty arena") {
-    epidemic_simulator::Simulator simulator(0, 100, 0,
-                                            epidemic_simulator::Virus(1, 2, 2));
+    epidemic_simulator::Simulator simulator(
+        0, 100, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, 1, 1);
     simulator.ShufflePeople();
     REQUIRE(simulator.GetSlots().empty());
     REQUIRE(simulator.GetPeople().empty());
-
   }
 
   SECTION("Arena with 1 person") {
-    epidemic_simulator::Simulator simulator(1, 100, 0,
-                                            epidemic_simulator::Virus(1, 2, 2));
+    epidemic_simulator::Simulator simulator(
+        1, 100, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, 1, 1);
     simulator.ShufflePeople();
-    const std::vector<epidemic_simulator::Person>& people = simulator.GetPeople();
+    const std::vector<epidemic_simulator::Person>& people =
+        simulator.GetPeople();
     REQUIRE(people.size() == 1);
     REQUIRE(people[0].GetLocation() == glm::vec2(100, 0));
   }
 
   SECTION("Arena with many people") {
-    epidemic_simulator::Simulator simulator(43, 100, 0,
-                                            epidemic_simulator::Virus(1, 2, 2));
-    const std::vector<epidemic_simulator::Person>& initial_people = simulator.GetPeople();
+    epidemic_simulator::Simulator simulator(
+        43, 100, 0, epidemic_simulator::Virus(1, 2, 2), 0, 0, 1, 1);
+    const std::vector<epidemic_simulator::Person>& initial_people =
+        simulator.GetPeople();
     simulator.ShufflePeople();
-    const std::vector<epidemic_simulator::Person>& shuffled_people = simulator.GetPeople();
+    const std::vector<epidemic_simulator::Person>& shuffled_people =
+        simulator.GetPeople();
     REQUIRE(initial_people.size() == 43);
     REQUIRE(shuffled_people.size() == 43);
 
-    for (const epidemic_simulator::Person& person: shuffled_people) {
+    for (const epidemic_simulator::Person& person : shuffled_people) {
       bool contained_in_initial = false;
-      for(const epidemic_simulator::Person& other_person: initial_people) {
-        if(other_person.GetLocation()==person.GetLocation()) {
+      for (const epidemic_simulator::Person& other_person : initial_people) {
+        if (other_person.GetLocation() == person.GetLocation()) {
           contained_in_initial = true;
           break;
         }
@@ -80,10 +107,10 @@ TEST_CASE("Shuffle People generates a valid permutation of slots") {
       REQUIRE(contained_in_initial);
     }
 
-    for (const epidemic_simulator::Person& person: initial_people) {
+    for (const epidemic_simulator::Person& person : initial_people) {
       bool contained_in_shuffled = false;
-      for(const epidemic_simulator::Person& other_person: shuffled_people) {
-        if(other_person.GetLocation()==person.GetLocation()) {
+      for (const epidemic_simulator::Person& other_person : shuffled_people) {
+        if (other_person.GetLocation() == person.GetLocation()) {
           contained_in_shuffled = true;
           break;
         }
@@ -95,14 +122,14 @@ TEST_CASE("Shuffle People generates a valid permutation of slots") {
 
 TEST_CASE("Verify ApproachNewLocations() functionality") {
   SECTION("Method returns true immediately for 0-person arena") {
-    epidemic_simulator::Simulator simulator(0, 100, 3,
-                                            epidemic_simulator::Virus(1, 2, 2));
+    epidemic_simulator::Simulator simulator(
+        0, 100, 3, epidemic_simulator::Virus(1, 2, 2), 0, 0, 1, 1);
     simulator.ShufflePeople();
     REQUIRE(simulator.ApproachNewLocations());
   }
   SECTION("Method returns true for 1-person arena") {
-    epidemic_simulator::Simulator simulator(1, 100, 3,
-                                            epidemic_simulator::Virus(1, 2, 2));
+    epidemic_simulator::Simulator simulator(
+        1, 100, 3, epidemic_simulator::Virus(1, 2, 2), 0, 0, 1, 1);
     simulator.ShufflePeople();
     REQUIRE(simulator.ApproachNewLocations());
   }
@@ -110,8 +137,8 @@ TEST_CASE("Verify ApproachNewLocations() functionality") {
   SECTION(
       "Method returns false until all people are at their new location for"
       "many-person arena") {
-    epidemic_simulator::Simulator simulator(12, 100, 3,
-                                            epidemic_simulator::Virus(1, 2, 2));
+    epidemic_simulator::Simulator simulator(
+        12, 100, 3, epidemic_simulator::Virus(1, 2, 2), 0, 0, 1, 1);
     simulator.ShufflePeople();
     while (!simulator.ApproachNewLocations()) {
       bool all_have_arrived = true;
@@ -130,8 +157,8 @@ TEST_CASE("Verify ApproachNewLocations() functionality") {
   SECTION(
       "Method returns true once all people are at their new location for "
       "many-person arena") {
-    epidemic_simulator::Simulator simulator(12, 100, 3,
-                                            epidemic_simulator::Virus(1, 2, 2));
+    epidemic_simulator::Simulator simulator(
+        12, 100, 3, epidemic_simulator::Virus(1, 2, 2), 0, 0, 1, 1);
     simulator.ShufflePeople();
     while (!simulator.ApproachNewLocations()) {
     }
@@ -145,10 +172,547 @@ TEST_CASE("Verify ApproachNewLocations() functionality") {
   }
 }
 
-TEST_CASE("Infect Neighbors works as intended") {
-  SECTION("Virus with 0% infectiousness does not infect anybody else") {
-    epidemic_simulator::Simulator simulator(12, 100, 1000,
-                                            epidemic_simulator::Virus(0, 2, 2));
+TEST_CASE("InfectNeighbors() works as intended") {
+  SECTION(
+      "Virus with 0% infectiousness does not infect anybody else for a "
+      "12-person arena") {
+    epidemic_simulator::Simulator simulator(
+        12, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, 1, 1);
+    for (size_t i = 0; i < 100; ++i) {
+      const std::map<epidemic_simulator::Status, size_t>& frequencies =
+          simulator.GetFrequencies();
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Infectious) +
+                  frequencies.at(epidemic_simulator::Status::Incubating) +
+                  frequencies.at(epidemic_simulator::Status::Immune) ==
+              1);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Vulnerable) == 11);
+      simulator.ShufflePeople();
+      simulator.InfectNeighbors();
+    }
+  }
 
+  SECTION(
+      "Virus with 0% infectiousness does not infect anybody else for a "
+      "15-person arena") {
+    epidemic_simulator::Simulator simulator(
+        15, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, 1, 1);
+    for (size_t i = 0; i < 100; ++i) {
+      simulator.UpdateFrequencies();
+      const std::map<epidemic_simulator::Status, size_t>& frequencies =
+          simulator.GetFrequencies();
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Infectious) +
+                  frequencies.at(epidemic_simulator::Status::Incubating) +
+                  frequencies.at(epidemic_simulator::Status::Immune) ==
+              1);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Vulnerable) == 14);
+      simulator.ShufflePeople();
+      simulator.InfectNeighbors();
+    }
+  }
+
+  SECTION(
+      "Virus with 100% infectiousness infects each right neighbor of an "
+      "infectious "
+      "person") {
+    epidemic_simulator::Simulator simulator(
+        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, 1, 1);
+    for (size_t i = 0; i < 100; ++i) {
+      const std::vector<epidemic_simulator::Person>& initial_people =
+          simulator.GetPeople();
+      simulator.InfectNeighbors();
+      const std::vector<epidemic_simulator::Person>& final_people =
+          simulator.GetPeople();
+      for (size_t j = 0; j < final_people.size(); ++j) {
+        if (initial_people[j].GetStatus() ==
+            epidemic_simulator::Status::Infectious) {
+          REQUIRE(final_people[(j + 1) % final_people.size()].GetStatus() !=
+                  epidemic_simulator::Status::Vulnerable);
+        }
+      }
+      simulator.ShufflePeople();
+    }
+  }
+  SECTION(
+      "Virus with 100% infectiousness infects each left neighbor of an "
+      "infectious person") {
+    epidemic_simulator::Simulator simulator(
+        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, 1, 1);
+    for (size_t i = 0; i < 100; ++i) {
+      const std::vector<epidemic_simulator::Person>& initial_people =
+          simulator.GetPeople();
+      simulator.InfectNeighbors();
+      const std::vector<epidemic_simulator::Person>& final_people =
+          simulator.GetPeople();
+      for (size_t j = 0; j < final_people.size(); ++j) {
+        if (initial_people[j].GetStatus() ==
+            epidemic_simulator::Status::Infectious) {
+          REQUIRE(
+              final_people[(j - 1 + final_people.size()) % final_people.size()]
+                  .GetStatus() != epidemic_simulator::Status::Vulnerable);
+        }
+      }
+      simulator.ShufflePeople();
+    }
+  }
+}
+
+TEST_CASE("Frequencies are calculated correctly") {
+  SECTION("Initial frequencies have 1 incubating and all other vulnerable") {
+    epidemic_simulator::Simulator simulator(
+        12, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, 1, 1);
+    const std::map<epidemic_simulator::Status, size_t>& frequencies =
+        simulator.GetFrequencies();
+    REQUIRE(frequencies.at(epidemic_simulator::Status::Infectious) == 0);
+    REQUIRE(frequencies.at(epidemic_simulator::Status::Incubating) == 1);
+    REQUIRE(frequencies.at(epidemic_simulator::Status::Immune) == 0);
+    REQUIRE(frequencies.at(epidemic_simulator::Status::Vulnerable) == 11);
+  }
+
+  SECTION("Virus with a 0% infectiousness updates frequencies correctly") {
+    epidemic_simulator::Simulator simulator(
+        15, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, 1, 1);
+    for (size_t i = 0; i < 100; ++i) {
+      size_t number_infectious = 0;
+      size_t number_vulnerable = 0;
+      size_t number_immune = 0;
+      size_t number_incubating = 0;
+      const std::vector<epidemic_simulator::Person>& people =
+          simulator.GetPeople();
+      for (const epidemic_simulator::Person& person : people) {
+        switch (person.GetStatus()) {
+          case epidemic_simulator::Status::Vulnerable:
+            ++number_vulnerable;
+            break;
+          case epidemic_simulator::Status::Incubating:
+            ++number_incubating;
+            break;
+          case epidemic_simulator::Status::Infectious:
+            ++number_infectious;
+            break;
+          case epidemic_simulator::Status::Immune:
+            ++number_immune;
+            break;
+        }
+      }
+      simulator.UpdateFrequencies();
+      const std::map<epidemic_simulator::Status, size_t>& frequencies =
+          simulator.GetFrequencies();
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Immune) ==
+              number_immune);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Vulnerable) ==
+              number_vulnerable);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Infectious) ==
+              number_infectious);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Incubating) ==
+              number_incubating);
+      simulator.ShufflePeople();
+      simulator.InfectNeighbors();
+    }
+  }
+
+  SECTION("Virus with a 50% infectiousness updates frequencies correctly") {
+    epidemic_simulator::Simulator simulator(
+        15, 100, 1000, epidemic_simulator::Virus(0.5, 2, 2), 0, 0, 1, 1);
+    for (size_t i = 0; i < 100; ++i) {
+      size_t number_infectious = 0;
+      size_t number_vulnerable = 0;
+      size_t number_immune = 0;
+      size_t number_incubating = 0;
+      const std::vector<epidemic_simulator::Person>& people =
+          simulator.GetPeople();
+      for (const epidemic_simulator::Person& person : people) {
+        switch (person.GetStatus()) {
+          case epidemic_simulator::Status::Vulnerable:
+            ++number_vulnerable;
+            break;
+          case epidemic_simulator::Status::Incubating:
+            ++number_incubating;
+            break;
+          case epidemic_simulator::Status::Infectious:
+            ++number_infectious;
+            break;
+          case epidemic_simulator::Status::Immune:
+            ++number_immune;
+            break;
+        }
+      }
+      simulator.UpdateFrequencies();
+
+      const std::map<epidemic_simulator::Status, size_t>& frequencies =
+          simulator.GetFrequencies();
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Immune) ==
+              number_immune);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Vulnerable) ==
+              number_vulnerable);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Infectious) ==
+              number_infectious);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Incubating) ==
+              number_incubating);
+      simulator.ShufflePeople();
+      simulator.InfectNeighbors();
+    }
+  }
+
+  SECTION("Virus with a 100% infectiousness updates frequencies correctly") {
+    epidemic_simulator::Simulator simulator(
+        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, 1, 1);
+    for (size_t i = 0; i < 100; ++i) {
+      size_t number_infectious = 0;
+      size_t number_vulnerable = 0;
+      size_t number_immune = 0;
+      size_t number_incubating = 0;
+      const std::vector<epidemic_simulator::Person>& people =
+          simulator.GetPeople();
+      for (const epidemic_simulator::Person& person : people) {
+        switch (person.GetStatus()) {
+          case epidemic_simulator::Status::Vulnerable:
+            ++number_vulnerable;
+            break;
+          case epidemic_simulator::Status::Incubating:
+            ++number_incubating;
+            break;
+          case epidemic_simulator::Status::Infectious:
+            ++number_infectious;
+            break;
+          case epidemic_simulator::Status::Immune:
+            ++number_immune;
+            break;
+        }
+      }
+      simulator.UpdateFrequencies();
+      const std::map<epidemic_simulator::Status, size_t>& frequencies =
+          simulator.GetFrequencies();
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Immune) ==
+              number_immune);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Vulnerable) ==
+              number_vulnerable);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Infectious) ==
+              number_infectious);
+      REQUIRE(frequencies.at(epidemic_simulator::Status::Incubating) ==
+              number_incubating);
+      simulator.ShufflePeople();
+      simulator.InfectNeighbors();
+    }
+  }
+}
+
+TEST_CASE("Verify PerformNextFrame() functionality") {
+  SECTION("People are shuffled when method is called for the first time") {
+    epidemic_simulator::Simulator simulator(
+        100, 100, 1, epidemic_simulator::Virus(0, 2, 2), 0, 0, 1, 1);
+    const std::vector<epidemic_simulator::Person> initial_people =
+        simulator.GetPeople();
+    simulator.PerformNextFrame();
+    const std::vector<epidemic_simulator::Person> final_people =
+        simulator.GetPeople();
+    bool is_shuffled = false;
+    for (size_t i = 0; i < initial_people.size(); ++i) {
+      if (initial_people[i].GetLocation() != final_people[i].GetLocation()) {
+        is_shuffled = true;
+        break;
+      }
+    }
+    REQUIRE(is_shuffled);
+  }
+
+  SECTION("Neighbors are infected when method is called for the first time") {
+    epidemic_simulator::Simulator simulator(
+        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, 1, 1);
+    for (size_t i = 0; i < 100; ++i) {
+      const std::vector<epidemic_simulator::Person>& initial_people =
+          simulator.GetPeople();
+      simulator.InfectNeighbors();
+      const std::vector<epidemic_simulator::Person>& final_people =
+          simulator.GetPeople();
+      for (size_t j = 0; j < final_people.size(); ++j) {
+        if (initial_people[j].GetStatus() ==
+            epidemic_simulator::Status::Infectious) {
+          REQUIRE(final_people[(j + 1) % final_people.size()].GetStatus() !=
+                  epidemic_simulator::Status::Vulnerable);
+          REQUIRE(
+              final_people[(j - 1 + final_people.size()) % final_people.size()]
+                  .GetStatus() != epidemic_simulator::Status::Vulnerable);
+        }
+      }
+    }
+  }
+  SECTION(
+      "People approach their new locations when they are on their way to their "
+      "new locations") {
+    epidemic_simulator::Simulator simulator(
+        100, 100, 1, epidemic_simulator::Virus(0, 2, 2), 0, 0, 1, 1);
+    const std::vector<epidemic_simulator::Person> initial_people =
+        simulator.GetPeople();
+    simulator.PerformNextFrame();
+    simulator.PerformNextFrame();
+    const std::vector<epidemic_simulator::Person> final_people =
+        simulator.GetPeople();
+    const std::vector<glm::vec2>& slots = simulator.GetSlots();
+    for (size_t i = 0; i < initial_people.size(); ++i) {
+      REQUIRE((final_people[i].GetLocation()==slots[i] || initial_people[i].GetLocation() != final_people[i].GetLocation()));
+    }
+  }
+
+  SECTION("People are infected when they are at their new locations") {
+    epidemic_simulator::Simulator simulator(
+        15, 100, 1000, epidemic_simulator::Virus(1, 2, 2), 0, 0, 1, 1);
+    simulator.PerformNextFrame();
+    simulator.PerformNextFrame();
+    simulator.PerformNextFrame();
+    for (size_t i = 0; i < 100; ++i) {
+      const std::vector<epidemic_simulator::Person>& initial_people =
+          simulator.GetPeople();
+      simulator.InfectNeighbors();
+      const std::vector<epidemic_simulator::Person>& final_people =
+          simulator.GetPeople();
+      for (size_t j = 0; j < final_people.size(); ++j) {
+        if (initial_people[j].GetStatus() ==
+            epidemic_simulator::Status::Infectious) {
+          REQUIRE(final_people[(j + 1) % final_people.size()].GetStatus() !=
+                  epidemic_simulator::Status::Vulnerable);
+          REQUIRE(
+              final_people[(j - 1 + final_people.size()) % final_people.size()]
+                  .GetStatus() != epidemic_simulator::Status::Vulnerable);
+        }
+      }
+    }
+  }
+
+  SECTION("People are shuffled when they are at their new locations") {
+    epidemic_simulator::Simulator simulator(
+        100, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 0, 0, 1, 1);
+    simulator.PerformNextFrame();
+    const std::vector<epidemic_simulator::Person> initial_people =
+        simulator.GetPeople();
+    simulator.PerformNextFrame();
+    simulator.PerformNextFrame();
+
+    const std::vector<epidemic_simulator::Person> final_people =
+        simulator.GetPeople();
+    bool is_shuffled = false;
+    for (size_t i = 0; i < initial_people.size(); ++i) {
+      if (initial_people[i].GetLocation() != final_people[i].GetLocation()) {
+        is_shuffled = true;
+        break;
+      }
+    }
+    REQUIRE(is_shuffled);
+  }
+}
+
+TEST_CASE("Verify Graph bar generation functionality") {
+  SECTION("Graph bars are initially generated correctly") {
+    epidemic_simulator::Simulator simulator(
+        1, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 100, 100, 1, 1);
+    const std::vector<ColumnStatus>& bars = simulator.GetBars();
+    REQUIRE(bars.size() == 4);
+    REQUIRE(bars[0].first == epidemic_simulator::Status::Vulnerable);
+    REQUIRE(bars[1].first == epidemic_simulator::Status::Immune);
+    REQUIRE(bars[2].first == epidemic_simulator::Status::Incubating);
+    REQUIRE(bars[3].first == epidemic_simulator::Status::Infectious);
+    REQUIRE(bars[0].second.getUpperLeft() == glm::vec2(0, 0));
+    REQUIRE(bars[0].second.getLowerRight() == glm::vec2(100, 0));
+    REQUIRE(bars[1].second.getUpperLeft() == glm::vec2(0, 0));
+    REQUIRE(bars[1].second.getLowerRight() == glm::vec2(100, 0));
+    REQUIRE(bars[2].second.getUpperLeft() == glm::vec2(0, 0));
+    REQUIRE(bars[2].second.getLowerRight() == glm::vec2(100, 100));
+    REQUIRE(bars[3].second.getUpperLeft() == glm::vec2(0, 100));
+    REQUIRE(bars[3].second.getLowerRight() == glm::vec2(100, 100));
+  }
+
+  SECTION("Graph bars are generated correctly after 2 days") {
+    epidemic_simulator::Simulator simulator(
+        1, 100, 1000, epidemic_simulator::Virus(0, 2, 2), 100, 100, 1, 1);
+    simulator.PerformNextFrame();
+    const std::vector<ColumnStatus>& bars = simulator.GetBars();
+    REQUIRE(bars.size() == 8);
+    REQUIRE(bars[0].first == epidemic_simulator::Status::Vulnerable);
+    REQUIRE(bars[1].first == epidemic_simulator::Status::Immune);
+    REQUIRE(bars[2].first == epidemic_simulator::Status::Incubating);
+    REQUIRE(bars[3].first == epidemic_simulator::Status::Infectious);
+    REQUIRE(bars[4].first == epidemic_simulator::Status::Vulnerable);
+    REQUIRE(bars[5].first == epidemic_simulator::Status::Immune);
+    REQUIRE(bars[6].first == epidemic_simulator::Status::Incubating);
+    REQUIRE(bars[7].first == epidemic_simulator::Status::Infectious);
+    REQUIRE(bars[0].second.getUpperLeft() == glm::vec2(0, 0));
+    REQUIRE(bars[0].second.getLowerRight() == glm::vec2(50, 0));
+    REQUIRE(bars[1].second.getUpperLeft() == glm::vec2(0, 0));
+    REQUIRE(bars[1].second.getLowerRight() == glm::vec2(50, 0));
+    REQUIRE(bars[2].second.getUpperLeft() == glm::vec2(0, 0));
+    REQUIRE(bars[2].second.getLowerRight() == glm::vec2(50, 100));
+    REQUIRE(bars[3].second.getUpperLeft() == glm::vec2(0, 100));
+    REQUIRE(bars[3].second.getLowerRight() == glm::vec2(50, 100));
+    REQUIRE(bars[4].second.getUpperLeft() == glm::vec2(50, 0));
+    REQUIRE(bars[4].second.getLowerRight() == glm::vec2(100, 0));
+    REQUIRE(bars[5].second.getUpperLeft() == glm::vec2(50, 0));
+    REQUIRE(bars[5].second.getLowerRight() == glm::vec2(100, 0));
+    REQUIRE(bars[6].second.getUpperLeft() == glm::vec2(50, 0));
+    REQUIRE(bars[6].second.getLowerRight() == glm::vec2(100, 100));
+    REQUIRE(bars[7].second.getUpperLeft() == glm::vec2(50, 100));
+    REQUIRE(bars[7].second.getLowerRight() == glm::vec2(100, 100));
+  }
+
+  SECTION("Graph bars are generated correctly after 4 days") {
+    epidemic_simulator::Simulator simulator(
+        1, 100, 1000, epidemic_simulator::Virus(0, 0, 0), 100, 100, 1, 1);
+    simulator.PerformNextFrame();
+    simulator.PerformNextFrame();
+    simulator.PerformNextFrame();
+    simulator.PerformNextFrame();
+    simulator.PerformNextFrame();
+    const std::vector<ColumnStatus>& bars = simulator.GetBars();
+    REQUIRE(bars.size() == 16);
+    REQUIRE(bars[0].first == epidemic_simulator::Status::Vulnerable);
+    REQUIRE(bars[1].first == epidemic_simulator::Status::Immune);
+    REQUIRE(bars[2].first == epidemic_simulator::Status::Incubating);
+    REQUIRE(bars[3].first == epidemic_simulator::Status::Infectious);
+    REQUIRE(bars[4].first == epidemic_simulator::Status::Vulnerable);
+    REQUIRE(bars[5].first == epidemic_simulator::Status::Immune);
+    REQUIRE(bars[6].first == epidemic_simulator::Status::Incubating);
+    REQUIRE(bars[7].first == epidemic_simulator::Status::Infectious);
+    REQUIRE(bars[8].first == epidemic_simulator::Status::Vulnerable);
+    REQUIRE(bars[9].first == epidemic_simulator::Status::Immune);
+    REQUIRE(bars[10].first == epidemic_simulator::Status::Incubating);
+    REQUIRE(bars[11].first == epidemic_simulator::Status::Infectious);
+    REQUIRE(bars[12].first == epidemic_simulator::Status::Vulnerable);
+    REQUIRE(bars[13].first == epidemic_simulator::Status::Immune);
+    REQUIRE(bars[14].first == epidemic_simulator::Status::Incubating);
+    REQUIRE(bars[15].first == epidemic_simulator::Status::Infectious);
+    REQUIRE(bars[0].second.getUpperLeft() == glm::vec2(0, 0));
+    REQUIRE(bars[0].second.getLowerRight() == glm::vec2(25, 0));
+    REQUIRE(bars[1].second.getUpperLeft() == glm::vec2(0, 0));
+    REQUIRE(bars[1].second.getLowerRight() == glm::vec2(25, 0));
+    REQUIRE(bars[2].second.getUpperLeft() == glm::vec2(0, 0));
+    REQUIRE(bars[2].second.getLowerRight() == glm::vec2(25, 0));
+    REQUIRE(bars[3].second.getUpperLeft() == glm::vec2(0, 0));
+    REQUIRE(bars[3].second.getLowerRight() == glm::vec2(25, 100));
+    REQUIRE(bars[4].second.getUpperLeft() == glm::vec2(25, 0));
+    REQUIRE(bars[4].second.getLowerRight() == glm::vec2(50, 0));
+    REQUIRE(bars[5].second.getUpperLeft() == glm::vec2(25, 0));
+    REQUIRE(bars[5].second.getLowerRight() == glm::vec2(50, 100));
+    REQUIRE(bars[6].second.getUpperLeft() == glm::vec2(25, 100));
+    REQUIRE(bars[6].second.getLowerRight() == glm::vec2(50, 100));
+    REQUIRE(bars[7].second.getUpperLeft() == glm::vec2(25, 100));
+    REQUIRE(bars[7].second.getLowerRight() == glm::vec2(50, 100));
+    REQUIRE(bars[8].second.getUpperLeft() == glm::vec2(50, 0));
+    REQUIRE(bars[8].second.getLowerRight() == glm::vec2(75, 0));
+    REQUIRE(bars[9].second.getUpperLeft() == glm::vec2(50, 0));
+    REQUIRE(bars[9].second.getLowerRight() == glm::vec2(75, 100));
+    REQUIRE(bars[10].second.getUpperLeft() == glm::vec2(50, 100));
+    REQUIRE(bars[10].second.getLowerRight() == glm::vec2(75, 100));
+    REQUIRE(bars[11].second.getUpperLeft() == glm::vec2(50, 100));
+    REQUIRE(bars[11].second.getLowerRight() == glm::vec2(75, 100));
+    REQUIRE(bars[12].second.getUpperLeft() == glm::vec2(75, 0));
+    REQUIRE(bars[12].second.getLowerRight() == glm::vec2(100, 0));
+    REQUIRE(bars[13].second.getUpperLeft() == glm::vec2(75, 0));
+    REQUIRE(bars[13].second.getLowerRight() == glm::vec2(100, 100));
+    REQUIRE(bars[14].second.getUpperLeft() == glm::vec2(75, 100));
+    REQUIRE(bars[14].second.getLowerRight() == glm::vec2(100, 100));
+    REQUIRE(bars[15].second.getUpperLeft() == glm::vec2(75, 100));
+    REQUIRE(bars[15].second.getLowerRight() == glm::vec2(100, 100));
+  }
+}
+
+TEST_CASE("Verify graph labels are generated correctly for 1 person in simulation") {
+  epidemic_simulator::Simulator simulator(
+      1, 100, 1000, epidemic_simulator::Virus(0, 0, 0), 100, 100, 1, 1);
+
+  SECTION("Graph generates correct vertical labels") {
+    const std::vector<LocatedLabel>& labels = simulator.GetVerticalLabels();
+    REQUIRE(labels.size() == 2);
+    REQUIRE(labels[0].first == 0);
+    REQUIRE(labels[0].second.x == 0);
+    REQUIRE(labels[0].second.y == 100);
+    REQUIRE(labels[1].first == 1);
+    REQUIRE(labels[1].second.x == 0);
+    REQUIRE(labels[1].second.y == 0);
+  }
+
+  SECTION("Graph generates correct horizontal labels after 1 day with initial interval of 1") {
+    const std::vector<LocatedLabel>& labels = simulator.GetHorizontalLabels();
+    REQUIRE(labels.size() == 1);
+    REQUIRE(labels[0].first==1);
+    REQUIRE(labels[0].second==glm::vec2(100,0));
+  }
+
+  SECTION("Horizontal labels are correctly rescaled and located on 10th day with initial interval 1") {
+    for (size_t i = 0; i < 16; ++i) {
+      simulator.PerformNextFrame();
+    }
+    const std::vector<LocatedLabel>& initial_labels =
+        simulator.GetHorizontalLabels();
+    REQUIRE(initial_labels.size() == 9);
+    simulator.PerformNextFrame();
+    const std::vector<LocatedLabel>& final_labels = simulator.GetHorizontalLabels();
+    REQUIRE(final_labels.size() == 5);
+    for (size_t i = 0; i < final_labels.size(); ++i) {
+      REQUIRE(final_labels[i].first == (i + 1) * 2);
+      REQUIRE(final_labels[i].second.y == 0);
+      REQUIRE(final_labels[i].second.x == 20 * (i + 1));
+    }
+  }
+}
+
+TEST_CASE("Verify graph labels are generated correctly for 2 people in simulation") {
+  epidemic_simulator::Simulator simulator(
+      2, 100, 1000, epidemic_simulator::Virus(0, 0, 0), 100, 100, 1, 2);
+
+  SECTION("Graph generates correct vertical labels with interval 1") {
+    const std::vector<LocatedLabel>& labels = simulator.GetVerticalLabels();
+    REQUIRE(labels.size() == 3);
+    REQUIRE(labels[0].first == 0);
+    REQUIRE(labels[0].second.x == 0);
+    REQUIRE(labels[0].second.y == 100);
+    REQUIRE(labels[1].first == 1);
+    REQUIRE(labels[1].second.x == 0);
+    REQUIRE(labels[1].second.y == 50);
+    REQUIRE(labels[2].first == 2);
+    REQUIRE(labels[2].second.x == 0);
+    REQUIRE(labels[2].second.y == 0);
+  }
+
+  SECTION("Graph generates correct vertical labels with interval 2") {
+    epidemic_simulator::Simulator other_simulator(
+        2, 100, 1000, epidemic_simulator::Virus(0, 0, 0), 100, 100, 2, 2);
+    const std::vector<LocatedLabel>& labels = other_simulator.GetVerticalLabels();
+    REQUIRE(labels.size() == 2);
+    REQUIRE(labels[0].first == 0);
+    REQUIRE(labels[0].second.x == 0);
+    REQUIRE(labels[0].second.y == 100);
+    REQUIRE(labels[1].first == 2);
+    REQUIRE(labels[1].second.x == 0);
+    REQUIRE(labels[1].second.y == 0);
+  }
+
+
+  SECTION("Graph generates no horizontal labels after 1 day with initial interval 2") {
+    const std::vector<LocatedLabel>& labels = simulator.GetHorizontalLabels();
+    REQUIRE(labels.empty());
+  }
+
+  SECTION("Graph generates correct horizontal labels after 2 days with initial interval 2") {
+    simulator.PerformNextFrame();
+    const std::vector<LocatedLabel>& labels = simulator.GetHorizontalLabels();
+    REQUIRE(labels.size() == 1);
+    REQUIRE(labels[0].first==2);
+    REQUIRE(labels[0].second==glm::vec2(100,0));
+  }
+
+  SECTION("Horizontal labels are correctly rescaled and located on 20th day with initial interval 2") {
+    for (size_t i = 0; i < 36; ++i) {
+      simulator.PerformNextFrame();
+    }
+    const std::vector<LocatedLabel>& initial_labels =
+        simulator.GetHorizontalLabels();
+    REQUIRE(initial_labels.size() == 9);
+    simulator.PerformNextFrame();
+    simulator.PerformNextFrame();
+    const std::vector<LocatedLabel>& final_labels = simulator.GetHorizontalLabels();
+    REQUIRE(final_labels.size() == 5);
+    for (size_t i = 0; i < final_labels.size(); ++i) {
+      REQUIRE(final_labels[i].first == (i + 1) * 4);
+      REQUIRE(final_labels[i].second.y == 0);
+      REQUIRE(final_labels[i].second.x == 20 * (i + 1));
+    }
   }
 }

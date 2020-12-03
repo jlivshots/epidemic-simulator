@@ -10,15 +10,10 @@ bool Person::MoveTowardLocation(const glm::vec2& target_location, float speed) {
   if (glm::distance(position_, target_location) <= speed) {
     position_ = target_location;
     return true;
-  }
-  else {
+  } else {
     position_ += glm::normalize(target_location - position_) * speed;
     return false;
   }
-}
-
-const glm::vec2& Person::GetLocation() const {
-  return position_;
 }
 
 void Person::Infect(Virus virus) {
@@ -47,6 +42,10 @@ void Person::PassOneDay() {
       --days_infectious_remaining_;
     }
   }
+}
+
+const glm::vec2& Person::GetLocation() const {
+  return position_;
 }
 
 Status Person::GetStatus() const {

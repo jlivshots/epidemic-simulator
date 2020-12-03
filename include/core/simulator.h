@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "cinder/gl/gl.h"
+#include "core/graph.h"
 #include "core/person.h"
 #include "core/virus.h"
 
@@ -20,9 +21,16 @@ class Simulator {
    * @param arena_radius the radius of the arena.
    * @param speed the speed of people when moving to a new slot.
    * @param virus the Virus to be modelled in the simulation.
+   * @param graph_width the width of the stacked bar chart
+   * @param graph_height the height of the stacked bar chart
+   * @param vertical_label_interval the interval for the vertical axis labels
+   * @param initial_horizontal_label_interval the initial interval for the
+   * horizontal axis labels
    */
   Simulator(size_t number_people, double arena_radius, float speed,
-            const epidemic_simulator::Virus& virus);
+            const epidemic_simulator::Virus& virus, double graph_width,
+            double graph_height, size_t vertical_label_interval,
+            size_t initial_horizontal_label_interval);
 
   /**
    * Iterates through each Person in people_ and moves then 1 speed_ closer to
@@ -48,8 +56,17 @@ class Simulator {
    */
   void PerformNextFrame();
 
+  /**
+   * Updates frequencies_ with the current frequencies of each Status.
+   */
+  void UpdateFrequencies();
+
   const std::vector<Person>& GetPeople() const;
   const std::vector<glm::vec2>& GetSlots() const;
+  const std::vector<ColumnStatus>& GetBars() const;
+  const std::map<Status, size_t>& GetFrequencies() const;
+  const std::vector<LocatedLabel>& GetHorizontalLabels() const;
+  const std::vector<LocatedLabel>& GetVerticalLabels() const;
 
  private:
   /** All vec2 positions on the circle, in order as traversed from 0-2PI. **/
@@ -59,6 +76,8 @@ class Simulator {
   double infectiousness_;
   Virus virus_;
   bool at_slots_;
+  std::map<Status, size_t> frequencies_;
+  Graph graph_;
 };
 }  // namespace epidemic_simulator
 

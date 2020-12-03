@@ -3,7 +3,7 @@
 #include <catch2/catch.hpp>
 
 TEST_CASE(
-    "Verify constructor throws invalid argument exceptions for invalid "
+    "Verify constructor throws invalid argument exception for invalid "
     "infectiousness") {
   SECTION("Infectiousness less than 0 throws exception") {
     REQUIRE_THROWS_AS(epidemic_simulator::Virus(-0.0001, 2, 2),
