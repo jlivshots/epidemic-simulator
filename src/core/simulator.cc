@@ -53,15 +53,11 @@ void Simulator::InfectNeighbors() {
     if (people_[i].GetStatus() == Status::Infectious) {
       if ((double)rand() / RAND_MAX < infectiousness_) {
         size_t right_index = (i + 1) % people_.size();
-        --frequencies_[people_[right_index].GetStatus()];
         people_[right_index].Infect(virus_);
-        ++frequencies_[people_[right_index].GetStatus()];
       }
       if ((double)rand() / RAND_MAX < infectiousness_) {
         size_t left_index = (i - 1 + people_.size()) % people_.size();
-        --frequencies_[people_[left_index].GetStatus()];
         people_[left_index].Infect(virus_);
-        ++frequencies_[people_[left_index].GetStatus()];
       }
     }
   }

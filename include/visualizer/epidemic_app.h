@@ -47,7 +47,7 @@ class EpidemicSimulatorApp : public ci::app::App {
 
   /** Virus and people **/
   static const size_t kNumberPeople = 250;
-  const Virus kVirus = Virus(0.06, 2, 10);
+  const Virus kVirus = Virus(0.15, 1, 8);
 
   /** Window and speed**/
   constexpr static float kSpeed = 25;
@@ -55,7 +55,7 @@ class EpidemicSimulatorApp : public ci::app::App {
   constexpr static double kWindowHeight = 1000;
 
   /** Arena **/
-  constexpr static float kPersonRadius = 2;
+  constexpr static float kPersonRadius = 4;
   constexpr static float kArenaRadius = 330;
   const glm::vec2 kArenaCenter = glm::vec2(400, 500);
 
@@ -64,7 +64,7 @@ class EpidemicSimulatorApp : public ci::app::App {
   constexpr static double kGraphWidth = 500;
   constexpr static double kGraphHeight = 500;
   static const size_t kVerticalLabelInterval = 50;
-  static const size_t kInitialHorizontalLabelInterval = 5;
+  static const size_t kInitialHorizontalLabelInterval = 1;
   constexpr static float kAxisLabelSize = 20.0f;
   const glm::vec2 kVerticalAxisNameLocation = glm::vec2(800, 550);
   const glm::vec2 kHorizontalAxisNameLocation = glm::vec2(1130, 825);
