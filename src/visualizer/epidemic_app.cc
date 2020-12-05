@@ -152,6 +152,9 @@ void EpidemicSimulatorApp::DrawSliders() {
   ci::gl::drawString(std::to_string(kMaxNumberPeople),
                      kPeopleSliderTopLeft + glm::vec2(kSliderWidth, 0),
                      kTextColor, ci::Font(kFont, kAxisNameSize));
+  ci::gl::drawStringCentered(std::to_string((int)people_slider_.GetValue()),
+                     kPeopleSliderTopLeft + glm::vec2(kSliderWidth/2, -kSliderHeight),
+                     kTextColor, ci::Font(kFont, kAxisNameSize));
   ci::Rectf people_drag_box = people_slider_.GenerateDragBox();
   ci::gl::drawSolidRect(people_drag_box + kPeopleSliderTopLeft);
 }
