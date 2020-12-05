@@ -41,6 +41,8 @@ class Slider {
   void StopDragging();
 
   ci::Rectf GenerateDragBox();
+
+  double GetValue() const;
  private:
   double drag_box_height_;
   double drag_box_width_;
@@ -48,6 +50,8 @@ class Slider {
   double drag_box_right_;
   double sliding_width_;
   double current_value_;
+  double min_value_;
+  double max_value_;
   bool is_dragged_;
 
 };

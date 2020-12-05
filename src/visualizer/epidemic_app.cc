@@ -127,7 +127,7 @@ void EpidemicSimulatorApp::DrawHorizontalAxis() {
 
 void EpidemicSimulatorApp::mouseDown(ci::app::MouseEvent event) {
   glm::vec2 current_location = event.getPos();
-  people_slider_.BeginDragging(current_location-kPeopleSliderTopLeft);
+  people_slider_.BeginDragging(current_location - kPeopleSliderTopLeft);
 }
 
 void EpidemicSimulatorApp::mouseUp(ci::app::MouseEvent event) {
@@ -135,15 +135,24 @@ void EpidemicSimulatorApp::mouseUp(ci::app::MouseEvent event) {
 }
 void EpidemicSimulatorApp::mouseDrag(ci::app::MouseEvent event) {
   glm::vec2 current_location = event.getPos();
-  people_slider_.UpdateSlider(current_location-kPeopleSliderTopLeft);
+  people_slider_.UpdateSlider(current_location - kPeopleSliderTopLeft);
 }
 
 void EpidemicSimulatorApp::DrawSliders() {
-  ci::Rectf boundary(kPeopleSliderTopLeft, kPeopleSliderTopLeft+glm::vec2(kSliderWidth, kSliderHeight));
+  ci::Rectf boundary(
+      kPeopleSliderTopLeft,
+      kPeopleSliderTopLeft + glm::vec2(kSliderWidth, kSliderHeight));
   ci::gl::color(ci::Color(kSliderColor));
   ci::gl::drawStrokedRect(boundary);
 
-  ci::Rectf people_drag_box= people_slider_.GenerateDragBox();
+  ci::gl::drawStringRight(std::to_string(kMinNumberPeople),
+                          kPeopleSliderTopLeft, kTextColor,
+                          ci::Font(kFont, kAxisNameSize));
+
+  ci::gl::drawString(std::to_string(kMaxNumberPeople),
+                     kPeopleSliderTopLeft + glm::vec2(kSliderWidth, 0),
+                     kTextColor, ci::Font(kFont, kAxisNameSize));
+  ci::Rectf people_drag_box = people_slider_.GenerateDragBox();
   ci::gl::drawSolidRect(people_drag_box + kPeopleSliderTopLeft);
 }
 
