@@ -6,6 +6,7 @@
 #include "cinder/gl/gl.h"
 #include "core/person.h"
 #include "core/simulator.h"
+#include "core/slider.h"
 #include "core/virus.h"
 
 /**
@@ -20,6 +21,13 @@ class EpidemicSimulatorApp : public ci::app::App {
 
   /** Draws the next frame of the simulation. **/
   void draw() override;
+
+  void mouseDown(ci::app::MouseEvent event) override;
+
+  void mouseUp(ci::app::MouseEvent event) override;
+
+  void mouseDrag(ci::app::MouseEvent event) override;
+
 
  private:
   /**
@@ -44,6 +52,8 @@ class EpidemicSimulatorApp : public ci::app::App {
    * Draws the horizontal axis labels and title.
    */
   void DrawHorizontalAxis();
+
+  void DrawSliders();
 
   /** Virus and people **/
   static const size_t kNumberPeople = 250;
@@ -88,7 +98,16 @@ class EpidemicSimulatorApp : public ci::app::App {
   const ci::Color kInfectiousColor = ci::Color("red");
   const ci::Color kImmuneColor = ci::Color("green");
 
+  const ci::Color kSliderColor = ci::Color("gray");
+  const double kSliderWidth = 100;
+  const double kSliderHeight = 25;
+  const double kDragBoxWidth = 10;
+  const glm::vec2 kPeopleSliderTopLeft = glm::vec2(880, 950);
+  const size_t kMinNumberPeople = 1;
+  const size_t kMaxNumberPeople = 1000;
+
   epidemic_simulator::Simulator simulator_;
+  Slider people_slider_;
   std::vector<LocatedLabel> vertical_labels_;
 };
 }  // namespace visualizer
