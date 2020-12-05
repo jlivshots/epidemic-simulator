@@ -40,4 +40,8 @@ void Slider::BeginDragging(glm::vec2& mouse_position) {
                  mouse_y >= 0 && mouse_y <= drag_box_height_);
 }
 
+void Slider::StopDragging(glm::vec2& mouse_position) {
+  is_dragged_ = false;
+}
+
 }  // namespace epidemic_simulator
