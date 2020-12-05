@@ -18,7 +18,7 @@ class Slider {
          glm::vec2& bottom_right_corner);
 
   /**
-   * Returns the value of the slider and the rectangle which is being dragged.
+   * Returns the value of the slider and the rectangle of the drag box.
    * @param mouse_position the vec2 position of the mouse.
    * @return a pair consisting of the double value of the slider and the
    * rectangle drag box.
@@ -41,12 +41,14 @@ class Slider {
   void StopDragging(glm::vec2& mouse_position);
 
  private:
-  double slider_height_;
+  double drag_box_height_;
+  float drag_box_width_;
   double drag_box_left_;
-  double drag_box_right;
+  double drag_box_right_;
   double sliding_width_;
   double current_value_;
   bool is_dragged_;
+
 };
 }  // namespace epidemic_simulator
 
