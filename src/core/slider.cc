@@ -32,4 +32,12 @@ std::pair<double, ci::Rectf> Slider::UpdateSlider(glm::vec2& mouse_position) {
       current_value_, ci::Rectf(glm::vec2(drag_box_left_, 0),
                                 glm::vec2(drag_box_right_, drag_box_height_)));
 }
+
+void Slider::BeginDragging(glm::vec2& mouse_position) {
+  double mouse_x = mouse_position.x;
+  double mouse_y = mouse_position.y;
+  is_dragged_ = (mouse_x >= drag_box_left_ && mouse_x <= drag_box_right_ &&
+                 mouse_y >= 0 && mouse_y <= drag_box_height_);
+}
+
 }  // namespace epidemic_simulator
