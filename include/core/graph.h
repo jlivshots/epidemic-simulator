@@ -7,7 +7,6 @@
 typedef std::pair<epidemic_simulator::Status, ci::Rectf> ColumnStatus;
 typedef std::pair<size_t, glm::vec2> LocatedLabel;
 namespace epidemic_simulator {
-
 /**
  * Visualizes the spread of a virus over time in a stacked bar chart format.
  */
