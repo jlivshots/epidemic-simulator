@@ -9,10 +9,19 @@ namespace epidemic_simulator {
  */
 class Button {
  public:
-
+  /**
+   * Instantiates a new Button Object. Assumes top left corner of button is
+   * (0,0).
+   * @param bottom_right_corner the bottom right corner of the button.
+   * is_playing_ is set to false by default.
+   */
   Button(const glm::vec2& bottom_right_corner);
 
-
+  /**
+   * Returns true if the button has been clicked, false otherwise.
+   * @param mouse_location
+   * @return
+   */
   bool ClickMouse(const glm::vec2& mouse_location);
 
  private:
