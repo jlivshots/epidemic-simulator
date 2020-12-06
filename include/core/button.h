@@ -18,7 +18,8 @@ class Button {
   Button(const glm::vec2& bottom_right_corner);
 
   /**
-   * Returns true if the button has been clicked, false otherwise.
+   * Returns true if the button has been clicked, false otherwise. If the button
+   * has been clicked, is_playing_ is inverted.
    * @param mouse_location
    * @return
    */

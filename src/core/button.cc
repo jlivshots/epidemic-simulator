@@ -6,4 +6,15 @@ Button::Button(const glm::vec2& bottom_right_corner)
       width_(bottom_right_corner.x),
       height_(bottom_right_corner.y) {
 }
+
+bool Button::ClickMouse(const glm::vec2& mouse_location) {
+  double mouse_x = mouse_location.x;
+  double mouse_y = mouse_location.y;
+  bool is_clicked =
+      (mouse_x >= 0 && mouse_x <= width_ && mouse_y >= 0 && mouse_y <= height_);
+  if (is_clicked) {
+    is_playing_ = !is_playing_;
+  }
+  return is_clicked;
+}
 }  // namespace epidemic_simulator
