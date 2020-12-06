@@ -25,6 +25,8 @@ class Button {
    */
   bool ClickMouse(const glm::vec2& mouse_location);
 
+  void SetPlayingStatus(bool is_playing);
+
   bool IsPlaying() const;
  private:
   bool is_playing_;

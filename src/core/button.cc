@@ -21,4 +21,8 @@ bool Button::ClickMouse(const glm::vec2& mouse_location) {
 bool Button::IsPlaying() const{
   return is_playing_;
 }
+
+void Button::SetPlayingStatus(bool is_playing) {
+  is_playing_ = is_playing;
+}
 }  // namespace epidemic_simulator

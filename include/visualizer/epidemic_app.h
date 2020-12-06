@@ -65,12 +65,9 @@ class EpidemicSimulatorApp : public ci::app::App {
 
   void DrawButtons();
 
-  /** Virus and people **/
-  static const size_t kNumberPeople = 250;
-  const Virus kDefaultVirus = Virus(0.15, 1, 8);
 
   /** Window and speed**/
-  constexpr static float kSpeed = 25;
+  constexpr static float kSpeed = 33;
   constexpr static double kWindowWidth = 1400;
   constexpr static double kWindowHeight = 1000;
 
@@ -83,7 +80,7 @@ class EpidemicSimulatorApp : public ci::app::App {
   const glm::vec2 kGraphTopLeft = glm::vec2(880, 360);
   constexpr static double kGraphWidth = 500;
   constexpr static double kGraphHeight = 500;
-  static const size_t kVerticalLabelInterval = 50;
+  constexpr static double kVerticalLabelIntervalFactor = 5.0;
   static const size_t kInitialHorizontalLabelInterval = 1;
   constexpr static float kAxisLabelSize = 20.0f;
   const glm::vec2 kVerticalAxisNameLocation = glm::vec2(800, 600);
