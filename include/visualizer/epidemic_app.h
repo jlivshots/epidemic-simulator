@@ -8,6 +8,7 @@
 #include "core/simulator.h"
 #include "core/slider.h"
 #include "core/virus.h"
+#include "core/button.h"
 
 /**
  * Simulates the spread of a virus over time.
@@ -55,6 +56,8 @@ class EpidemicSimulatorApp : public ci::app::App {
 
   void DrawSliders();
 
+  void DrawButtons();
+
   /** Virus and people **/
   static const size_t kNumberPeople = 250;
   const Virus kVirus = Virus(0.15, 1, 8);
@@ -100,16 +103,22 @@ class EpidemicSimulatorApp : public ci::app::App {
 
   /** Sliders **/
   const ci::Color kSliderColor = ci::Color("gray");
-  const double kSliderWidth = 100;
+  constexpr static double kSliderWidth = 100;
   constexpr static float kSliderTextSize = 28;
-  const double kSliderHeight = 35;
-  const double kDragBoxWidth = 15;
+  constexpr static double kSliderHeight = 35;
+  constexpr static double kDragBoxWidth = 15;
   const glm::vec2 kPeopleSliderTopLeft = glm::vec2(50, 50);
-  const size_t kMinNumberPeople = 1;
-  const size_t kMaxNumberPeople = 1000;
+  static const size_t kMinNumberPeople = 1;
+  static const size_t kMaxNumberPeople = 1000;
 
+  /** Buttons **/
+  const glm::vec2 kPlayButtonTopLeft = glm::vec2(10,10);
+  const glm::vec2 kPlayButtonBottomRight = glm::vec2(40,40);
+  const ci::Color kPlayButtonColor = ci::Color("Green");
+  constexpr static float kButtonTextSize = 20;
   epidemic_simulator::Simulator simulator_;
   Slider people_slider_;
+  Button play_button_;
   std::vector<LocatedLabel> vertical_labels_;
 };
 }  // namespace visualizer
