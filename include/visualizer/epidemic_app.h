@@ -4,11 +4,11 @@
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
+#include "core/button.h"
 #include "core/person.h"
 #include "core/simulator.h"
 #include "core/slider.h"
 #include "core/virus.h"
-#include "core/button.h"
 
 /**
  * Simulates the spread of a virus over time.
@@ -28,7 +28,6 @@ class EpidemicSimulatorApp : public ci::app::App {
   void mouseUp(ci::app::MouseEvent event) override;
 
   void mouseDrag(ci::app::MouseEvent event) override;
-
 
  private:
   /**
@@ -136,16 +135,20 @@ class EpidemicSimulatorApp : public ci::app::App {
   static const size_t kMinContagiousness = 0;
   static const size_t kMaxContagiousness = 100;
 
-
   /** Buttons **/
   constexpr static float kButtonTextSize = 50;
-  const glm::vec2 kPlayButtonTopLeft = glm::vec2(30,30);
-  const glm::vec2 kPlayButtonBottomRight = glm::vec2(200,200);
+  const glm::vec2 kPlayButtonTopLeft = glm::vec2(30, 30);
+  const glm::vec2 kPlayButtonBottomRight = glm::vec2(200, 200);
   const ci::Color kPlayButtonColor = ci::Color("Green");
-  const glm::vec2 kResetButtonTopLeft = glm::vec2(200,210);
-  const glm::vec2 kResetButtonBottomRight = glm::vec2(40,40);
-  const ci::Color kResetButtonColor = ci::Color("Green");
-
+  const glm::vec2 kPlayButtonTextLocation =
+      (kPlayButtonTopLeft + kPlayButtonBottomRight) * 0.5f -
+      glm::vec2(0, kButtonTextSize / 3);
+  const glm::vec2 kResetButtonTopLeft = glm::vec2(30, 210);
+  const glm::vec2 kResetButtonBottomRight = glm::vec2(200, 320);
+  const ci::Color kResetButtonColor = ci::Color("Red");
+  const glm::vec2 kResetButtonTextLocation =
+      (kResetButtonTopLeft + kResetButtonBottomRight) * 0.5f -
+      glm::vec2(0, kButtonTextSize / 3);
 
   epidemic_simulator::Simulator simulator_;
   Slider people_slider_;
@@ -154,6 +157,7 @@ class EpidemicSimulatorApp : public ci::app::App {
   Slider contagiousness_slider_;
 
   Button play_button_;
+  Button reset_button_;
   std::vector<LocatedLabel> vertical_labels_;
 };
 }  // namespace visualizer

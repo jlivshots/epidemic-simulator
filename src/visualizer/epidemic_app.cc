@@ -18,7 +18,8 @@ EpidemicSimulatorApp::EpidemicSimulatorApp()
       contagiousness_slider_(kMinContagiousness, kMaxContagiousness,
                              kDragBoxWidth,
                              glm::vec2(kSliderWidth, kSliderHeight)),
-      play_button_(kPlayButtonBottomRight - kPlayButtonTopLeft) {
+      play_button_(kPlayButtonBottomRight - kPlayButtonTopLeft),
+      reset_button_(kLegendBottomRight - kResetButtonTopLeft) {
   ci::app::setWindowSize((int)kWindowWidth, (int)kWindowHeight);
   vertical_labels_ = simulator_.GetVerticalLabels();
   simulator_.ShufflePeople();
@@ -187,7 +188,15 @@ void EpidemicSimulatorApp::DrawButtons() {
     play_label = "RUN";
   }
   ci::gl::drawStringCentered(
-      play_label, (kPlayButtonTopLeft + kPlayButtonBottomRight).operator*=(0.5),
+      play_label, kPlayButtonTextLocation,
+      kTextColor, ci::Font(kFont, kButtonTextSize));
+
+  ci::gl::color(ci::Color(kResetButtonColor));
+  ci::Rectf reset_boundary(kResetButtonTopLeft, kResetButtonBottomRight);
+  ci::gl::drawSolidRect(reset_boundary);
+  ci::gl::drawStringCentered(
+      "RESET",
+      kResetButtonTextLocation,
       kTextColor, ci::Font(kFont, kButtonTextSize));
 }
 
