@@ -67,17 +67,17 @@ class EpidemicSimulatorApp : public ci::app::App {
   /** Arena **/
   constexpr static float kPersonRadius = 4;
   constexpr static float kArenaRadius = 330;
-  const glm::vec2 kArenaCenter = glm::vec2(400, 500);
+  const glm::vec2 kArenaCenter = glm::vec2(375, 650);
 
   /** Graph **/
-  const glm::vec2 kGraphTopLeft = glm::vec2(880, 300);
+  const glm::vec2 kGraphTopLeft = glm::vec2(880, 360);
   constexpr static double kGraphWidth = 500;
   constexpr static double kGraphHeight = 500;
   static const size_t kVerticalLabelInterval = 50;
   static const size_t kInitialHorizontalLabelInterval = 1;
   constexpr static float kAxisLabelSize = 20.0f;
-  const glm::vec2 kVerticalAxisNameLocation = glm::vec2(800, 550);
-  const glm::vec2 kHorizontalAxisNameLocation = glm::vec2(1130, 825);
+  const glm::vec2 kVerticalAxisNameLocation = glm::vec2(800, 600);
+  const glm::vec2 kHorizontalAxisNameLocation = glm::vec2(1130, 875);
   constexpr static float kAxisNameSize = 35.0f;
 
   /** Text **/
@@ -85,12 +85,12 @@ class EpidemicSimulatorApp : public ci::app::App {
   const ci::Color kTextColor = ci::Color("white");
 
   /** Legend **/
-  const glm::vec2 kLegendTopLeft = glm::vec2(850, 30);
-  const glm::vec2 kLegendBottomRight = glm::vec2(1115, 200);
+  const glm::vec2 kLegendTopLeft = glm::vec2(975, 100);
+  const glm::vec2 kLegendBottomRight = glm::vec2(1240, 300);
   constexpr static float kLegendIconSize = 15;
   constexpr static float kLegendTextSize = 35.0f;
   constexpr static double kLegendMargin = 15;
-  const glm::vec2 kFrequencyTopLeft = glm::vec2(1100, 30);
+  const glm::vec2 kFrequencyTopLeft = glm::vec2(1225, 100);
 
   /** Status colors **/
   const ci::Color kVulnerableColor = ci::Color("gray");
@@ -98,11 +98,13 @@ class EpidemicSimulatorApp : public ci::app::App {
   const ci::Color kInfectiousColor = ci::Color("red");
   const ci::Color kImmuneColor = ci::Color("green");
 
+  /** Sliders **/
   const ci::Color kSliderColor = ci::Color("gray");
   const double kSliderWidth = 100;
-  const double kSliderHeight = 25;
-  const double kDragBoxWidth = 10;
-  const glm::vec2 kPeopleSliderTopLeft = glm::vec2(880, 950);
+  constexpr static float kSliderTextSize = 28;
+  const double kSliderHeight = 35;
+  const double kDragBoxWidth = 15;
+  const glm::vec2 kPeopleSliderTopLeft = glm::vec2(50, 50);
   const size_t kMinNumberPeople = 1;
   const size_t kMaxNumberPeople = 1000;
 

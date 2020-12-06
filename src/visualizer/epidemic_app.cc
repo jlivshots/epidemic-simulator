@@ -15,6 +15,9 @@ EpidemicSimulatorApp::EpidemicSimulatorApp()
 }
 
 void EpidemicSimulatorApp::draw() {
+//  simulator_= Simulator(kNumberPeople, kArenaRadius, kSpeed, kVirus, kGraphWidth,
+//                        kGraphHeight, kVerticalLabelInterval,
+//                        kInitialHorizontalLabelInterval);
   ci::Color8u background_color(ci::Color("black"));
   ci::gl::clear(background_color);
   ci::gl::color(ci::Color("white"));
@@ -77,7 +80,7 @@ void EpidemicSimulatorApp::DrawLegend() {
   double height = (kLegendBottomRight.y - kLegendTopLeft.y) - 2 * kLegendMargin;
   double entry_height = height / frequencies.size();
   size_t index = 0;
-  for (auto iterator : frequencies) {
+  for (auto& iterator : frequencies) {
     std::string label = SetColorAndGetName(iterator.first);
     ci::gl::drawSolidCircle(
         kLegendTopLeft +
@@ -147,14 +150,15 @@ void EpidemicSimulatorApp::DrawSliders() {
 
   ci::gl::drawStringRight(std::to_string(kMinNumberPeople),
                           kPeopleSliderTopLeft, kTextColor,
-                          ci::Font(kFont, kAxisNameSize));
+                          ci::Font(kFont, kSliderTextSize));
 
   ci::gl::drawString(std::to_string(kMaxNumberPeople),
                      kPeopleSliderTopLeft + glm::vec2(kSliderWidth, 0),
-                     kTextColor, ci::Font(kFont, kAxisNameSize));
-  ci::gl::drawStringCentered(std::to_string((int)people_slider_.GetValue()),
-                     kPeopleSliderTopLeft + glm::vec2(kSliderWidth/2, -kSliderHeight),
-                     kTextColor, ci::Font(kFont, kAxisNameSize));
+                     kTextColor, ci::Font(kFont, kSliderTextSize));
+  ci::gl::drawString(
+      "People: " + std::to_string((int)people_slider_.GetValue()),
+      kPeopleSliderTopLeft + glm::vec2(0, -kSliderHeight),
+      kTextColor, ci::Font(kFont, kSliderTextSize));
   ci::Rectf people_drag_box = people_slider_.GenerateDragBox();
   ci::gl::drawSolidRect(people_drag_box + kPeopleSliderTopLeft);
 }

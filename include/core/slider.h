@@ -40,9 +40,14 @@ class Slider {
    */
   void StopDragging();
 
+  /**
+   * Generates and returns the rectangle drag box.
+   * @return a Rectf rectangle representing the drag box.
+   */
   ci::Rectf GenerateDragBox();
 
   double GetValue() const;
+
  private:
   double drag_box_height_;
   double drag_box_width_;
