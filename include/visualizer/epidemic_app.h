@@ -56,6 +56,14 @@ class EpidemicSimulatorApp : public ci::app::App {
 
   void DrawSliders();
 
+  void DrawPeopleSlider();
+
+  void DrawIncubationSlider();
+
+  void DrawInfectionDurationSlider();
+
+  void DrawContagiousnessSlider();
+
   void DrawButtons();
 
   /** Virus and people **/
@@ -103,18 +111,25 @@ class EpidemicSimulatorApp : public ci::app::App {
 
   /** Sliders **/
   const ci::Color kSliderColor = ci::Color("gray");
-  constexpr static double kSliderWidth = 100;
-  constexpr static float kSliderTextSize = 28;
+  constexpr static double kSliderWidth = 150;
+  constexpr static float kSliderTextSize = 30;
   constexpr static double kSliderHeight = 35;
-  constexpr static double kDragBoxWidth = 15;
-  const glm::vec2 kPeopleSliderTopLeft = glm::vec2(50, 50);
+  constexpr static double kDragBoxWidth = 25;
+
+  /** People slider **/
+  const glm::vec2 kPeopleSliderTopLeft = glm::vec2(275, 50);
   static const size_t kMinNumberPeople = 1;
   static const size_t kMaxNumberPeople = 1000;
 
+  /** Incubation slider **/
+  const glm::vec2 kIncubationSliderTopLeft = glm::vec2(575, 50);
+  static const size_t kMinIncubation = 0;
+  static const size_t kMaxIncubation = 10;
+
   /** Buttons **/
-  constexpr static float kButtonTextSize = 20;
-  const glm::vec2 kPlayButtonTopLeft = glm::vec2(10,10);
-  const glm::vec2 kPlayButtonBottomRight = glm::vec2(40,40);
+  constexpr static float kButtonTextSize = 50;
+  const glm::vec2 kPlayButtonTopLeft = glm::vec2(30,30);
+  const glm::vec2 kPlayButtonBottomRight = glm::vec2(200,200);
   const ci::Color kPlayButtonColor = ci::Color("Green");
   const glm::vec2 kResetButtonTopLeft = glm::vec2(10,10);
   const glm::vec2 kResetButtonBottomRight = glm::vec2(40,40);
@@ -123,6 +138,8 @@ class EpidemicSimulatorApp : public ci::app::App {
 
   epidemic_simulator::Simulator simulator_;
   Slider people_slider_;
+  Slider incubation_slider_;
+
   Button play_button_;
   std::vector<LocatedLabel> vertical_labels_;
 };
