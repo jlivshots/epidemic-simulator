@@ -207,7 +207,9 @@ void EpidemicSimulatorApp::DrawButtons() {
   ci::gl::color(ci::Color(kResetButtonColor));
   ci::Rectf reset_boundary(kResetButtonTopLeft, kResetButtonBottomRight);
   ci::gl::drawSolidRect(reset_boundary);
-  ci::gl::drawStringCentered("RESET", kResetButtonTextLocation, kTextColor,
+  ci::gl::drawStringCentered("APPLY", kResetButtonTextLocationApply, kTextColor,
+                             ci::Font(kFont, kButtonTextSize));
+  ci::gl::drawStringCentered("SETTINGS", kResetButtonTextLocationSettings, kTextColor,
                              ci::Font(kFont, kButtonTextSize));
 }
 

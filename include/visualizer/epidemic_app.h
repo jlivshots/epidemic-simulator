@@ -135,7 +135,7 @@ class EpidemicSimulatorApp : public ci::app::App {
   constexpr static double kSpeedBase = 1.05;
 
   /** Buttons **/
-  constexpr static float kButtonTextSize = 50;
+  constexpr static float kButtonTextSize = 45;
   const glm::vec2 kPlayButtonTopLeft = glm::vec2(30, 30);
   const glm::vec2 kPlayButtonBottomRight = glm::vec2(200, 200);
   const ci::Color kPlayButtonColor = ci::Color("Green");
@@ -145,10 +145,12 @@ class EpidemicSimulatorApp : public ci::app::App {
   const glm::vec2 kResetButtonTopLeft = glm::vec2(30, 210);
   const glm::vec2 kResetButtonBottomRight = glm::vec2(200, 320);
   const ci::Color kResetButtonColor = ci::Color("Red");
-  const glm::vec2 kResetButtonTextLocation =
+  const glm::vec2 kResetButtonTextLocationSettings =
+      (kResetButtonTopLeft + kResetButtonBottomRight) * 0.5f +
+      glm::vec2(0, kButtonTextSize / 4);
+  const glm::vec2 kResetButtonTextLocationApply =
       (kResetButtonTopLeft + kResetButtonBottomRight) * 0.5f -
-      glm::vec2(0, kButtonTextSize / 3);
-
+      glm::vec2(0, 0.75*kButtonTextSize);
   epidemic_simulator::Simulator simulator_;
   Slider people_slider_;
   Slider incubation_slider_;
