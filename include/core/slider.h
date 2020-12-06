@@ -3,6 +3,9 @@
 
 #include "cinder/gl/gl.h"
 namespace epidemic_simulator {
+/**
+ * Slider class allows a user to drag a slider to set a parameter value.
+ */
 class Slider {
  public:
   /**
