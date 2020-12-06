@@ -52,19 +52,13 @@ class EpidemicSimulatorApp : public ci::app::App {
    * Draws the horizontal axis labels and title.
    */
   void DrawHorizontalAxis();
-
   void DrawSliders();
-
   void DrawPeopleSlider();
-
   void DrawIncubationSlider();
-
+  void DrawSpeedSlider();
   void DrawInfectionSlider();
-
   void DrawContagiousnessSlider();
-
   void DrawButtons();
-
 
   /** Window and speed**/
   constexpr static float kSpeed = 33;
@@ -118,12 +112,12 @@ class EpidemicSimulatorApp : public ci::app::App {
   static const size_t kMaxNumberPeople = 1000;
 
   /** Incubation slider **/
-  const glm::vec2 kIncubationSliderTopLeft = glm::vec2(575, 85);
+  const glm::vec2 kIncubationSliderTopLeft = glm::vec2(550, 85);
   static const size_t kMinIncubation = 0;
   static const size_t kMaxIncubation = 10;
 
   /** Infection slider **/
-  const glm::vec2 kInfectionSliderTopLeft = glm::vec2(575, 200);
+  const glm::vec2 kInfectionSliderTopLeft = glm::vec2(550, 200);
   static const size_t kMinInfection = 1;
   static const size_t kMaxInfection = 10;
 
@@ -131,6 +125,14 @@ class EpidemicSimulatorApp : public ci::app::App {
   const glm::vec2 kContagiousnessSliderTopLeft = glm::vec2(275, 200);
   static const size_t kMinContagiousness = 0;
   static const size_t kMaxContagiousness = 100;
+
+  /** Speed Slider **/
+  const glm::vec2 kSpeedSliderTopLeft = glm::vec2(780, 85);
+  // The following constants are used as a base raised to an exponent for speed
+  // calculations for a more user-friendly slider.
+  constexpr static float kMinSpeedExponent = 1;
+  constexpr static float kMaxSpeedExponent = 134;
+  constexpr static double kSpeedBase = 1.05;
 
   /** Buttons **/
   constexpr static float kButtonTextSize = 50;
@@ -152,6 +154,7 @@ class EpidemicSimulatorApp : public ci::app::App {
   Slider incubation_slider_;
   Slider infection_slider_;
   Slider contagiousness_slider_;
+  Slider speed_slider_;
 
   Button play_button_;
   Button reset_button_;

@@ -110,4 +110,8 @@ const std::vector<LocatedLabel>& Simulator::GetHorizontalLabels() const {
 const std::vector<LocatedLabel>& Simulator::GetVerticalLabels() const {
   return graph_.GetVerticalLabels();
 }
+
+void Simulator::SetSpeed(float speed) {
+  speed_ = speed;
+}
 }  // namespace epidemic_simulator

@@ -18,6 +18,8 @@ EpidemicSimulatorApp::EpidemicSimulatorApp()
       contagiousness_slider_(kMinContagiousness, kMaxContagiousness,
                              kDragBoxWidth,
                              glm::vec2(kSliderWidth, kSliderHeight)),
+      speed_slider_(kMinSpeedExponent, kMaxSpeedExponent, kDragBoxWidth,
+                    glm::vec2(kSliderWidth, kSliderHeight)),
       play_button_(kPlayButtonBottomRight - kPlayButtonTopLeft),
       reset_button_(kResetButtonBottomRight - kResetButtonTopLeft) {
   ci::app::setWindowSize((int)kWindowWidth, (int)kWindowHeight);
@@ -30,8 +32,8 @@ void EpidemicSimulatorApp::draw() {
   ci::gl::clear(background_color);
   ci::gl::color(ci::Color("white"));
   ci::gl::drawStrokedCircle(kArenaCenter, kArenaRadius);
-
   if (play_button_.IsPlaying()) {
+    simulator_.SetSpeed((float)std::pow(kSpeedBase,speed_slider_.GetValue()));
     simulator_.PerformNextFrame();
   }
   const std::vector<Person> people = simulator_.GetPeople();
@@ -146,10 +148,11 @@ void EpidemicSimulatorApp::mouseDown(ci::app::MouseEvent event) {
   infection_slider_.BeginDragging(current_location - kInfectionSliderTopLeft);
   contagiousness_slider_.BeginDragging(current_location -
                                        kContagiousnessSliderTopLeft);
-
+  speed_slider_.BeginDragging(current_location - kSpeedSliderTopLeft);
   play_button_.ClickMouse(current_location - kPlayButtonTopLeft);
   if (reset_button_.ClickMouse(current_location - kResetButtonTopLeft)) {
-    double vertical_interval = std::max(1.0, people_slider_.GetValue()/kVerticalLabelIntervalFactor);
+    double vertical_interval =
+        std::max(1.0, people_slider_.GetValue() / kVerticalLabelIntervalFactor);
     simulator_ =
         Simulator((size_t)people_slider_.GetValue(), kArenaRadius, kSpeed,
                   Virus(contagiousness_slider_.GetValue() / 100,
@@ -157,7 +160,7 @@ void EpidemicSimulatorApp::mouseDown(ci::app::MouseEvent event) {
                         (size_t)infection_slider_.GetValue()),
                   kGraphWidth, kGraphHeight, (size_t)vertical_interval,
                   kInitialHorizontalLabelInterval);
-    vertical_labels_=simulator_.GetVerticalLabels();
+    vertical_labels_ = simulator_.GetVerticalLabels();
     play_button_.SetPlayingStatus(false);
   }
 }
@@ -167,6 +170,7 @@ void EpidemicSimulatorApp::mouseUp(ci::app::MouseEvent event) {
   incubation_slider_.StopDragging();
   infection_slider_.StopDragging();
   contagiousness_slider_.StopDragging();
+  speed_slider_.StopDragging();
 }
 
 void EpidemicSimulatorApp::mouseDrag(ci::app::MouseEvent event) {
@@ -176,6 +180,7 @@ void EpidemicSimulatorApp::mouseDrag(ci::app::MouseEvent event) {
   infection_slider_.UpdateSlider(current_location - kInfectionSliderTopLeft);
   contagiousness_slider_.UpdateSlider(current_location -
                                       kContagiousnessSliderTopLeft);
+  speed_slider_.UpdateSlider(current_location - kSpeedSliderTopLeft);
 }
 
 void EpidemicSimulatorApp::DrawSliders() {
@@ -183,6 +188,7 @@ void EpidemicSimulatorApp::DrawSliders() {
   DrawIncubationSlider();
   DrawInfectionSlider();
   DrawContagiousnessSlider();
+  DrawSpeedSlider();
 }
 
 void EpidemicSimulatorApp::DrawButtons() {
@@ -285,6 +291,20 @@ void EpidemicSimulatorApp::DrawContagiousnessSlider() {
       kTextColor, ci::Font(kFont, kSliderTextSize));
   ci::Rectf contagiousness_drag_box = contagiousness_slider_.GenerateDragBox();
   ci::gl::drawSolidRect(contagiousness_drag_box + kContagiousnessSliderTopLeft);
+}
+
+void EpidemicSimulatorApp::DrawSpeedSlider() {
+  ci::Rectf boundary(
+      kSpeedSliderTopLeft,
+      kSpeedSliderTopLeft + glm::vec2(kSliderWidth, kSliderHeight));
+  ci::gl::color(ci::Color(kSliderColor));
+  ci::gl::drawStrokedRect(boundary);
+  ci::gl::drawStringCentered(
+      "Speed",
+      kSpeedSliderTopLeft + glm::vec2(kSliderWidth / 2, -kSliderHeight),
+      kTextColor, ci::Font(kFont, kSliderTextSize));
+  ci::Rectf speed_drag_box = speed_slider_.GenerateDragBox();
+  ci::gl::drawSolidRect(speed_drag_box + kSpeedSliderTopLeft);
 }
 
 }  // namespace visualizer

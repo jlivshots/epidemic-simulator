@@ -61,6 +61,7 @@ class Simulator {
    */
   void UpdateFrequencies();
 
+  void SetSpeed(float speed);
   const std::vector<Person>& GetPeople() const;
   const std::vector<glm::vec2>& GetSlots() const;
   const std::vector<ColumnStatus>& GetBars() const;
