@@ -4,7 +4,7 @@ namespace epidemic_simulator {
 namespace visualizer {
 
 EpidemicSimulatorApp::EpidemicSimulatorApp()
-    : simulator_(kNumberPeople, kArenaRadius, kSpeed, kVirus, kGraphWidth,
+    : simulator_(kNumberPeople, kArenaRadius, kSpeed, kDefaultVirus, kGraphWidth,
                  kGraphHeight, kVerticalLabelInterval,
                  kInitialHorizontalLabelInterval),
       people_slider_(kMinNumberPeople, kMaxNumberPeople, kDragBoxWidth,
@@ -16,7 +16,8 @@ EpidemicSimulatorApp::EpidemicSimulatorApp()
 }
 
 void EpidemicSimulatorApp::draw() {
-  //  simulator_= Simulator(kNumberPeople, kArenaRadius, kSpeed, kVirus,
+
+  //  simulator_= Simulator(kNumberPeople, kArenaRadius, kSpeed, kDefaultVirus,
   //  kGraphWidth,
   //                        kGraphHeight, kVerticalLabelInterval,
   //                        kInitialHorizontalLabelInterval);
@@ -25,7 +26,9 @@ void EpidemicSimulatorApp::draw() {
   ci::gl::color(ci::Color("white"));
   ci::gl::drawStrokedCircle(kArenaCenter, kArenaRadius);
 
-  simulator_.PerformNextFrame();
+  if(play_button_.IsPlaying()) {
+    simulator_.PerformNextFrame();
+  }
   const std::vector<Person> people = simulator_.GetPeople();
 
   for (const Person& person : people) {
@@ -180,6 +183,7 @@ void EpidemicSimulatorApp::DrawButtons() {
   ci::gl::drawStringCentered(
       play_label, (kPlayButtonTopLeft + kPlayButtonBottomRight).operator*=(0.5),
       kTextColor, ci::Font(kFont, kButtonTextSize));
+
 }
 
 }  // namespace visualizer
