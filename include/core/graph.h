@@ -67,13 +67,6 @@ class Graph {
   /** The width of the graph **/
   double width_;
 
-  /**
-   * The vertical order of the bars for each day. First Status will be at the
-   * top, and the last status will be on the horizontal axis.
-   */
-  const std::vector<Status> kVerticalOrder = {
-      Status::Vulnerable, Status::Immune, Status::Incubating,
-      Status::Infectious};
   std::vector<LocatedLabel> vertical_labels_;
   std::vector<LocatedLabel> horizontal_labels_;
   std::vector<ColumnStatus> bars_;
@@ -82,8 +75,10 @@ class Graph {
   size_t horizontal_interval_;
 
   /** Maximum number of horizontal labels for a graph to display at a time. **/
-  const size_t kMaxNumberLabels = 10;
+  static const size_t kMaxNumberLabels = 10;
 };
+
+
 }  // namespace epidemic_simulator
 
 #endif  // EPIDEMIC_SIMULATOR_GRAPH_H

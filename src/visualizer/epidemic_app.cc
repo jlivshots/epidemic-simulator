@@ -4,13 +4,20 @@ namespace epidemic_simulator {
 namespace visualizer {
 
 EpidemicSimulatorApp::EpidemicSimulatorApp()
-    : simulator_(kNumberPeople, kArenaRadius, kSpeed, kDefaultVirus,
+    : simulator_(kNumberPeople, kArenaRadius, kSpeed,
+                 Virus((double)kMinContagiousness / 100, (size_t)kMinIncubation,
+                       (size_t)kMinInfection),
                  kGraphWidth, kGraphHeight, kVerticalLabelInterval,
                  kInitialHorizontalLabelInterval),
       people_slider_(kMinNumberPeople, kMaxNumberPeople, kDragBoxWidth,
                      glm::vec2(kSliderWidth, kSliderHeight)),
       incubation_slider_(kMinIncubation, kMaxIncubation, kDragBoxWidth,
                          glm::vec2(kSliderWidth, kSliderHeight)),
+      infection_slider_(kMinInfection, kMaxInfection, kDragBoxWidth,
+                        glm::vec2(kSliderWidth, kSliderHeight)),
+      contagiousness_slider_(kMinContagiousness, kMaxContagiousness,
+                             kDragBoxWidth,
+                             glm::vec2(kSliderWidth, kSliderHeight)),
       play_button_(kPlayButtonBottomRight - kPlayButtonTopLeft) {
   ci::app::setWindowSize((int)kWindowWidth, (int)kWindowHeight);
   vertical_labels_ = simulator_.GetVerticalLabels();
@@ -18,10 +25,10 @@ EpidemicSimulatorApp::EpidemicSimulatorApp()
 }
 
 void EpidemicSimulatorApp::draw() {
-  //  simulator_= Simulator(kNumberPeople, kArenaRadius, kSpeed, kDefaultVirus,
-  //  kGraphWidth,
-  //                        kGraphHeight, kVerticalLabelInterval,
-  //                        kInitialHorizontalLabelInterval);
+  //    simulator_= Simulator(kNumberPeople, kArenaRadius, kSpeed,
+  //    kDefaultVirus, kGraphWidth,
+  //                          kGraphHeight, kVerticalLabelInterval,
+  //                          kInitialHorizontalLabelInterval);
   ci::Color8u background_color(ci::Color("black"));
   ci::gl::clear(background_color);
   ci::gl::color(ci::Color("white"));
@@ -139,23 +146,33 @@ void EpidemicSimulatorApp::mouseDown(ci::app::MouseEvent event) {
   glm::vec2 current_location = event.getPos();
   people_slider_.BeginDragging(current_location - kPeopleSliderTopLeft);
   incubation_slider_.BeginDragging(current_location - kIncubationSliderTopLeft);
+  infection_slider_.BeginDragging(current_location - kInfectionSliderTopLeft);
+  contagiousness_slider_.BeginDragging(current_location -
+                                       kContagiousnessSliderTopLeft);
+
   play_button_.ClickMouse(current_location - kPlayButtonTopLeft);
 }
 
 void EpidemicSimulatorApp::mouseUp(ci::app::MouseEvent event) {
   people_slider_.StopDragging();
   incubation_slider_.StopDragging();
+  infection_slider_.StopDragging();
+  contagiousness_slider_.StopDragging();
 }
+
 void EpidemicSimulatorApp::mouseDrag(ci::app::MouseEvent event) {
   glm::vec2 current_location = event.getPos();
   people_slider_.UpdateSlider(current_location - kPeopleSliderTopLeft);
   incubation_slider_.UpdateSlider(current_location - kIncubationSliderTopLeft);
+  infection_slider_.UpdateSlider(current_location - kInfectionSliderTopLeft);
+  contagiousness_slider_.UpdateSlider(current_location -
+                                      kContagiousnessSliderTopLeft);
 }
 
 void EpidemicSimulatorApp::DrawSliders() {
   DrawPeopleSlider();
   DrawIncubationSlider();
-  DrawInfectionDurationSlider();
+  DrawInfectionSlider();
   DrawContagiousnessSlider();
 }
 
@@ -188,8 +205,8 @@ void EpidemicSimulatorApp::DrawPeopleSlider() {
                      kTextColor, ci::Font(kFont, kSliderTextSize));
   ci::gl::drawStringCentered(
       "People: " + std::to_string((int)people_slider_.GetValue()),
-      kPeopleSliderTopLeft + glm::vec2(kSliderWidth/2, -kSliderHeight), kTextColor,
-      ci::Font(kFont, kSliderTextSize));
+      kPeopleSliderTopLeft + glm::vec2(kSliderWidth / 2, -kSliderHeight),
+      kTextColor, ci::Font(kFont, kSliderTextSize));
   ci::Rectf people_drag_box = people_slider_.GenerateDragBox();
   ci::gl::drawSolidRect(people_drag_box + kPeopleSliderTopLeft);
 }
@@ -208,14 +225,52 @@ void EpidemicSimulatorApp::DrawIncubationSlider() {
                      kTextColor, ci::Font(kFont, kSliderTextSize));
   ci::gl::drawStringCentered(
       "Incubation Days: " + std::to_string((int)incubation_slider_.GetValue()),
-      kIncubationSliderTopLeft + glm::vec2(kSliderWidth/2, -kSliderHeight), kTextColor,
-      ci::Font(kFont, kSliderTextSize));
+      kIncubationSliderTopLeft + glm::vec2(kSliderWidth / 2, -kSliderHeight),
+      kTextColor, ci::Font(kFont, kSliderTextSize));
   ci::Rectf incubation_drag_box = incubation_slider_.GenerateDragBox();
   ci::gl::drawSolidRect(incubation_drag_box + kIncubationSliderTopLeft);
 }
-void EpidemicSimulatorApp::DrawInfectionDurationSlider() {
+
+void EpidemicSimulatorApp::DrawInfectionSlider() {
+  ci::Rectf boundary(
+      kInfectionSliderTopLeft,
+      kInfectionSliderTopLeft + glm::vec2(kSliderWidth, kSliderHeight));
+  ci::gl::color(ci::Color(kSliderColor));
+  ci::gl::drawStrokedRect(boundary);
+  ci::gl::drawStringRight(std::to_string(kMinInfection),
+                          kInfectionSliderTopLeft, kTextColor,
+                          ci::Font(kFont, kSliderTextSize));
+  ci::gl::drawString(std::to_string(kMaxInfection),
+                     kInfectionSliderTopLeft + glm::vec2(kSliderWidth, 0),
+                     kTextColor, ci::Font(kFont, kSliderTextSize));
+  ci::gl::drawStringCentered(
+      "Infectious Days: " + std::to_string((int)infection_slider_.GetValue()),
+      kInfectionSliderTopLeft + glm::vec2(kSliderWidth / 2, -kSliderHeight),
+      kTextColor, ci::Font(kFont, kSliderTextSize));
+  ci::Rectf infection_drag_box = infection_slider_.GenerateDragBox();
+  ci::gl::drawSolidRect(infection_drag_box + kInfectionSliderTopLeft);
 }
+
 void EpidemicSimulatorApp::DrawContagiousnessSlider() {
+  ci::Rectf boundary(
+      kContagiousnessSliderTopLeft,
+      kContagiousnessSliderTopLeft + glm::vec2(kSliderWidth, kSliderHeight));
+  ci::gl::color(ci::Color(kSliderColor));
+  ci::gl::drawStrokedRect(boundary);
+  ci::gl::drawStringRight(std::to_string(kMinContagiousness) + "%",
+                          kContagiousnessSliderTopLeft, kTextColor,
+                          ci::Font(kFont, kSliderTextSize));
+  ci::gl::drawString(std::to_string(kMaxContagiousness) + "%",
+                     kContagiousnessSliderTopLeft + glm::vec2(kSliderWidth, 0),
+                     kTextColor, ci::Font(kFont, kSliderTextSize));
+  ci::gl::drawStringCentered(
+      "Infection Rate: " +
+          std::to_string((int)contagiousness_slider_.GetValue()) + "%",
+      kContagiousnessSliderTopLeft +
+          glm::vec2(kSliderWidth / 2, -kSliderHeight),
+      kTextColor, ci::Font(kFont, kSliderTextSize));
+  ci::Rectf contagiousness_drag_box = contagiousness_slider_.GenerateDragBox();
+  ci::gl::drawSolidRect(contagiousness_drag_box + kContagiousnessSliderTopLeft);
 }
 
 }  // namespace visualizer
