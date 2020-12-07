@@ -74,8 +74,6 @@ class EpidemicSimulatorApp : public ci::app::App {
   /** Draws the play and reset buttons. **/
   void DrawButtons();
 
-  void CheckReset(const glm::vec2& current_location);
-
   /** Window and speed. **/
   constexpr static float kSpeed = 33;
   constexpr static double kWindowWidth = 1400;
@@ -160,16 +158,15 @@ class EpidemicSimulatorApp : public ci::app::App {
   constexpr static float kButtonTextSize = 45;
 
   /** Play button. **/
-  Button play_button_;
   const glm::vec2 kPlayButtonTopLeft = glm::vec2(30, 30);
   const glm::vec2 kPlayButtonBottomRight = glm::vec2(200, 200);
   const ci::Color kPlayButtonColor = ci::Color("Green");
   const glm::vec2 kPlayButtonTextLocation =
       (kPlayButtonTopLeft + kPlayButtonBottomRight) * 0.5f -
       glm::vec2(0, kButtonTextSize / 3);
+  Button play_button_;
 
   /** Reset button. **/
-  Button reset_button_;
   const glm::vec2 kResetButtonTopLeft = glm::vec2(30, 210);
   const glm::vec2 kResetButtonBottomRight = glm::vec2(200, 320);
   const ci::Color kResetButtonColor = ci::Color("Red");
@@ -179,6 +176,7 @@ class EpidemicSimulatorApp : public ci::app::App {
   const glm::vec2 kResetButtonTextLocationApply =
       (kResetButtonTopLeft + kResetButtonBottomRight) * 0.5f -
       glm::vec2(0, 0.75 * kButtonTextSize);
+  Button reset_button_;
 
   /** Simulator instance. **/
   epidemic_simulator::Simulator simulator_;
