@@ -273,3 +273,40 @@ TEST_CASE(
     REQUIRE(slider.GetValue() == 2);
   }
 }
+
+
+TEST_CASE(
+    "Slider value updates correctly for slider length 100 and minimum value of "
+    "0") {
+  epidemic_simulator::Slider slider(0, 20, 10, glm::vec2(100, 20));
+  SECTION("Slider initial value is that of the minimum value") {
+    REQUIRE(slider.GetValue() == 0);
+  }
+
+  SECTION("Value updated correctly when slider is dragged to middle") {
+    slider.BeginDragging(glm::vec2(2, 2));
+    slider.UpdateSlider(glm::vec2(50, 3));
+    REQUIRE(slider.GetValue() == 10);
+  }
+
+  SECTION("Value updated correctly when slider is dragged to the right") {
+    slider.BeginDragging(glm::vec2(2, 2));
+    slider.UpdateSlider(glm::vec2(100, 3));
+    REQUIRE(slider.GetValue() == 20);
+  }
+
+  SECTION("Value remains unchanged when slider is not moved") {
+    slider.BeginDragging(glm::vec2(2, 2));
+    slider.UpdateSlider(glm::vec2(50, 3));
+    slider.UpdateSlider(glm::vec2(50, -20));
+    REQUIRE(slider.GetValue() == 10);
+  }
+
+  SECTION(
+      "Value updated correctly when mouse dragged to the left of drag box") {
+    slider.BeginDragging(glm::vec2(2, 2));
+    slider.UpdateSlider(glm::vec2(25, 3));
+    slider.UpdateSlider(glm::vec2(-20, -20));
+    REQUIRE(slider.GetValue() == 0);
+  }
+}
