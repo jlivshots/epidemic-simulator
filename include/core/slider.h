@@ -50,7 +50,7 @@ class Slider {
   ci::Rectf GenerateDragBox();
 
   double GetValue() const;
-
+  bool IsDragged() const;
  private:
   double drag_box_height_;
   double drag_box_width_;
@@ -61,7 +61,6 @@ class Slider {
   double min_value_;
   double max_value_;
   bool is_dragged_;
-
 };
 }  // namespace epidemic_simulator
 

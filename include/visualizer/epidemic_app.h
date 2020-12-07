@@ -13,6 +13,13 @@
 /**
  * Simulates the spread of a virus over time, and provides sliders and buttons
  * to set simulation speed and virus parameters.
+ *
+ * Note: slider/button logic and instance variables are maintained in this app
+ * class because resetting the simulation when the reset button is pressed
+ * requires creating a new simulator_ instance, which cannot be done from within
+ * the Simulator class. Also, maintaining sliders and buttons within a simulator
+ * would require an unnecessarily large number of parameters in the Simulator
+ * Constructor.
  */
 namespace epidemic_simulator {
 namespace visualizer {
