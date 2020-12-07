@@ -5,7 +5,7 @@
 
 namespace epidemic_simulator {
 /**
- * Button class allows a user to press a button to pause/play.
+ * Button class allows a user to press a rectangular button to pause/play.
  */
 class Button {
  public:
@@ -15,13 +15,13 @@ class Button {
    * @param bottom_right_corner the bottom right corner of the button.
    * is_playing_ is set to false by default.
    */
-  Button(const glm::vec2& bottom_right_corner);
+  explicit Button(const glm::vec2& bottom_right_corner);
 
   /**
    * Returns true if the button has been clicked, false otherwise. If the button
    * has been clicked, is_playing_ is inverted.
    * @param mouse_location
-   * @return
+   * @return a bool representing if the button has been clicked.
    */
   bool ClickMouse(const glm::vec2& mouse_location);
 
