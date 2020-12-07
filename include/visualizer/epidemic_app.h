@@ -74,6 +74,10 @@ class EpidemicSimulatorApp : public ci::app::App {
   /** Draws the play and reset buttons. **/
   void DrawButtons();
 
+  /** Replaces simulator_ with a new instance that has the parameters specified
+   * by the sliders. **/
+  void CheckResetButton(const glm::vec2& location);
+
   /** Window and speed. **/
   constexpr static float kSpeed = 33;
   constexpr static double kWindowWidth = 1400;
@@ -93,7 +97,7 @@ class EpidemicSimulatorApp : public ci::app::App {
   static const size_t kInitialHorizontalLabelInterval = 1;
   constexpr static float kAxisLabelSize = 20.0f;
   const glm::vec2 kVerticalAxisNameLocation = glm::vec2(800, 600);
-  const glm::vec2 kHorizontalAxisNameLocation = glm::vec2(1130, 875);
+  const glm::vec2 kHorizontalAxisNameLocation = glm::vec2(1130, 880);
   constexpr static float kAxisNameSize = 35.0f;
 
   /** Text. **/
@@ -131,13 +135,13 @@ class EpidemicSimulatorApp : public ci::app::App {
   Slider incubation_slider_;
   const glm::vec2 kIncubationSliderTopLeft = glm::vec2(550, 85);
   static const size_t kMinIncubation = 0;
-  static const size_t kMaxIncubation = 10;
+  static const size_t kMaxIncubation = 20;
 
   /** Infection slider. **/
   Slider infection_slider_;
   const glm::vec2 kInfectionSliderTopLeft = glm::vec2(550, 200);
   static const size_t kMinInfection = 1;
-  static const size_t kMaxInfection = 10;
+  static const size_t kMaxInfection = 20;
 
   /** Contagiousness slider. **/
   Slider contagiousness_slider_;
