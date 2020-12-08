@@ -10,7 +10,9 @@ epidemic_simulator::Slider::Slider(double min_value, double max_value,
       drag_box_left_(0),
       drag_box_right_(drag_box_width),
       is_dragged_(false),
-      drag_box_width_(drag_box_width), min_value_(min_value), max_value_(max_value) {
+      drag_box_width_(drag_box_width),
+      min_value_(min_value),
+      max_value_(max_value) {
 }
 
 void Slider::UpdateSlider(const glm::vec2& mouse_position) {
@@ -27,7 +29,9 @@ void Slider::UpdateSlider(const glm::vec2& mouse_position) {
       drag_box_left_ = mouse_x - half_drag_box_width;
       drag_box_right_ = mouse_x + half_drag_box_width;
     }
-    current_value_ = drag_box_left_ * (max_value_-min_value_)/sliding_width_ + min_value_;
+    current_value_ =
+        drag_box_left_ * (max_value_ - min_value_) / sliding_width_ +
+        min_value_;
   }
 }
 
@@ -42,9 +46,9 @@ void Slider::StopDragging() {
   is_dragged_ = false;
 }
 
-ci::Rectf Slider::GenerateDragBox() {
+ci::Rectf Slider::GenerateDragBox() const {
   return {glm::vec2(drag_box_left_, 0),
-                   glm::vec2(drag_box_right_, drag_box_height_)};
+          glm::vec2(drag_box_right_, drag_box_height_)};
 }
 
 bool Slider::IsDragged() const {
@@ -54,5 +58,4 @@ bool Slider::IsDragged() const {
 double Slider::GetValue() const {
   return current_value_;
 }
-
 }  // namespace epidemic_simulator

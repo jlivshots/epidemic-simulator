@@ -60,6 +60,36 @@ void EpidemicSimulatorApp::draw() {
   DrawButtons();
 }
 
+void EpidemicSimulatorApp::mouseDown(ci::app::MouseEvent event) {
+  glm::vec2 current_location = event.getPos();
+  people_slider_.BeginDragging(current_location - kPeopleSliderTopLeft);
+  incubation_slider_.BeginDragging(current_location - kIncubationSliderTopLeft);
+  infection_slider_.BeginDragging(current_location - kInfectionSliderTopLeft);
+  contagiousness_slider_.BeginDragging(current_location -
+                                       kContagiousnessSliderTopLeft);
+  speed_slider_.BeginDragging(current_location - kSpeedSliderTopLeft);
+  play_button_.ClickMouse(current_location - kPlayButtonTopLeft);
+  CheckResetButton(current_location);
+}
+
+void EpidemicSimulatorApp::mouseUp(ci::app::MouseEvent event) {
+  people_slider_.StopDragging();
+  incubation_slider_.StopDragging();
+  infection_slider_.StopDragging();
+  contagiousness_slider_.StopDragging();
+  speed_slider_.StopDragging();
+}
+
+void EpidemicSimulatorApp::mouseDrag(ci::app::MouseEvent event) {
+  glm::vec2 current_location = event.getPos();
+  people_slider_.UpdateSlider(current_location - kPeopleSliderTopLeft);
+  incubation_slider_.UpdateSlider(current_location - kIncubationSliderTopLeft);
+  infection_slider_.UpdateSlider(current_location - kInfectionSliderTopLeft);
+  contagiousness_slider_.UpdateSlider(current_location -
+                                      kContagiousnessSliderTopLeft);
+  speed_slider_.UpdateSlider(current_location - kSpeedSliderTopLeft);
+}
+
 std::string EpidemicSimulatorApp::SetColorAndGetName(
     const Status& status) const {
   std::string status_string;
@@ -139,36 +169,6 @@ void EpidemicSimulatorApp::DrawHorizontalAxis() {
   }
   ci::gl::drawStringCentered("Day", kHorizontalAxisNameLocation, kTextColor,
                              ci::Font(kFont, kAxisNameSize));
-}
-
-void EpidemicSimulatorApp::mouseDown(ci::app::MouseEvent event) {
-  glm::vec2 current_location = event.getPos();
-  people_slider_.BeginDragging(current_location - kPeopleSliderTopLeft);
-  incubation_slider_.BeginDragging(current_location - kIncubationSliderTopLeft);
-  infection_slider_.BeginDragging(current_location - kInfectionSliderTopLeft);
-  contagiousness_slider_.BeginDragging(current_location -
-                                       kContagiousnessSliderTopLeft);
-  speed_slider_.BeginDragging(current_location - kSpeedSliderTopLeft);
-  play_button_.ClickMouse(current_location - kPlayButtonTopLeft);
-  CheckResetButton(current_location);
-}
-
-void EpidemicSimulatorApp::mouseUp(ci::app::MouseEvent event) {
-  people_slider_.StopDragging();
-  incubation_slider_.StopDragging();
-  infection_slider_.StopDragging();
-  contagiousness_slider_.StopDragging();
-  speed_slider_.StopDragging();
-}
-
-void EpidemicSimulatorApp::mouseDrag(ci::app::MouseEvent event) {
-  glm::vec2 current_location = event.getPos();
-  people_slider_.UpdateSlider(current_location - kPeopleSliderTopLeft);
-  incubation_slider_.UpdateSlider(current_location - kIncubationSliderTopLeft);
-  infection_slider_.UpdateSlider(current_location - kInfectionSliderTopLeft);
-  contagiousness_slider_.UpdateSlider(current_location -
-                                      kContagiousnessSliderTopLeft);
-  speed_slider_.UpdateSlider(current_location - kSpeedSliderTopLeft);
 }
 
 void EpidemicSimulatorApp::DrawSliders() {
@@ -312,6 +312,5 @@ void EpidemicSimulatorApp::CheckResetButton(const glm::vec2& current_location) {
     play_button_.SetPlayingStatus(false);
   }
 }
-
 }  // namespace visualizer
 }  // namespace epidemic_simulator

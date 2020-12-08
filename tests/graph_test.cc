@@ -99,8 +99,8 @@ TEST_CASE("1 person in simulation") {
     graph.GenerateHorizontalLabels();
     const std::vector<LocatedLabel>& labels = graph.GetHorizontalLabels();
     REQUIRE(labels.size() == 1);
-    REQUIRE(labels[0].first==1);
-    REQUIRE(labels[0].second==glm::vec2(100,0));
+    REQUIRE(labels[0].first == 1);
+    REQUIRE(labels[0].second == glm::vec2(100, 0));
   }
 
   SECTION("Horizontal labels are correctly rescaled and located on 10th day") {

@@ -77,7 +77,6 @@ class Graph {
   /** Maximum number of horizontal labels for a graph to display at a time. **/
   static const size_t kMaxNumberLabels = 10;
 };
-
 }  // namespace epidemic_simulator
 
 #endif  // EPIDEMIC_SIMULATOR_GRAPH_H

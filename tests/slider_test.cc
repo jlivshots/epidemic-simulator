@@ -274,7 +274,6 @@ TEST_CASE(
   }
 }
 
-
 TEST_CASE(
     "Slider value updates correctly for slider length 100 and minimum value of "
     "0") {

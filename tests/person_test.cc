@@ -128,7 +128,7 @@ TEST_CASE("Verify SimulateOneDayPass() correctness") {
   }
 
   SECTION("Status remains unchanged for immune person") {
-    person.Infect(epidemic_simulator::Virus(1,0,0));
+    person.Infect(epidemic_simulator::Virus(1, 0, 0));
     person.SimulateOneDayPass();
     REQUIRE(person.GetStatus() == epidemic_simulator::Status::Immune);
     person.SimulateOneDayPass();

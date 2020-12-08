@@ -35,4 +35,5 @@ class Button {
   double height_;
 };
 }  // namespace epidemic_simulator
+
 #endif  // EPIDEMIC_SIMULATOR_BUTTON_H

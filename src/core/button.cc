@@ -18,7 +18,7 @@ bool Button::ClickMouse(const glm::vec2& mouse_location) {
   return is_clicked;
 }
 
-bool Button::IsPlaying() const{
+bool Button::IsPlaying() const {
   return is_playing_;
 }
 

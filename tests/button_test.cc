@@ -35,13 +35,15 @@ TEST_CASE("Button with dimensions 10 X 15") {
     REQUIRE(button.ClickMouse(glm::vec2(2, 3)));
   }
 
-  SECTION("Clicking on the button edge inverts playing status from true to false") {
+  SECTION(
+      "Clicking on the button edge inverts playing status from true to false") {
     button.SetPlayingStatus(true);
     button.ClickMouse(glm::vec2(8, 15));
     REQUIRE_FALSE(button.IsPlaying());
   }
 
-  SECTION("Clicking on the button edge inverts playing status from false to true") {
+  SECTION(
+      "Clicking on the button edge inverts playing status from false to true") {
     button.SetPlayingStatus(false);
     button.ClickMouse(glm::vec2(0, 15));
     REQUIRE(button.IsPlaying());
@@ -85,13 +87,15 @@ TEST_CASE("Button with dimensions 5 X 10") {
     REQUIRE(button.ClickMouse(glm::vec2(2, 3)));
   }
 
-  SECTION("Clicking on the button edge inverts playing status from true to false") {
+  SECTION(
+      "Clicking on the button edge inverts playing status from true to false") {
     button.SetPlayingStatus(true);
     button.ClickMouse(glm::vec2(2, 10));
     REQUIRE_FALSE(button.IsPlaying());
   }
 
-  SECTION("Clicking on the button edge inverts playing status from false to true") {
+  SECTION(
+      "Clicking on the button edge inverts playing status from false to true") {
     button.SetPlayingStatus(false);
     button.ClickMouse(glm::vec2(1, 10));
     REQUIRE(button.IsPlaying());

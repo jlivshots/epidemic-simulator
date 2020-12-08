@@ -21,10 +21,9 @@ class Slider {
          const glm::vec2& bottom_right_corner);
 
   /**
-   * Returns the value of the slider and the rectangle of the drag box.
+   * Updates the value of the slider and the drag box location based on if the
+   * slider is being dragged and the current mouse position.
    * @param mouse_position the vec2 position of the mouse.
-   * @return a pair consisting of the double value of the slider and the
-   * rectangle drag box.
    */
   void UpdateSlider(const glm::vec2& mouse_position);
 
@@ -39,7 +38,6 @@ class Slider {
   /**
    * Sets is_dragged_ to false. Method is intended to be called for each slider
    * in the MouseUp() method in epidemic_app.cc.
-   * @param mouse_position
    */
   void StopDragging();
 
@@ -47,10 +45,11 @@ class Slider {
    * Generates and returns the rectangle drag box.
    * @return a Rectf rectangle representing the drag box.
    */
-  ci::Rectf GenerateDragBox();
+  ci::Rectf GenerateDragBox() const;
 
   double GetValue() const;
   bool IsDragged() const;
+
  private:
   double drag_box_height_;
   double drag_box_width_;
