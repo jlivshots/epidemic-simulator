@@ -72,12 +72,26 @@ class Simulator {
  private:
   /** All vec2 positions on the circle, in order as traversed from 0-2PI. **/
   std::vector<glm::vec2> slots_;
+
+  /** The people within the simulation. **/
   std::vector<Person> people_;
+
+  /**The speed of travel around the arena. **/
   float speed_;
+
+  /** The infectiousness of the virus. **/
   double infectiousness_;
+
+  /** The virus to be modeled. **/
   Virus virus_;
+
+  /** True if all people are at their slot, false otherwise. **/
   bool at_slots_;
+
+  /** The frequency of each Status within the simulation **/
   std::map<Status, size_t> frequencies_;
+
+  /** The graphical representation of the simulation. **/
   Graph graph_;
 };
 }  // namespace epidemic_simulator

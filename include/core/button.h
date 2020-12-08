@@ -28,6 +28,7 @@ class Button {
   void SetPlayingStatus(bool is_playing);
 
   bool IsPlaying() const;
+
  private:
   bool is_playing_;
   double width_;

@@ -59,7 +59,7 @@ class Person {
    * is infectious and days_infectious_remaining is 0, status is updated to
    * immune, otherwise days_infectious_remaining is decremented.
    */
-  void PassOneDay();
+  void SimulateOneDayPass();
 
   const glm::vec2& GetLocation() const;
 

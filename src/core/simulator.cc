@@ -46,7 +46,7 @@ void Simulator::ShufflePeople() {
 
 void Simulator::InfectNeighbors() {
   for (Person& person : people_) {
-    person.PassOneDay();
+    person.SimulateOneDayPass();
   }
 
   for (size_t i = 0; i < people_.size(); ++i) {

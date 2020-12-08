@@ -78,7 +78,6 @@ class Graph {
   static const size_t kMaxNumberLabels = 10;
 };
 
-
 }  // namespace epidemic_simulator
 
 #endif  // EPIDEMIC_SIMULATOR_GRAPH_H
