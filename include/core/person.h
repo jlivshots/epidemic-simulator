@@ -7,7 +7,8 @@
 namespace epidemic_simulator {
 
 /**
- * Represents a person's viral status. Vulnerable means they can be infected.
+ * Represents a person's viral status.
+ * Vulnerable: they can be infected.
  * Incubating: infected but not yet contagious.
  * Infectious: infected and infectious.
  * Immune: recovered from virus, cannot contract it again.
@@ -59,7 +60,7 @@ class Person {
    * is infectious and days_infectious_remaining is 0, status is updated to
    * immune, otherwise days_infectious_remaining is decremented.
    */
-  void PassOneDay();
+  void SimulateOneDayPass();
 
   const glm::vec2& GetLocation() const;
 

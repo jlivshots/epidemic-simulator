@@ -1,5 +1,6 @@
 #include "core/graph.h"
 
+namespace epidemic_simulator {
 epidemic_simulator::Graph::Graph(double width, double height,
                                  size_t number_people,
                                  size_t initial_horizontal_label_interval)
@@ -25,6 +26,11 @@ void epidemic_simulator::Graph::AddDay(
 }
 
 void epidemic_simulator::Graph::GenerateBars() {
+  // The vertical order of the bars for each day. First Status will be at the
+  // top, and the last status will be on the horizontal axis.
+  static const std::vector<Status> kVerticalOrder = {
+      Status::Vulnerable, Status::Immune, Status::Incubating,
+      Status::Infectious};
   bars_.clear();
   if (number_people_ != 0) {
     double bar_width = width_ / number_days_;
@@ -74,3 +80,4 @@ const std::vector<LocatedLabel>&
 epidemic_simulator::Graph::GetHorizontalLabels() const {
   return horizontal_labels_;
 }
+}  // namespace epidemic_simulator

@@ -28,7 +28,7 @@ void Person::Infect(Virus virus) {
   }
 }
 
-void Person::PassOneDay() {
+void Person::SimulateOneDayPass() {
   if (status_ == Status::Incubating) {
     if (days_incubating_remaining_ == 0) {
       status_ = Status::Infectious;

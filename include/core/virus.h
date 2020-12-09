@@ -18,6 +18,7 @@ class Virus {
    */
   Virus(double infectiousness, size_t incubation_period,
         size_t infectious_period);
+
   double GetInfectiousness() const;
   size_t GetIncubationPeriod() const;
   size_t GetInfectiousPeriod() const;

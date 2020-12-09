@@ -46,22 +46,18 @@ void Simulator::ShufflePeople() {
 
 void Simulator::InfectNeighbors() {
   for (Person& person : people_) {
-    person.PassOneDay();
+    person.SimulateOneDayPass();
   }
 
   for (size_t i = 0; i < people_.size(); ++i) {
     if (people_[i].GetStatus() == Status::Infectious) {
       if ((double)rand() / RAND_MAX < infectiousness_) {
         size_t right_index = (i + 1) % people_.size();
-        --frequencies_[people_[right_index].GetStatus()];
         people_[right_index].Infect(virus_);
-        ++frequencies_[people_[right_index].GetStatus()];
       }
       if ((double)rand() / RAND_MAX < infectiousness_) {
         size_t left_index = (i - 1 + people_.size()) % people_.size();
-        --frequencies_[people_[left_index].GetStatus()];
         people_[left_index].Infect(virus_);
-        ++frequencies_[people_[left_index].GetStatus()];
       }
     }
   }
@@ -113,5 +109,9 @@ const std::vector<LocatedLabel>& Simulator::GetHorizontalLabels() const {
 
 const std::vector<LocatedLabel>& Simulator::GetVerticalLabels() const {
   return graph_.GetVerticalLabels();
+}
+
+void Simulator::SetSpeed(float speed) {
+  speed_ = speed;
 }
 }  // namespace epidemic_simulator
