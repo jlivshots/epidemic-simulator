@@ -24,13 +24,11 @@ EpidemicSimulatorApp::EpidemicSimulatorApp()
       reset_button_(kResetButtonBottomRight - kResetButtonTopLeft) {
   ci::app::setWindowSize((int)kWindowWidth, (int)kWindowHeight);
   vertical_labels_ = simulator_.GetVerticalLabels();
-  simulator_.ShufflePeople();
 }
 
 void EpidemicSimulatorApp::draw() {
-  ci::Color8u background_color(ci::Color("black"));
-  ci::gl::clear(background_color);
-  ci::gl::color(ci::Color("white"));
+  ci::gl::clear(kBlack);
+  ci::gl::color(ci::Color(kWhite));
   ci::gl::drawStrokedCircle(kArenaCenter, kArenaRadius);
   if (play_button_.IsPlaying()) {
     simulator_.SetSpeed((float)std::pow(kSpeedBase, speed_slider_.GetValue()));
@@ -116,7 +114,7 @@ std::string EpidemicSimulatorApp::SetColorAndGetName(
 
 void EpidemicSimulatorApp::DrawLegend() {
   ci::Rectf boundary(kLegendTopLeft, kLegendBottomRight);
-  ci::gl::color(ci::Color("white"));
+  ci::gl::color(kWhite);
   ci::gl::drawStrokedRect(boundary);
 
   std::map<Status, size_t> frequencies = simulator_.GetFrequencies();
@@ -134,12 +132,12 @@ void EpidemicSimulatorApp::DrawLegend() {
         label,
         kLegendTopLeft + glm::vec2(2 * kLegendIconSize + 2 * kLegendMargin,
                                    kLegendMargin + entry_height * index),
-        kTextColor, ci::Font(kFont, kLegendTextSize));
+        kWhite, ci::Font(kFont, kLegendTextSize));
 
     ci::gl::drawStringRight(
         std::to_string(iterator.second),
         kFrequencyTopLeft + glm::vec2(0, kLegendMargin + entry_height * index),
-        kTextColor, ci::Font(kFont, kLegendTextSize));
+        kWhite, ci::Font(kFont, kLegendTextSize));
     ++index;
   }
 }
@@ -147,15 +145,14 @@ void EpidemicSimulatorApp::DrawLegend() {
 void EpidemicSimulatorApp::DrawVerticalAxis() {
   for (const LocatedLabel& label : vertical_labels_) {
     ci::gl::drawStringRight(std::to_string(label.first),
-                            kGraphTopLeft + label.second, kTextColor,
+                            kGraphTopLeft + label.second, kWhite,
                             ci::Font(kFont, kAxisLabelSize));
   }
-  ci::gl::pushModelMatrix();
+  ci::gl::ScopedModelMatrix scoped_matrix;
   ci::gl::translate(kVerticalAxisNameLocation);
   ci::gl::rotate((float)-M_PI / 2);
-  ci::gl::drawStringCentered("Number of People", glm::vec2(0, 0), kTextColor,
+  ci::gl::drawStringCentered("Number of People", glm::vec2(0, 0), kWhite,
                              ci::Font(kFont, kAxisNameSize));
-  ci::gl::popModelMatrix();
 }
 
 void EpidemicSimulatorApp::DrawHorizontalAxis() {
@@ -164,10 +161,10 @@ void EpidemicSimulatorApp::DrawHorizontalAxis() {
   for (const LocatedLabel& label : horizontal_labels_) {
     ci::gl::drawStringRight(
         std::to_string(label.first),
-        kGraphTopLeft + glm::vec2(0, kGraphHeight) + label.second, kTextColor,
+        kGraphTopLeft + glm::vec2(0, kGraphHeight) + label.second, kWhite,
         ci::Font(kFont, kAxisLabelSize));
   }
-  ci::gl::drawStringCentered("Day", kHorizontalAxisNameLocation, kTextColor,
+  ci::gl::drawStringCentered("Day", kHorizontalAxisNameLocation, kWhite,
                              ci::Font(kFont, kAxisNameSize));
 }
 
@@ -189,16 +186,16 @@ void EpidemicSimulatorApp::DrawButtons() {
   } else {
     play_label = "RUN";
   }
-  ci::gl::drawStringCentered(play_label, kPlayButtonTextLocation, kTextColor,
+  ci::gl::drawStringCentered(play_label, kPlayButtonTextLocation, kWhite,
                              ci::Font(kFont, kButtonTextSize));
 
   ci::gl::color(ci::Color(kResetButtonColor));
   ci::Rectf reset_boundary(kResetButtonTopLeft, kResetButtonBottomRight);
   ci::gl::drawSolidRect(reset_boundary);
-  ci::gl::drawStringCentered("APPLY", kResetButtonTextLocationApply, kTextColor,
+  ci::gl::drawStringCentered("APPLY", kResetButtonTextLocationApply, kWhite,
                              ci::Font(kFont, kButtonTextSize));
   ci::gl::drawStringCentered("SETTINGS", kResetButtonTextLocationSettings,
-                             kTextColor, ci::Font(kFont, kButtonTextSize));
+                             kWhite, ci::Font(kFont, kButtonTextSize));
 }
 
 void EpidemicSimulatorApp::DrawPeopleSlider() {
@@ -208,15 +205,15 @@ void EpidemicSimulatorApp::DrawPeopleSlider() {
   ci::gl::color(ci::Color(kSliderColor));
   ci::gl::drawStrokedRect(boundary);
   ci::gl::drawStringRight(std::to_string(kMinNumberPeople),
-                          kPeopleSliderTopLeft, kTextColor,
+                          kPeopleSliderTopLeft, kWhite,
                           ci::Font(kFont, kSliderTextSize));
   ci::gl::drawString(std::to_string(kMaxNumberPeople),
-                     kPeopleSliderTopLeft + glm::vec2(kSliderWidth, 0),
-                     kTextColor, ci::Font(kFont, kSliderTextSize));
+                     kPeopleSliderTopLeft + glm::vec2(kSliderWidth, 0), kWhite,
+                     ci::Font(kFont, kSliderTextSize));
   ci::gl::drawStringCentered(
       "People: " + std::to_string((int)people_slider_.GetValue()),
       kPeopleSliderTopLeft + glm::vec2(kSliderWidth / 2, -kSliderHeight),
-      kTextColor, ci::Font(kFont, kSliderTextSize));
+      kWhite, ci::Font(kFont, kSliderTextSize));
   ci::Rectf people_drag_box = people_slider_.GenerateDragBox();
   ci::gl::drawSolidRect(people_drag_box + kPeopleSliderTopLeft);
 }
@@ -228,15 +225,15 @@ void EpidemicSimulatorApp::DrawIncubationSlider() {
   ci::gl::color(ci::Color(kSliderColor));
   ci::gl::drawStrokedRect(boundary);
   ci::gl::drawStringRight(std::to_string(kMinIncubation),
-                          kIncubationSliderTopLeft, kTextColor,
+                          kIncubationSliderTopLeft, kWhite,
                           ci::Font(kFont, kSliderTextSize));
   ci::gl::drawString(std::to_string(kMaxIncubation),
                      kIncubationSliderTopLeft + glm::vec2(kSliderWidth, 0),
-                     kTextColor, ci::Font(kFont, kSliderTextSize));
+                     kWhite, ci::Font(kFont, kSliderTextSize));
   ci::gl::drawStringCentered(
       "Incubation Days: " + std::to_string((int)incubation_slider_.GetValue()),
       kIncubationSliderTopLeft + glm::vec2(kSliderWidth / 2, -kSliderHeight),
-      kTextColor, ci::Font(kFont, kSliderTextSize));
+      kWhite, ci::Font(kFont, kSliderTextSize));
   ci::Rectf incubation_drag_box = incubation_slider_.GenerateDragBox();
   ci::gl::drawSolidRect(incubation_drag_box + kIncubationSliderTopLeft);
 }
@@ -248,15 +245,15 @@ void EpidemicSimulatorApp::DrawInfectionSlider() {
   ci::gl::color(ci::Color(kSliderColor));
   ci::gl::drawStrokedRect(boundary);
   ci::gl::drawStringRight(std::to_string(kMinInfection),
-                          kInfectionSliderTopLeft, kTextColor,
+                          kInfectionSliderTopLeft, kWhite,
                           ci::Font(kFont, kSliderTextSize));
   ci::gl::drawString(std::to_string(kMaxInfection),
                      kInfectionSliderTopLeft + glm::vec2(kSliderWidth, 0),
-                     kTextColor, ci::Font(kFont, kSliderTextSize));
+                     kWhite, ci::Font(kFont, kSliderTextSize));
   ci::gl::drawStringCentered(
       "Infectious Days: " + std::to_string((int)infection_slider_.GetValue()),
       kInfectionSliderTopLeft + glm::vec2(kSliderWidth / 2, -kSliderHeight),
-      kTextColor, ci::Font(kFont, kSliderTextSize));
+      kWhite, ci::Font(kFont, kSliderTextSize));
   ci::Rectf infection_drag_box = infection_slider_.GenerateDragBox();
   ci::gl::drawSolidRect(infection_drag_box + kInfectionSliderTopLeft);
 }
@@ -268,17 +265,17 @@ void EpidemicSimulatorApp::DrawContagiousnessSlider() {
   ci::gl::color(ci::Color(kSliderColor));
   ci::gl::drawStrokedRect(boundary);
   ci::gl::drawStringRight(std::to_string(kMinContagiousness) + "%",
-                          kContagiousnessSliderTopLeft, kTextColor,
+                          kContagiousnessSliderTopLeft, kWhite,
                           ci::Font(kFont, kSliderTextSize));
   ci::gl::drawString(std::to_string(kMaxContagiousness) + "%",
                      kContagiousnessSliderTopLeft + glm::vec2(kSliderWidth, 0),
-                     kTextColor, ci::Font(kFont, kSliderTextSize));
+                     kWhite, ci::Font(kFont, kSliderTextSize));
   ci::gl::drawStringCentered(
       "Infection Rate: " +
           std::to_string((int)contagiousness_slider_.GetValue()) + "%",
       kContagiousnessSliderTopLeft +
           glm::vec2(kSliderWidth / 2, -kSliderHeight),
-      kTextColor, ci::Font(kFont, kSliderTextSize));
+      kWhite, ci::Font(kFont, kSliderTextSize));
   ci::Rectf contagiousness_drag_box = contagiousness_slider_.GenerateDragBox();
   ci::gl::drawSolidRect(contagiousness_drag_box + kContagiousnessSliderTopLeft);
 }
@@ -291,8 +288,8 @@ void EpidemicSimulatorApp::DrawSpeedSlider() {
   ci::gl::drawStrokedRect(boundary);
   ci::gl::drawStringCentered(
       "Speed",
-      kSpeedSliderTopLeft + glm::vec2(kSliderWidth / 2, -kSliderHeight),
-      kTextColor, ci::Font(kFont, kSliderTextSize));
+      kSpeedSliderTopLeft + glm::vec2(kSliderWidth / 2, -kSliderHeight), kWhite,
+      ci::Font(kFont, kSliderTextSize));
   ci::Rectf speed_drag_box = speed_slider_.GenerateDragBox();
   ci::gl::drawSolidRect(speed_drag_box + kSpeedSliderTopLeft);
 }
