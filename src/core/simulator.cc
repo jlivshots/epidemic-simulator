@@ -5,7 +5,7 @@
 namespace epidemic_simulator {
 
 Simulator::Simulator(size_t number_people, double arena_radius, float speed,
-                     const epidemic_simulator::Virus& virus, double graph_width,
+                     const Virus& virus, double graph_width,
                      double graph_height, size_t vertical_label_interval,
                      size_t initial_horizontal_label_interval)
     : speed_(speed),
@@ -91,6 +91,7 @@ void Simulator::UpdateFrequencies() {
 const std::vector<ColumnStatus>& Simulator::GetBars() const {
   return graph_.GetBars();
 }
+
 const std::map<Status, size_t>& Simulator::GetFrequencies() const {
   return frequencies_;
 }
