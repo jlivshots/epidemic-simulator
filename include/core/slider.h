@@ -43,7 +43,7 @@ class Slider {
 
   /**
    * Generates and returns the rectangle drag box.
-   * @return a Rectf rectangle representing the drag box.
+   * @return a rectangle representing the drag box.
    */
   ci::Rectf GenerateDragBox() const;
 
