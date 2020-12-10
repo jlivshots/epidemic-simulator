@@ -56,34 +56,34 @@ class EpidemicSimulatorApp : public ci::app::App {
   std::string SetColorAndGetName(const Status& status) const;
 
   /** Draws the legend box and frequency counts. */
-  void DrawLegend();
+  void DrawLegend() const;
 
   /** Draws the vertical axis labels and title. */
-  void DrawVerticalAxis();
+  void DrawVerticalAxis() const;
 
   /** Draws the horizontal axis labels and title. */
-  void DrawHorizontalAxis();
+  void DrawHorizontalAxis() const;
 
   /** Consolidates calls to each slider drawing method into one method. */
-  void DrawSliders();
+  void DrawSliders() const;
 
   /** Draws the people number slider and its drag box. */
-  void DrawPeopleSlider();
+  void DrawPeopleSlider() const;
 
   /** Draws the incubation duration slider and its drag box. */
-  void DrawIncubationSlider();
+  void DrawIncubationSlider() const;
 
   /** Draws the speed slider and its drag box. */
-  void DrawSpeedSlider();
+  void DrawSpeedSlider() const;
 
   /** Draws the infection duration slider and its drag box. */
-  void DrawInfectionSlider();
+  void DrawInfectionSlider() const;
 
   /** Draws the contagiousness slider and its drag box. */
-  void DrawContagiousnessSlider();
+  void DrawContagiousnessSlider() const;
 
   /** Draws the play and reset buttons. */
-  void DrawButtons();
+  void DrawButtons() const;
 
   /**
    * Replaces simulator_ with a new instance that has the parameters specified

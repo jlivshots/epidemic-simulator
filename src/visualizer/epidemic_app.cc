@@ -112,7 +112,7 @@ std::string EpidemicSimulatorApp::SetColorAndGetName(
   return status_string;
 }
 
-void EpidemicSimulatorApp::DrawLegend() {
+void EpidemicSimulatorApp::DrawLegend() const {
   ci::Rectf boundary(kLegendTopLeft, kLegendBottomRight);
   ci::gl::color(kWhite);
   ci::gl::drawStrokedRect(boundary);
@@ -142,7 +142,7 @@ void EpidemicSimulatorApp::DrawLegend() {
   }
 }
 
-void EpidemicSimulatorApp::DrawVerticalAxis() {
+void EpidemicSimulatorApp::DrawVerticalAxis() const {
   for (const LocatedLabel& label : vertical_labels_) {
     ci::gl::drawStringRight(std::to_string(label.first),
                             kGraphTopLeft + label.second, kWhite,
@@ -155,7 +155,7 @@ void EpidemicSimulatorApp::DrawVerticalAxis() {
                              ci::Font(kFont, kAxisNameSize));
 }
 
-void EpidemicSimulatorApp::DrawHorizontalAxis() {
+void EpidemicSimulatorApp::DrawHorizontalAxis() const {
   std::vector<LocatedLabel> horizontal_labels_ =
       simulator_.GetHorizontalLabels();
   for (const LocatedLabel& label : horizontal_labels_) {
@@ -168,7 +168,7 @@ void EpidemicSimulatorApp::DrawHorizontalAxis() {
                              ci::Font(kFont, kAxisNameSize));
 }
 
-void EpidemicSimulatorApp::DrawSliders() {
+void EpidemicSimulatorApp::DrawSliders() const {
   DrawPeopleSlider();
   DrawIncubationSlider();
   DrawInfectionSlider();
@@ -176,7 +176,7 @@ void EpidemicSimulatorApp::DrawSliders() {
   DrawSpeedSlider();
 }
 
-void EpidemicSimulatorApp::DrawButtons() {
+void EpidemicSimulatorApp::DrawButtons() const {
   ci::gl::color(ci::Color(kPlayButtonColor));
   ci::Rectf play_boundary(kPlayButtonTopLeft, kPlayButtonBottomRight);
   ci::gl::drawSolidRect(play_boundary);
@@ -198,7 +198,7 @@ void EpidemicSimulatorApp::DrawButtons() {
                              kWhite, ci::Font(kFont, kButtonTextSize));
 }
 
-void EpidemicSimulatorApp::DrawPeopleSlider() {
+void EpidemicSimulatorApp::DrawPeopleSlider() const {
   ci::Rectf boundary(
       kPeopleSliderTopLeft,
       kPeopleSliderTopLeft + glm::vec2(kSliderWidth, kSliderHeight));
@@ -218,7 +218,7 @@ void EpidemicSimulatorApp::DrawPeopleSlider() {
   ci::gl::drawSolidRect(people_drag_box + kPeopleSliderTopLeft);
 }
 
-void EpidemicSimulatorApp::DrawIncubationSlider() {
+void EpidemicSimulatorApp::DrawIncubationSlider() const {
   ci::Rectf boundary(
       kIncubationSliderTopLeft,
       kIncubationSliderTopLeft + glm::vec2(kSliderWidth, kSliderHeight));
@@ -238,7 +238,7 @@ void EpidemicSimulatorApp::DrawIncubationSlider() {
   ci::gl::drawSolidRect(incubation_drag_box + kIncubationSliderTopLeft);
 }
 
-void EpidemicSimulatorApp::DrawInfectionSlider() {
+void EpidemicSimulatorApp::DrawInfectionSlider() const {
   ci::Rectf boundary(
       kInfectionSliderTopLeft,
       kInfectionSliderTopLeft + glm::vec2(kSliderWidth, kSliderHeight));
@@ -258,7 +258,7 @@ void EpidemicSimulatorApp::DrawInfectionSlider() {
   ci::gl::drawSolidRect(infection_drag_box + kInfectionSliderTopLeft);
 }
 
-void EpidemicSimulatorApp::DrawContagiousnessSlider() {
+void EpidemicSimulatorApp::DrawContagiousnessSlider() const {
   ci::Rectf boundary(
       kContagiousnessSliderTopLeft,
       kContagiousnessSliderTopLeft + glm::vec2(kSliderWidth, kSliderHeight));
@@ -280,7 +280,7 @@ void EpidemicSimulatorApp::DrawContagiousnessSlider() {
   ci::gl::drawSolidRect(contagiousness_drag_box + kContagiousnessSliderTopLeft);
 }
 
-void EpidemicSimulatorApp::DrawSpeedSlider() {
+void EpidemicSimulatorApp::DrawSpeedSlider() const {
   ci::Rectf boundary(
       kSpeedSliderTopLeft,
       kSpeedSliderTopLeft + glm::vec2(kSliderWidth, kSliderHeight));

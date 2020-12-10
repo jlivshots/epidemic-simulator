@@ -58,24 +58,20 @@ class Graph {
   const std::vector<LocatedLabel>& GetHorizontalLabels() const;
 
  private:
-  /** The frequency of each status for each day. **/
+  /** Maximum number of horizontal labels for a graph to display at a time. */
+  static const size_t kMaxNumberLabels = 10;
+
+  /** The frequency of each status for each day. */
   std::map<Status, std::vector<size_t>> status_frequencies_;
 
-  /** The height of the graph. **/
   double height_;
-
-  /** The width of the graph **/
   double width_;
-
   std::vector<LocatedLabel> vertical_labels_;
   std::vector<LocatedLabel> horizontal_labels_;
   std::vector<ColumnStatus> bars_;
   size_t number_days_;
   size_t number_people_;
   size_t horizontal_interval_;
-
-  /** Maximum number of horizontal labels for a graph to display at a time. **/
-  static const size_t kMaxNumberLabels = 10;
 };
 }  // namespace epidemic_simulator
 
