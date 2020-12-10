@@ -16,7 +16,7 @@ bool Person::MoveTowardLocation(const glm::vec2& target_location, float speed) {
   }
 }
 
-void Person::Infect(Virus virus) {
+void Person::Infect(const Virus& virus) {
   if (status_ == Status::Vulnerable) {
     days_infectious_remaining_ = virus.GetInfectiousPeriod();
     days_incubating_remaining_ = virus.GetIncubationPeriod();

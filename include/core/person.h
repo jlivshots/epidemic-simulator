@@ -46,12 +46,12 @@ class Person {
   /**
    * Infects the person if they weren't already infected. Sets
    * days_incubating_remaining and days_infectious_remaining to be the
-   * corresponding instance variabes of the virus parameter. If
+   * corresponding instance variables of the virus parameter. If
    * days_incubating_remaining is zero, sets status_ to be infectious, otherwise
    * sets status_ to be incubating.
    * @param virus the Virus with which the person is infected.
    */
-  void Infect(Virus virus);
+  void Infect(const Virus& virus);
 
   /**
    * If person is not infected, person remains unaltered. If status is
